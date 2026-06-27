@@ -11,6 +11,7 @@ local SECRET_REALM_BG_IMAGE = "image/secret_realm_bg.png"
 local SECRET_BUTTON_IMAGE = "image/btn_secret_challenge.png"
 local CHALLENGE_BADGE_LEFT_IMAGE = "image/challenge_badge_left.png"
 local CHALLENGE_BADGE_RIGHT_IMAGE = "image/challenge_badge_right.png"
+local TITLE_TOP_IMAGE = "image/P-标题-上.png"
 local SAVE_KEY = "partner_idle_save_v1"
 local MAX_OFFLINE_SECONDS = 12 * 60 * 60
 
@@ -336,8 +337,8 @@ local function CreateCircleFeature(label, side)
     local left = side == "left" and 20 or nil
     local right = side == "right" and 20 or nil
     return UI.Panel {
-        width = 132,
-        height = 132,
+        width = 160,
+        height = 160,
         backgroundImage = FEATURE_ICONS[label],
         backgroundFit = "contain",
         alignItems = "center",
@@ -507,7 +508,8 @@ local function CreateHomeScreen()
                 left = 0,
                 right = 0,
                 height = 48,
-                backgroundColor = { 245, 236, 218, 215 },
+                backgroundImage = TITLE_TOP_IMAGE,
+                backgroundFit = "fill",
                 alignItems = "center",
                 justifyContent = "center",
                 children = {
@@ -599,10 +601,11 @@ local function CreateHomeScreen()
 
             UI.Panel {
                 position = "absolute",
-                top = 602,
+                top = 614,
                 left = 0,
-                right = 0,
-                height = 48,
+                right = 6,
+                width = 720,
+                height = 50,
                 flexDirection = "row",
                 alignItems = "center",
                 justifyContent = "center",
@@ -613,19 +616,30 @@ local function CreateHomeScreen()
                     UI.Label {
                         id = "offlineRewardLabel",
                         text = pendingOfflineCoin_ > 0 and ("本次离线收益 +" .. FormatNumber(pendingOfflineCoin_)) or "当前可以领取 12.35万",
+                        left = -78,
+                        top = -2,
                         fontSize = 22,
                         fontColor = { 65, 50, 40, 255 },
                         textAlign = "center",
                     },
                     UI.Button {
                         text = "领取",
-                        width = 92,
-                        height = 36,
+                        width = 115,
+                        height = 39,
+                        left = 114,
+                        top = -2,
+                        variant = "outline",
+                        paddingTop = 0,
+                        paddingRight = 16,
+                        paddingBottom = 4,
+                        paddingLeft = 16,
                         fontSize = 22,
                         backgroundColor = { 158, 48, 30, 255 },
                         pressedBackgroundColor = { 120, 32, 22, 255 },
                         textColor = { 255, 245, 220, 255 },
-                        borderRadius = 18,
+                        borderColor = { 0, 0, 0, 255 },
+                        borderWidth = 1,
+                        borderRadius = 30,
                         onClick = function()
                             playerSave_.coin = playerSave_.coin + 123500
                             playerSave_.idle.lastCollectTime = Now()
@@ -668,12 +682,22 @@ local function CreateHomeScreen()
                         onClick = function()
                             print("[Home] Secret challenge clicked")
                         end,
+                        children = {
+                            UI.Label {
+                                text = "秘境挑战",
+                                fontSize = 30,
+                                fontWeight = "bold",
+                                fontColor = { 255, 255, 255, 255 },
+                                textAlign = "center",
+                                textStroke = { width = 3, color = { 40, 120, 160, 255 } },
+                            },
+                        },
                     },
-                    UI.Panel { position = "absolute", top = 0, left = 0, right = 0, height = 150, pointerEvents = "box-none", children = {
+                    UI.Panel { position = "absolute", top = 0, left = 0, right = 0, height = 160, pointerEvents = "box-none", children = {
                         CreateCircleFeature("勇者", "left"),
                         CreateCircleFeature("福利", "right"),
                     } },
-                    UI.Panel { position = "absolute", top = 294, left = 0, right = 0, height = 150, pointerEvents = "box-none", children = {
+                    UI.Panel { position = "absolute", top = 294, left = 0, right = 0, height = 160, pointerEvents = "box-none", children = {
                         CreateCircleFeature("召唤", "left"),
                         CreateCircleFeature("宝物", "right"),
                     } },
