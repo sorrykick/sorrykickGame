@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-06-27 | inspector-top-home-layout | 落实 Inspector 主界面上半区修改：顶部功能区图标放大到 96×96、删除资源短标签和右上角数字、调整标题条/章节文字/模式行/挑战徽章布局，LSP 0 Error，构建成功。 |
 | 2026-06-27 | stage-forest-scroll | 将 `stage_forest_bg.png` 按 1024×309 规格接入两个图层横向无缝滚动，LSP 0 Error，构建成功。 |
 | 2026-06-27 | inspector-home-layout | 落实 Inspector 主界面布局修改：放大四个功能入口到 160×160、调整收益条/领取按钮/离线收益文案位置尺寸、补回秘境挑战文字、章节标题条改用 `P-标题-上.png`，LSP 0 Error，构建成功。 |
 | 2026-06-27 | inspector-home-icons | 落实 Inspector 主界面修改：删除顶部功能图标文字、删除勇者/福利/召唤/宝物文字、移动秘境挑战按钮，LSP 0 Error，构建成功。 |

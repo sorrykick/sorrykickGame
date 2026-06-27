@@ -275,7 +275,7 @@ function HandleUpdate(eventType, eventData)
     end
 end
 
-local function CreateResourcePill(id, title, value)
+local function CreateResourcePill(id, value)
     return UI.Panel {
         id = id,
         width = 174,
@@ -297,13 +297,6 @@ local function CreateResourcePill(id, title, value)
                 backgroundFit = "contain",
             },
             UI.Label {
-                text = title,
-                width = 28,
-                fontSize = 14,
-                fontColor = { 245, 230, 190, 255 },
-                textAlign = "left",
-            },
-            UI.Label {
                 id = id .. "Value",
                 text = value,
                 flexGrow = 1,
@@ -319,7 +312,7 @@ end
 
 local function CreateTopMenuButton(label)
     return UI.Panel {
-        width = 94,
+        width = 96,
         height = 96,
         alignItems = "center",
         justifyContent = "flex-end",
@@ -330,8 +323,10 @@ local function CreateTopMenuButton(label)
         end,
         children = {
             UI.Panel {
-                width = 74,
-                height = 74,
+                width = 96,
+                height = 96,
+                left = 0,
+                top = 0,
                 backgroundImage = TOP_MENU_ICONS[label],
                 backgroundFit = "contain",
             },
@@ -445,9 +440,9 @@ local function CreateTopHud()
                         justifyContent = "center",
                         children = { UI.Label { text = "23:00", fontSize = 18, fontColor = { 255, 255, 255, 255 } } },
                     },
-                    CreateResourcePill("coin", "金", FormatNumber(playerSave_.coin)),
-                    CreateResourcePill("diamond", "蓝", FormatNumber(playerSave_.diamond)),
-                    CreateResourcePill("crystal", "晶", FormatNumber(playerSave_.crystal)),
+                    CreateResourcePill("coin", FormatNumber(playerSave_.coin)),
+                    CreateResourcePill("diamond", FormatNumber(playerSave_.diamond)),
+                    CreateResourcePill("crystal", FormatNumber(playerSave_.crystal)),
                     UI.Panel {
                         width = 44,
                         height = 44,
@@ -479,12 +474,6 @@ local function CreateTopHud()
                             UI.Label { text = "玩家名字", fontSize = 18, fontColor = { 65, 45, 34, 255 } },
                             UI.Label { text = "#75874", fontSize = 14, fontColor = { 196, 82, 42, 255 } },
                         },
-                    },
-                    UI.Label {
-                        text = "1234567890",
-                        fontSize = 26,
-                        fontColor = { 255, 203, 74, 255 },
-                        textStroke = { width = 2, color = { 95, 54, 25, 255 } },
                     },
                 },
             },
@@ -534,8 +523,8 @@ local function CreateStageForestPanel()
             },
             UI.Panel {
                 position = "absolute",
-                top = 8,
-                left = 4,
+                top = 2,
+                left = -1,
                 width = 128,
                 height = 136,
                 backgroundImage = CHALLENGE_BADGE_LEFT_IMAGE,
@@ -546,8 +535,8 @@ local function CreateStageForestPanel()
             },
             UI.Panel {
                 position = "absolute",
-                top = 8,
-                right = 4,
+                top = 7,
+                right = -9,
                 width = 128,
                 height = 136,
                 backgroundImage = CHALLENGE_BADGE_RIGHT_IMAGE,
@@ -592,10 +581,10 @@ local function CreateHomeScreen()
 
             UI.Panel {
                 position = "absolute",
-                top = 92,
-                left = 16,
-                right = 16,
-                height = 84,
+                top = 100,
+                left = 19,
+                right = 13,
+                height = 96,
                 flexDirection = "row",
                 justifyContent = "space-between",
                 alignItems = "center",
@@ -610,10 +599,11 @@ local function CreateHomeScreen()
 
             UI.Panel {
                 position = "absolute",
-                top = 176,
-                left = 0,
-                right = 0,
-                height = 48,
+                top = 194,
+                left = -2,
+                right = 2,
+                height = 56,
+                zIndex = 10,
                 backgroundImage = TITLE_TOP_IMAGE,
                 backgroundFit = "fill",
                 alignItems = "center",
@@ -621,7 +611,11 @@ local function CreateHomeScreen()
                 children = {
                     UI.Label {
                         text = "第一章  迷失森林",
-                        fontSize = 28,
+                        width = 388,
+                        height = 41,
+                        left = -3,
+                        top = -2,
+                        fontSize = 20,
                         fontColor = { 52, 36, 24, 255 },
                         textAlign = "center",
                     },
@@ -632,10 +626,11 @@ local function CreateHomeScreen()
 
             UI.Panel {
                 position = "absolute",
-                top = 535,
-                left = 18,
-                right = 18,
-                height = 76,
+                top = 514,
+                left = 5,
+                right = 20,
+                width = 712,
+                height = 110,
                 flexDirection = "row",
                 justifyContent = "space-between",
                 alignItems = "center",
