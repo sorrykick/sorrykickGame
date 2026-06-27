@@ -35,6 +35,7 @@
 - 收益条、领取按钮、离线收益文案、四个圆形功能入口、秘境挑战按钮、章节标题条已按 Inspector 调整；章节标题条使用 `image/P-标题-上.png`。
 - 森林关卡背景 `stage_forest_bg.png` 确认为 1024×309，并改为两个图层横向无缝滚动。
 - 主界面上半区已按 Inspector 调整：顶部功能区图标 96×96，资源条移除“金/蓝/晶”短标签，右上角数字移除，标题条、章节文字、模式行和挑战徽章位置尺寸更新。
+- 存档系统已模块化：`scripts/Save/SaveSchema.lua`、`SaveValidator.lua`、`RuntimeSave.lua`、`SaveManager.lua`；`main.lua` 通过 `SaveManager.LoginSyncPlayerSave()` 登录读档，通过 `SaveManager.GetSaveData()` 读取运行时副本，通过 `SaveManager.CollectIdleReward()` 领取收益。
 
 ## 下一步候选
 

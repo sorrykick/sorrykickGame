@@ -1,4 +1,5 @@
 local UI = require("urhox-libs/UI")
+local SaveManager = require("Save.SaveManager")
 
 local DESIGN_WIDTH = 720
 local DESIGN_HEIGHT = 1280
@@ -12,8 +13,6 @@ local SECRET_BUTTON_IMAGE = "image/btn_secret_challenge.png"
 local CHALLENGE_BADGE_LEFT_IMAGE = "image/challenge_badge_left.png"
 local CHALLENGE_BADGE_RIGHT_IMAGE = "image/challenge_badge_right.png"
 local TITLE_TOP_IMAGE = "image/P-标题-上.png"
-local SAVE_KEY = "partner_idle_save_v1"
-local MAX_OFFLINE_SECONDS = 12 * 60 * 60
 
 ---@type Widget|nil
 local uiRoot_ = nil
@@ -34,8 +33,6 @@ local STAGE_FOREST_WIDTH = 1024
 local STAGE_FOREST_HEIGHT = 309
 local STAGE_FOREST_SPEED = 28
 
-local playerSave_ = nil
-local pendingOfflineCoin_ = 0
 local isLoggingIn_ = false
 local stageForestOffset_ = 0
 
@@ -68,10 +65,6 @@ local BOTTOM_NAV_ICONS = {
     ["图鉴"] = "image/nav_codex.png",
 }
 
-local function Now()
-    return os.time()
-end
-
 local function FormatNumber(value)
     value = math.floor(tonumber(value) or 0)
     if value >= 100000000 then
@@ -83,161 +76,17 @@ local function FormatNumber(value)
     return tostring(value)
 end
 
-local function CreateDefaultSave(now)
-    return {
-        version = 1,
-        createdAt = now,
-        lastLoginTime = now,
-        coin = 1221300,
-        diamond = 1300,
-        crystal = 1300,
-        energy = 2544,
-        partner = {
-            id = "partner_001",
-            name = "初始伙伴",
-            level = 1,
-            exp = 0,
-            power = 10,
-        },
-        idle = {
-            baseRate = 8,
-            lastCollectTime = now,
-        },
-        stats = {
-            loginCount = 0,
-            totalOfflineCoin = 0,
-        },
-    }
-end
-
-local function NormalizeSave(save, now)
-    if type(save) ~= "table" then
-        return CreateDefaultSave(now)
-    end
-
-    save.version = save.version or 1
-    save.createdAt = save.createdAt or now
-    save.lastLoginTime = save.lastLoginTime or now
-    save.coin = math.floor(tonumber(save.coin) or 0)
-    save.diamond = math.floor(tonumber(save.diamond) or 0)
-    save.crystal = math.floor(tonumber(save.crystal) or 0)
-    save.energy = math.floor(tonumber(save.energy) or 0)
-
-    save.partner = save.partner or {}
-    save.partner.id = save.partner.id or "partner_001"
-    save.partner.name = save.partner.name or "初始伙伴"
-    save.partner.level = math.max(1, math.floor(tonumber(save.partner.level) or 1))
-    save.partner.exp = math.max(0, math.floor(tonumber(save.partner.exp) or 0))
-    save.partner.power = math.max(1, math.floor(tonumber(save.partner.power) or 10))
-
-    save.idle = save.idle or {}
-    save.idle.baseRate = math.max(1, math.floor(tonumber(save.idle.baseRate) or 8))
-    save.idle.lastCollectTime = math.floor(tonumber(save.idle.lastCollectTime) or now)
-
-    save.stats = save.stats or {}
-    save.stats.loginCount = math.max(0, math.floor(tonumber(save.stats.loginCount) or 0))
-    save.stats.totalOfflineCoin = math.max(0, math.floor(tonumber(save.stats.totalOfflineCoin) or 0))
-
-    return save
-end
-
-local function IsCloudAvailable()
-    return type(clientCloud) == "table" and clientCloud.BatchGet ~= nil and clientCloud.BatchSet ~= nil
-end
-
-local function RequestPlayerSave(onSuccess, onError)
-    print("[Save] Requesting player save")
-
-    if not IsCloudAvailable() then
-        print("[Save] clientCloud unavailable, using development fallback save")
-        if onSuccess then
-            onSuccess(nil)
-        end
-        return
-    end
-
-    clientCloud:BatchGet()
-        :Key(SAVE_KEY)
-        :Fetch({
-            ok = function(values)
-                print("[Save] Player save loaded")
-                if onSuccess then
-                    onSuccess(values and values[SAVE_KEY] or nil)
-                end
-            end,
-            error = function(code, reason)
-                print("[Save] Load failed: " .. tostring(code) .. " " .. tostring(reason))
-                if onError then
-                    onError(reason or "读取存档失败")
-                end
-            end,
-            timeout = function()
-                print("[Save] Load timeout")
-                if onError then
-                    onError("读取存档超时")
-                end
-            end,
-        })
-end
-
-local function RequestUpdateSave(reason, onSuccess, onError)
-    if not playerSave_ then
-        if onError then onError("没有可保存的数据") end
-        return
-    end
-
-    print("[Save] Updating player save: " .. tostring(reason))
-
-    if not IsCloudAvailable() then
-        print("[Save] clientCloud unavailable, development fallback save completed")
-        if onSuccess then onSuccess() end
-        return
-    end
-
-    clientCloud:BatchSet()
-        :Set(SAVE_KEY, playerSave_)
-        :Save(reason or "更新存档", {
-            ok = function()
-                print("[Save] Save updated")
-                if onSuccess then onSuccess() end
-            end,
-            error = function(code, reasonText)
-                print("[Save] Save failed: " .. tostring(code) .. " " .. tostring(reasonText))
-                if onError then onError(reasonText or "保存失败") end
-            end,
-            timeout = function()
-                print("[Save] Save timeout")
-                if onError then onError("保存超时") end
-            end,
-        })
-end
-
-local function ApplyOfflineSettlement(now)
-    local idle = playerSave_.idle
-    local elapsed = math.max(0, now - idle.lastCollectTime)
-    local cappedElapsed = math.min(elapsed, MAX_OFFLINE_SECONDS)
-    local partnerLevel = playerSave_.partner.level
-    local rate = idle.baseRate + partnerLevel * 2
-    local earned = math.floor(cappedElapsed * rate)
-
-    pendingOfflineCoin_ = earned
-    playerSave_.coin = playerSave_.coin + earned
-    playerSave_.lastLoginTime = now
-    playerSave_.idle.lastCollectTime = now
-    playerSave_.stats.loginCount = playerSave_.stats.loginCount + 1
-    playerSave_.stats.totalOfflineCoin = playerSave_.stats.totalOfflineCoin + earned
-
-    print(string.format("[Idle] elapsed=%d capped=%d rate=%d earned=%d", elapsed, cappedElapsed, rate, earned))
-end
-
 local function UpdateHomeLabels()
-    if not playerSave_ then return end
+    local saveData = SaveManager.GetSaveData()
+    if not saveData then return end
+
     if coinLabel_ then
-        coinLabel_:SetText(FormatNumber(playerSave_.coin))
+        coinLabel_:SetText(FormatNumber(saveData.coin))
     end
     if offlineLabel_ then
-        if pendingOfflineCoin_ > 0 then
-            offlineLabel_:SetText("本次离线收益 +" .. FormatNumber(pendingOfflineCoin_))
+        local pendingOfflineCoin = SaveManager.GetPendingOfflineCoin()
+        if pendingOfflineCoin > 0 then
+            offlineLabel_:SetText("本次离线收益 +" .. FormatNumber(pendingOfflineCoin))
         else
             offlineLabel_:SetText("当前可以领取 12.35万")
         end
@@ -417,6 +266,7 @@ local function CreateBottomNav(label, index)
 end
 
 local function CreateTopHud()
+    local saveData = SaveManager.GetSaveData()
     return UI.Panel {
         position = "absolute",
         top = 10,
@@ -440,9 +290,9 @@ local function CreateTopHud()
                         justifyContent = "center",
                         children = { UI.Label { text = "23:00", fontSize = 18, fontColor = { 255, 255, 255, 255 } } },
                     },
-                    CreateResourcePill("coin", FormatNumber(playerSave_.coin)),
-                    CreateResourcePill("diamond", FormatNumber(playerSave_.diamond)),
-                    CreateResourcePill("crystal", FormatNumber(playerSave_.crystal)),
+                    CreateResourcePill("coin", FormatNumber(saveData.coin)),
+                    CreateResourcePill("diamond", FormatNumber(saveData.diamond)),
+                    CreateResourcePill("crystal", FormatNumber(saveData.crystal)),
                     UI.Panel {
                         width = 44,
                         height = 44,
@@ -482,6 +332,7 @@ local function CreateTopHud()
 end
 
 local function CreateStageForestPanel()
+    local saveData = SaveManager.GetSaveData()
     stageForestOffset_ = 0
     stageForestLayerA_ = UI.Panel {
         position = "absolute",
@@ -546,7 +397,7 @@ local function CreateStageForestPanel()
                 end,
             },
             UI.Label {
-                text = "伙伴 Lv." .. tostring(playerSave_.partner.level),
+                text = "伙伴 Lv." .. tostring(saveData.partner.level),
                 position = "absolute",
                 left = 64,
                 bottom = 18,
@@ -664,7 +515,7 @@ local function CreateHomeScreen()
                 children = {
                     UI.Label {
                         id = "offlineRewardLabel",
-                        text = pendingOfflineCoin_ > 0 and ("本次离线收益 +" .. FormatNumber(pendingOfflineCoin_)) or "当前可以领取 12.35万",
+                        text = SaveManager.GetPendingOfflineCoin() > 0 and ("本次离线收益 +" .. FormatNumber(SaveManager.GetPendingOfflineCoin())) or "当前可以领取 12.35万",
                         left = -78,
                         top = -2,
                         fontSize = 22,
@@ -690,10 +541,7 @@ local function CreateHomeScreen()
                         borderWidth = 1,
                         borderRadius = 30,
                         onClick = function()
-                            playerSave_.coin = playerSave_.coin + 123500
-                            playerSave_.idle.lastCollectTime = Now()
-                            pendingOfflineCoin_ = 0
-                            RequestUpdateSave("领取挂机收益", function()
+                            SaveManager.CollectIdleReward(123500, function()
                                 UpdateHomeLabels()
                             end)
                         end,
@@ -784,23 +632,6 @@ local function EnterHomeScreen()
     print("[Main] Entered home screen")
 end
 
-local function CompleteLoginWithSave(rawSave)
-    local now = Now()
-    playerSave_ = NormalizeSave(rawSave, now)
-    ApplyOfflineSettlement(now)
-
-    RequestUpdateSave("登录离线收益结算", function()
-        EnterHomeScreen()
-    end, function(reason)
-        isLoggingIn_ = false
-        if loginButton_ then
-            loginButton_:SetDisabled(false)
-            loginButton_:SetText("登录")
-        end
-        SetLoginStatus("保存失败：" .. tostring(reason))
-    end)
-end
-
 local function HandleLogin()
     if isLoggingIn_ then return end
     isLoggingIn_ = true
@@ -811,9 +642,9 @@ local function HandleLogin()
     end
     SetLoginStatus("正在请求存档...")
 
-    RequestPlayerSave(function(rawSave)
-        SetLoginStatus("正在结算离线收益...")
-        CompleteLoginWithSave(rawSave)
+    SaveManager.LoginSyncPlayerSave(function()
+        SetLoginStatus("正在进入主界面...")
+        EnterHomeScreen()
     end, function(reason)
         isLoggingIn_ = false
         if loginButton_ then
