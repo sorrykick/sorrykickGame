@@ -305,14 +305,6 @@ local function CreateTopMenuButton(label)
                 backgroundImage = TOP_MENU_ICONS[label],
                 backgroundFit = "contain",
             },
-            UI.Label {
-                text = label,
-                fontSize = 18,
-                fontWeight = "bold",
-                fontColor = { 46, 34, 24, 255 },
-                textAlign = "center",
-                textStroke = { width = 1, color = { 255, 245, 220, 180 } },
-            },
         },
     }
 end
@@ -357,17 +349,6 @@ local function CreateCircleFeature(label, side)
         onClick = function()
             print("[Home] Feature clicked: " .. label)
         end,
-        children = {
-            UI.Label {
-                text = label,
-                fontSize = 28,
-                fontWeight = "bold",
-                fontColor = { 50, 38, 26, 255 },
-                textAlign = "center",
-                whiteSpace = "normal",
-                textStroke = { width = 2, color = { 255, 255, 255, 220 } },
-            },
-        },
     }
 end
 
@@ -676,8 +657,8 @@ local function CreateHomeScreen()
                     },
                     UI.Panel {
                         position = "absolute",
-                        top = 166,
-                        left = 240,
+                        top = 297,
+                        left = 238,
                         width = 240,
                         height = 72,
                         backgroundImage = SECRET_BUTTON_IMAGE,
