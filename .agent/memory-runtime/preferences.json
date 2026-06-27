@@ -1,0 +1,14 @@
+{
+  "wake_word": null,
+  "communication_style": "简洁、直接、面向执行",
+  "scoped_preferences": {
+    "gamedev": {
+      "orientation": "portrait-only",
+      "game_type": "2D idle casual mobile",
+      "save_rules": [
+        "login requests player save",
+        "player data changes request save update"
+      ]
+    }
+  }
+}
