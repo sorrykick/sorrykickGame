@@ -24,7 +24,7 @@
 - 已实现单用 Yoga UI 的登录主界面与游戏主界面。
 - 设计分辨率固定为 720×1280 竖屏，使用 `UI.Scale.DESIGN_RESOLUTION(720, 1280)`。
 - 登录背景图使用 `assets/image/login_background.png`，运行时引用路径为 `image/login_background.png`。
-- 主界面参考图资源为 `assets/image/main_reference.png`，运行时引用路径为 `image/main_reference.png`。
+- 游戏主界面已从整屏参考图切换为分层资源：背景、森林关卡、资源图标、顶部功能图标、挑战徽章、收益条、秘境按钮、功能按钮、底部导航均使用 `assets/image/` 下的独立图片。
 - 登录按钮已接入“请求存档 → 读取玩家数据 → 离线收益结算 → 请求更新存档 → 跳转主界面”流程。
 - 最近一次 LSP 诊断 0 Error，官方构建成功。
 - 后续开发需先按 UrhoX 文档流程阅读 Lua 指南、相关示例和脚手架，再实现。

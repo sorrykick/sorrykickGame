@@ -3,7 +3,14 @@ local UI = require("urhox-libs/UI")
 local DESIGN_WIDTH = 720
 local DESIGN_HEIGHT = 1280
 local LOGIN_BACKGROUND_IMAGE = "image/login_background.png"
-local MAIN_REFERENCE_IMAGE = "image/main_reference.png"
+local MAIN_BACKGROUND_IMAGE = "image/main_bg_blur.png"
+local STAGE_FOREST_IMAGE = "image/stage_forest_bg.png"
+local REWARD_BAR_IMAGE = "image/reward_bar.png"
+local BOTTOM_NAV_BG_IMAGE = "image/bottom_nav_bg.png"
+local SECRET_REALM_BG_IMAGE = "image/secret_realm_bg.png"
+local SECRET_BUTTON_IMAGE = "image/btn_secret_challenge.png"
+local CHALLENGE_BADGE_LEFT_IMAGE = "image/challenge_badge_left.png"
+local CHALLENGE_BADGE_RIGHT_IMAGE = "image/challenge_badge_right.png"
 local SAVE_KEY = "partner_idle_save_v1"
 local MAX_OFFLINE_SECONDS = 12 * 60 * 60
 
@@ -21,6 +28,35 @@ local offlineLabel_ = nil
 local playerSave_ = nil
 local pendingOfflineCoin_ = 0
 local isLoggingIn_ = false
+
+local RESOURCE_ICONS = {
+    coin = "image/icon_gold.png",
+    diamond = "image/icon_gem_blue.png",
+    crystal = "image/icon_gem_white.png",
+}
+
+local TOP_MENU_ICONS = {
+    ["签到"] = "image/icon_signin.png",
+    ["商城"] = "image/icon_shop.png",
+    ["邮件"] = "image/icon_mail.png",
+    ["成就"] = "image/icon_achievement.png",
+    ["设置"] = "image/icon_settings.png",
+}
+
+local FEATURE_ICONS = {
+    ["勇者"] = "image/icon_hero.png",
+    ["福利"] = "image/icon_welfare.png",
+    ["召唤"] = "image/icon_summon.png",
+    ["宝物"] = "image/icon_treasure.png",
+}
+
+local BOTTOM_NAV_ICONS = {
+    ["背包"] = "image/nav_bag.png",
+    ["阵型"] = "image/nav_formation.png",
+    ["冒险"] = "image/nav_adventure.png",
+    ["任务"] = "image/nav_adventure.png",
+    ["图鉴"] = "image/nav_codex.png",
+}
 
 local function Now()
     return os.time()
@@ -209,18 +245,7 @@ local function ShowRoot(root)
     UI.SetRoot(uiRoot_, true)
 end
 
-local function LabelText(text, size, color)
-    return UI.Label {
-        text = text,
-        fontSize = size,
-        fontWeight = "bold",
-        fontColor = color or { 255, 255, 255, 255 },
-        textAlign = "center",
-        textStroke = { width = 2, color = { 50, 34, 20, 220 } },
-    }
-end
-
-local function CreateResourcePill(id, title, value, color)
+local function CreateResourcePill(id, title, value)
     return UI.Panel {
         id = id,
         width = 174,
@@ -231,17 +256,15 @@ local function CreateResourcePill(id, title, value, color)
         borderColor = { 220, 200, 160, 90 },
         borderWidth = 1,
         borderRadius = 8,
-        paddingLeft = 8,
+        paddingLeft = 5,
         paddingRight = 10,
-        gap = 8,
+        gap = 6,
         children = {
             UI.Panel {
-                width = 24,
-                height = 24,
-                borderRadius = 12,
-                backgroundColor = color,
-                borderWidth = 2,
-                borderColor = { 255, 255, 255, 160 },
+                width = 30,
+                height = 30,
+                backgroundImage = RESOURCE_ICONS[id],
+                backgroundFit = "contain",
             },
             UI.Label {
                 text = title,
@@ -266,25 +289,21 @@ end
 
 local function CreateTopMenuButton(label)
     return UI.Panel {
-        width = 82,
-        height = 78,
+        width = 94,
+        height = 96,
         alignItems = "center",
-        justifyContent = "center",
-        gap = 3,
-        backgroundColor = { 222, 214, 194, 115 },
-        borderColor = { 80, 58, 36, 120 },
-        borderWidth = 2,
-        borderRadius = 12,
+        justifyContent = "flex-end",
+        gap = 0,
+        backgroundColor = { 255, 255, 255, 0 },
         onClick = function()
             print("[Home] Menu clicked: " .. label)
         end,
         children = {
-            UI.Label {
-                text = "★",
-                fontSize = 30,
-                fontWeight = "bold",
-                fontColor = { 55, 42, 28, 255 },
-                textAlign = "center",
+            UI.Panel {
+                width = 74,
+                height = 74,
+                backgroundImage = TOP_MENU_ICONS[label],
+                backgroundFit = "contain",
             },
             UI.Label {
                 text = label,
@@ -322,20 +341,19 @@ local function CreateModeBadge(title, color)
 end
 
 local function CreateCircleFeature(label, side)
-    local left = side == "left" and 24 or nil
-    local right = side == "right" and 24 or nil
+    local left = side == "left" and 20 or nil
+    local right = side == "right" and 20 or nil
     return UI.Panel {
-        width = 120,
-        height = 120,
-        borderRadius = 60,
-        backgroundColor = { 230, 224, 210, 205 },
-        borderWidth = 5,
-        borderColor = { 255, 255, 255, 180 },
+        width = 132,
+        height = 132,
+        backgroundImage = FEATURE_ICONS[label],
+        backgroundFit = "contain",
         alignItems = "center",
-        justifyContent = "center",
+        justifyContent = "flex-end",
         position = "absolute",
         left = left,
         right = right,
+        paddingBottom = 12,
         onClick = function()
             print("[Home] Feature clicked: " .. label)
         end,
@@ -360,21 +378,17 @@ local function CreateBottomNav(label)
         height = 126,
         alignItems = "center",
         justifyContent = "center",
-        backgroundColor = { 38, 30, 22, 225 },
-        borderColor = { 181, 160, 116, 160 },
-        borderWidth = 1,
-        gap = 6,
+        backgroundColor = { 255, 255, 255, 0 },
+        gap = 2,
         onClick = function()
             print("[Home] Bottom tab clicked: " .. label)
         end,
         children = {
-            UI.Label {
-                text = "◆",
-                fontSize = 34,
-                fontWeight = "bold",
-                fontColor = { 240, 230, 205, 255 },
-                textAlign = "center",
-                textStroke = { width = 2, color = { 0, 0, 0, 180 } },
+            UI.Panel {
+                width = 56,
+                height = 56,
+                backgroundImage = BOTTOM_NAV_ICONS[label],
+                backgroundFit = "contain",
             },
             UI.Label {
                 text = label,
@@ -412,18 +426,14 @@ local function CreateTopHud()
                         justifyContent = "center",
                         children = { UI.Label { text = "23:00", fontSize = 18, fontColor = { 255, 255, 255, 255 } } },
                     },
-                    CreateResourcePill("coin", "金", FormatNumber(playerSave_.coin), { 255, 213, 55, 255 }),
-                    CreateResourcePill("diamond", "蓝", FormatNumber(playerSave_.diamond), { 45, 205, 255, 255 }),
-                    CreateResourcePill("crystal", "晶", FormatNumber(playerSave_.crystal), { 215, 220, 255, 255 }),
-                    UI.Button {
-                        text = "+",
+                    CreateResourcePill("coin", "金", FormatNumber(playerSave_.coin)),
+                    CreateResourcePill("diamond", "蓝", FormatNumber(playerSave_.diamond)),
+                    CreateResourcePill("crystal", "晶", FormatNumber(playerSave_.crystal)),
+                    UI.Panel {
                         width = 44,
                         height = 44,
-                        fontSize = 30,
-                        backgroundColor = { 210, 78, 28, 255 },
-                        pressedBackgroundColor = { 170, 50, 18, 255 },
-                        textColor = { 255, 245, 210, 255 },
-                        borderRadius = 9,
+                        backgroundImage = "image/icon_add.png",
+                        backgroundFit = "contain",
                         onClick = function()
                             print("[Home] Add resource clicked")
                         end,
@@ -471,7 +481,7 @@ local function CreateHomeScreen()
         id = "homeScreen",
         width = DESIGN_WIDTH,
         height = DESIGN_HEIGHT,
-        backgroundImage = MAIN_REFERENCE_IMAGE,
+        backgroundImage = MAIN_BACKGROUND_IMAGE,
         backgroundFit = "cover",
         overflow = "hidden",
         children = {
@@ -523,40 +533,51 @@ local function CreateHomeScreen()
 
             UI.Panel {
                 position = "absolute",
-                top = 236,
-                left = 42,
-                right = 42,
-                height = 292,
+                top = 224,
+                left = 0,
+                right = 0,
+                height = 310,
+                backgroundImage = STAGE_FOREST_IMAGE,
+                backgroundFit = "cover",
                 children = {
                     UI.Panel {
                         position = "absolute",
-                        top = 8,
+                        top = 0,
                         left = 0,
-                        width = 116,
-                        height = 116,
-                        borderRadius = 58,
-                        backgroundColor = { 236, 228, 208, 190 },
-                        alignItems = "center",
-                        justifyContent = "center",
-                        children = { LabelText("玩家\n挑战", 22, { 72, 52, 35, 255 }) },
+                        right = 0,
+                        bottom = 0,
+                        backgroundColor = { 0, 0, 0, 22 },
+                        pointerEvents = "box-none",
                     },
                     UI.Panel {
                         position = "absolute",
                         top = 8,
-                        right = 0,
-                        width = 116,
-                        height = 116,
-                        borderRadius = 58,
-                        backgroundColor = { 236, 228, 208, 190 },
-                        alignItems = "center",
-                        justifyContent = "center",
-                        children = { LabelText("玩家\n养成", 22, { 72, 52, 35, 255 }) },
+                        left = 4,
+                        width = 128,
+                        height = 136,
+                        backgroundImage = CHALLENGE_BADGE_LEFT_IMAGE,
+                        backgroundFit = "contain",
+                        onClick = function()
+                            print("[Home] Player challenge clicked")
+                        end,
+                    },
+                    UI.Panel {
+                        position = "absolute",
+                        top = 8,
+                        right = 4,
+                        width = 128,
+                        height = 136,
+                        backgroundImage = CHALLENGE_BADGE_RIGHT_IMAGE,
+                        backgroundFit = "contain",
+                        onClick = function()
+                            print("[Home] Player growth clicked")
+                        end,
                     },
                     UI.Label {
                         text = "伙伴 Lv." .. tostring(playerSave_.partner.level),
                         position = "absolute",
-                        left = 56,
-                        bottom = 12,
+                        left = 64,
+                        bottom = 18,
                         fontSize = 22,
                         fontColor = { 255, 255, 255, 255 },
                         textStroke = { width = 2, color = { 0, 0, 0, 220 } },
@@ -592,12 +613,13 @@ local function CreateHomeScreen()
                 top = 602,
                 left = 0,
                 right = 0,
-                height = 46,
+                height = 48,
                 flexDirection = "row",
                 alignItems = "center",
                 justifyContent = "center",
                 gap = 18,
-                backgroundColor = { 238, 228, 205, 235 },
+                backgroundImage = REWARD_BAR_IMAGE,
+                backgroundFit = "fill",
                 children = {
                     UI.Label {
                         id = "offlineRewardLabel",
@@ -636,28 +658,27 @@ local function CreateHomeScreen()
                 children = {
                     UI.Panel {
                         position = "absolute",
+                        top = 54,
+                        left = 190,
+                        width = 339,
+                        height = 242,
+                        backgroundImage = SECRET_REALM_BG_IMAGE,
+                        backgroundFit = "contain",
+                        pointerEvents = "none",
+                    },
+                    UI.Panel {
+                        position = "absolute",
                         top = 166,
                         left = 240,
-                        right = 240,
+                        width = 240,
                         height = 72,
-                        borderRadius = 36,
-                        backgroundColor = { 73, 225, 255, 230 },
-                        borderWidth = 4,
-                        borderColor = { 31, 138, 180, 255 },
+                        backgroundImage = SECRET_BUTTON_IMAGE,
+                        backgroundFit = "contain",
                         alignItems = "center",
                         justifyContent = "center",
                         onClick = function()
                             print("[Home] Secret challenge clicked")
                         end,
-                        children = {
-                            UI.Label {
-                                text = "秘境挑战",
-                                fontSize = 30,
-                                fontWeight = "bold",
-                                fontColor = { 255, 255, 255, 255 },
-                                textStroke = { width = 3, color = { 40, 120, 160, 255 } },
-                            },
-                        },
                     },
                     UI.Panel { position = "absolute", top = 0, left = 0, right = 0, height = 150, pointerEvents = "box-none", children = {
                         CreateCircleFeature("勇者", "left"),
@@ -675,7 +696,9 @@ local function CreateHomeScreen()
                 left = 0,
                 right = 0,
                 bottom = 0,
-                height = 126,
+                height = 131,
+                backgroundImage = BOTTOM_NAV_BG_IMAGE,
+                backgroundFit = "fill",
                 flexDirection = "row",
                 children = {
                     CreateBottomNav("背包"),
