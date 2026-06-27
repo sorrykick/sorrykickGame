@@ -25,10 +25,19 @@ local loginStatusLabel_ = nil
 local coinLabel_ = nil
 ---@type Widget|nil
 local offlineLabel_ = nil
+---@type Widget|nil
+local stageForestLayerA_ = nil
+---@type Widget|nil
+local stageForestLayerB_ = nil
+
+local STAGE_FOREST_WIDTH = 1024
+local STAGE_FOREST_HEIGHT = 309
+local STAGE_FOREST_SPEED = 28
 
 local playerSave_ = nil
 local pendingOfflineCoin_ = 0
 local isLoggingIn_ = false
+local stageForestOffset_ = 0
 
 local RESOURCE_ICONS = {
     coin = "image/icon_gold.png",
@@ -244,6 +253,26 @@ end
 local function ShowRoot(root)
     uiRoot_ = root
     UI.SetRoot(uiRoot_, true)
+end
+
+local function UpdateStageForestLayers()
+    if not stageForestLayerA_ or not stageForestLayerB_ then
+        return
+    end
+
+    local x = -stageForestOffset_
+    stageForestLayerA_:SetStyle({ left = x })
+    stageForestLayerB_:SetStyle({ left = x + STAGE_FOREST_WIDTH })
+end
+
+---@param eventType string
+---@param eventData UpdateEventData
+function HandleUpdate(eventType, eventData)
+    local timeStep = eventData["TimeStep"]:GetFloat()
+    if stageForestLayerA_ and stageForestLayerB_ then
+        stageForestOffset_ = (stageForestOffset_ + STAGE_FOREST_SPEED * timeStep) % STAGE_FOREST_WIDTH
+        UpdateStageForestLayers()
+    end
 end
 
 local function CreateResourcePill(id, title, value)
@@ -463,6 +492,83 @@ local function CreateTopHud()
     }
 end
 
+local function CreateStageForestPanel()
+    stageForestOffset_ = 0
+    stageForestLayerA_ = UI.Panel {
+        position = "absolute",
+        top = 0,
+        left = 0,
+        width = STAGE_FOREST_WIDTH,
+        height = STAGE_FOREST_HEIGHT,
+        backgroundImage = STAGE_FOREST_IMAGE,
+        backgroundFit = "fill",
+    }
+    stageForestLayerB_ = UI.Panel {
+        position = "absolute",
+        top = 0,
+        left = STAGE_FOREST_WIDTH,
+        width = STAGE_FOREST_WIDTH,
+        height = STAGE_FOREST_HEIGHT,
+        backgroundImage = STAGE_FOREST_IMAGE,
+        backgroundFit = "fill",
+    }
+
+    return UI.Panel {
+        position = "absolute",
+        top = 224,
+        left = 0,
+        right = 0,
+        height = 310,
+        overflow = "hidden",
+        children = {
+            stageForestLayerA_,
+            stageForestLayerB_,
+            UI.Panel {
+                position = "absolute",
+                top = 0,
+                left = 0,
+                right = 0,
+                bottom = 0,
+                backgroundColor = { 0, 0, 0, 22 },
+                pointerEvents = "box-none",
+            },
+            UI.Panel {
+                position = "absolute",
+                top = 8,
+                left = 4,
+                width = 128,
+                height = 136,
+                backgroundImage = CHALLENGE_BADGE_LEFT_IMAGE,
+                backgroundFit = "contain",
+                onClick = function()
+                    print("[Home] Player challenge clicked")
+                end,
+            },
+            UI.Panel {
+                position = "absolute",
+                top = 8,
+                right = 4,
+                width = 128,
+                height = 136,
+                backgroundImage = CHALLENGE_BADGE_RIGHT_IMAGE,
+                backgroundFit = "contain",
+                onClick = function()
+                    print("[Home] Player growth clicked")
+                end,
+            },
+            UI.Label {
+                text = "伙伴 Lv." .. tostring(playerSave_.partner.level),
+                position = "absolute",
+                left = 64,
+                bottom = 18,
+                fontSize = 22,
+                fontColor = { 255, 255, 255, 255 },
+                textStroke = { width = 2, color = { 0, 0, 0, 220 } },
+            },
+        },
+    }
+end
+
 local function CreateHomeScreen()
     coinLabel_ = nil
     offlineLabel_ = nil
@@ -522,59 +628,7 @@ local function CreateHomeScreen()
                 },
             },
 
-            UI.Panel {
-                position = "absolute",
-                top = 224,
-                left = 0,
-                right = 0,
-                height = 310,
-                backgroundImage = STAGE_FOREST_IMAGE,
-                backgroundFit = "cover",
-                children = {
-                    UI.Panel {
-                        position = "absolute",
-                        top = 0,
-                        left = 0,
-                        right = 0,
-                        bottom = 0,
-                        backgroundColor = { 0, 0, 0, 22 },
-                        pointerEvents = "box-none",
-                    },
-                    UI.Panel {
-                        position = "absolute",
-                        top = 8,
-                        left = 4,
-                        width = 128,
-                        height = 136,
-                        backgroundImage = CHALLENGE_BADGE_LEFT_IMAGE,
-                        backgroundFit = "contain",
-                        onClick = function()
-                            print("[Home] Player challenge clicked")
-                        end,
-                    },
-                    UI.Panel {
-                        position = "absolute",
-                        top = 8,
-                        right = 4,
-                        width = 128,
-                        height = 136,
-                        backgroundImage = CHALLENGE_BADGE_RIGHT_IMAGE,
-                        backgroundFit = "contain",
-                        onClick = function()
-                            print("[Home] Player growth clicked")
-                        end,
-                    },
-                    UI.Label {
-                        text = "伙伴 Lv." .. tostring(playerSave_.partner.level),
-                        position = "absolute",
-                        left = 64,
-                        bottom = 18,
-                        fontSize = 22,
-                        fontColor = { 255, 255, 255, 255 },
-                        textStroke = { width = 2, color = { 0, 0, 0, 220 } },
-                    },
-                },
-            },
+            CreateStageForestPanel(),
 
             UI.Panel {
                 position = "absolute",
@@ -847,6 +901,7 @@ function Start()
     })
 
     ShowRoot(CreateLoginScreen())
+    SubscribeToEvent("Update", "HandleUpdate")
 
     print("[Main] Login screen initialized at 720x1280 design resolution")
 end
@@ -858,4 +913,6 @@ function Stop()
     loginStatusLabel_ = nil
     coinLabel_ = nil
     offlineLabel_ = nil
+    stageForestLayerA_ = nil
+    stageForestLayerB_ = nil
 end
