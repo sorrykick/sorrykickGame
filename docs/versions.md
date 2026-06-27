@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-06-27 | inspector-bottom-nav | 落实 Inspector 底部导航修改：隐藏文字标签、放大导航图标到 96×96、调整底部导航项布局，LSP 0 Error，构建成功。 |
 | 2026-06-27 | home-ui-assets | 按新上传资源更新主界面，从整屏参考图切换为分层图片资源 + Yoga UI 叠加，LSP 0 Error，构建成功。 |
 | 2026-06-27 | login-save-home | 接入登录读档、离线收益结算、存档更新和跳转主界面流程；新增参考图风格主界面，LSP 0 Error，构建成功。 |
 | 2026-06-27 | login-ui | 新增 720×1280 竖屏 Yoga UI 登录主界面，背景图 `image/login_background.png`，中央“登录”按钮，构建成功。 |

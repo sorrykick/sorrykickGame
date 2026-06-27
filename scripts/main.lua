@@ -371,11 +371,16 @@ local function CreateCircleFeature(label, side)
     }
 end
 
-local function CreateBottomNav(label)
+local function CreateBottomNav(label, index)
+    local leftOffsets = { 0, 2, 4, 4, 2 }
+    local itemHeight = index == 1 and 128 or 126
     return UI.Panel {
         flexGrow = 1,
         flexShrink = 1,
-        height = 126,
+        width = 52,
+        height = itemHeight,
+        left = leftOffsets[index] or 0,
+        top = index == 2 and 0 or nil,
         alignItems = "center",
         justifyContent = "center",
         backgroundColor = { 255, 255, 255, 0 },
@@ -385,12 +390,15 @@ local function CreateBottomNav(label)
         end,
         children = {
             UI.Panel {
-                width = 56,
-                height = 56,
+                width = 96,
+                height = 96,
+                left = index == 1 and 0 or nil,
+                top = index == 1 and 0 or nil,
                 backgroundImage = BOTTOM_NAV_ICONS[label],
                 backgroundFit = "contain",
             },
             UI.Label {
+                visible = false,
                 text = label,
                 fontSize = 28,
                 fontWeight = "bold",
@@ -701,11 +709,11 @@ local function CreateHomeScreen()
                 backgroundFit = "fill",
                 flexDirection = "row",
                 children = {
-                    CreateBottomNav("背包"),
-                    CreateBottomNav("阵型"),
-                    CreateBottomNav("冒险"),
-                    CreateBottomNav("任务"),
-                    CreateBottomNav("图鉴"),
+                    CreateBottomNav("背包", 1),
+                    CreateBottomNav("阵型", 2),
+                    CreateBottomNav("冒险", 3),
+                    CreateBottomNav("任务", 4),
+                    CreateBottomNav("图鉴", 5),
                 },
             },
         },
