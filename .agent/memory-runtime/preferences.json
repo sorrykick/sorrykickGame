@@ -5,6 +5,8 @@
     "gamedev": {
       "orientation": "portrait-only",
       "game_type": "2D idle casual mobile",
+      "core_term": "伙伴",
+      "avoid_terms": ["宠物"],
       "save_rules": [
         "login requests player save",
         "player data changes request save update"
