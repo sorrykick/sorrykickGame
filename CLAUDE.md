@@ -20,14 +20,18 @@
 
 ## 当前状态
 
-- 当前工作区尚未发现 `scripts/`、`assets/`、`.project/`。
-- 尚未创建游戏代码。
+- 已创建 `scripts/main.lua`。
+- 已实现单用 Yoga UI 的登录主界面。
+- 设计分辨率固定为 720×1280 竖屏，使用 `UI.Scale.DESIGN_RESOLUTION(720, 1280)`。
+- 背景图使用 `assets/image/login_background.png`，运行时引用路径为 `image/login_background.png`。
+- 主界面中央有“登录”按钮。
+- 最近一次构建成功。
 - 后续开发需先按 UrhoX 文档流程阅读 Lua 指南、相关示例和脚手架，再实现。
 
 ## likely_next_task
 
-- 创建 2D 竖屏离线挂机休闲游戏原型。
-- 建立登录读档、数据变更存档更新、离线收益结算的基础架构。
+- 将登录按钮接入登录读档流程。
+- 建立玩家存档数据模型、数据变更保存、离线收益结算的基础架构。
 
 ## 避雷清单
 
