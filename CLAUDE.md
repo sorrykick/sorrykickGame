@@ -21,17 +21,19 @@
 ## 当前状态
 
 - 已创建 `scripts/main.lua`。
-- 已实现单用 Yoga UI 的登录主界面。
+- 已实现单用 Yoga UI 的登录主界面与游戏主界面。
 - 设计分辨率固定为 720×1280 竖屏，使用 `UI.Scale.DESIGN_RESOLUTION(720, 1280)`。
-- 背景图使用 `assets/image/login_background.png`，运行时引用路径为 `image/login_background.png`。
-- 主界面中央有“登录”按钮。
-- 最近一次构建成功。
+- 登录背景图使用 `assets/image/login_background.png`，运行时引用路径为 `image/login_background.png`。
+- 主界面参考图资源为 `assets/image/main_reference.png`，运行时引用路径为 `image/main_reference.png`。
+- 登录按钮已接入“请求存档 → 读取玩家数据 → 离线收益结算 → 请求更新存档 → 跳转主界面”流程。
+- 最近一次 LSP 诊断 0 Error，官方构建成功。
 - 后续开发需先按 UrhoX 文档流程阅读 Lua 指南、相关示例和脚手架，再实现。
 
 ## likely_next_task
 
-- 将登录按钮接入登录读档流程。
-- 建立玩家存档数据模型、数据变更保存、离线收益结算的基础架构。
+- 将主界面参考图拆分为正式 UI 资源与可交互模块。
+- 继续完善主界面的背包、阵型、冒险、任务、图鉴等入口。
+- 建立更完整的伙伴成长、收益领取和数值展示逻辑。
 
 ## 避雷清单
 
