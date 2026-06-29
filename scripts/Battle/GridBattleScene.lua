@@ -178,13 +178,10 @@ function GridBattleScene:CreateBackground()
         top = 0,
         right = 0,
         bottom = 0,
-        backgroundGradient = {
-            direction = "vertical",
-            colors = {
-                { 31, 51, 57, 255 },
-                { 19, 28, 31, 255 },
-            },
-        },
+        zIndex = 0,
+        borderRadius = 0,
+        backgroundImage = "image/BattleRes/1.png",
+        backgroundFit = "cover",
         pointerEvents = "none",
     }
 end
