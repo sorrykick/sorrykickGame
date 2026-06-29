@@ -13,6 +13,14 @@ local SECRET_BUTTON_IMAGE = "image/btn_secret_challenge.png"
 local CHALLENGE_BADGE_LEFT_IMAGE = "image/challenge_badge_left.png"
 local CHALLENGE_BADGE_RIGHT_IMAGE = "image/challenge_badge_right.png"
 local TITLE_TOP_IMAGE = "image/P-标题-上.png"
+local HERO1_CLIP_DIR = "image/npcClip/1"
+
+local HERO1_ANIMATIONS = {
+    idle = { label = "待机", frames = { 1, 2, 3, 4 }, fps = 5, loop = true },
+    move = { label = "移动", frames = { 6, 7, 8, 9 }, fps = 8, loop = true },
+    attack = { label = "攻击", frames = { 10, 11, 12, 13, 14 }, fps = 10, loop = false, returnTo = "idle" },
+}
+local HERO1_ACTION_ORDER = { "idle", "move", "attack" }
 
 ---@type Widget|nil
 local uiRoot_ = nil
@@ -28,6 +36,10 @@ local offlineLabel_ = nil
 local stageForestLayerA_ = nil
 ---@type Widget|nil
 local stageForestLayerB_ = nil
+---@type Widget|nil
+local hero1Sprite_ = nil
+---@type Widget|nil
+local hero1ActionLabel_ = nil
 
 local STAGE_FOREST_WIDTH = 1024
 local STAGE_FOREST_HEIGHT = 309
@@ -35,6 +47,10 @@ local STAGE_FOREST_SPEED = 28
 
 local isLoggingIn_ = false
 local stageForestOffset_ = 0
+local hero1AnimName_ = "idle"
+local hero1FrameIndex_ = 1
+local hero1FrameTimer_ = 0
+local hero1ActionOrderIndex_ = 1
 
 local RESOURCE_ICONS = {
     coin = "image/icon_gold.png",
@@ -74,6 +90,60 @@ local function FormatNumber(value)
         return string.format("%.1f万", value / 10000)
     end
     return tostring(value)
+end
+
+local function GetHero1FramePath(frameNumber)
+    return string.format("%s/%02d.png", HERO1_CLIP_DIR, frameNumber)
+end
+
+local function SetHero1Animation(name)
+    local anim = HERO1_ANIMATIONS[name]
+    if not anim then
+        print("[Hero1] Unknown animation: " .. tostring(name))
+        return
+    end
+
+    hero1AnimName_ = name
+    hero1FrameIndex_ = 1
+    hero1FrameTimer_ = 0
+
+    if hero1Sprite_ then
+        hero1Sprite_:SetBackgroundImage(GetHero1FramePath(anim.frames[hero1FrameIndex_]))
+    end
+    if hero1ActionLabel_ then
+        hero1ActionLabel_:SetText("勇者1 · " .. anim.label)
+    end
+
+    print("[Hero1] Play animation: " .. anim.label)
+end
+
+local function PlayNextHero1Action()
+    hero1ActionOrderIndex_ = hero1ActionOrderIndex_ % #HERO1_ACTION_ORDER + 1
+    SetHero1Animation(HERO1_ACTION_ORDER[hero1ActionOrderIndex_])
+end
+
+local function UpdateHero1Animation(timeStep)
+    if not hero1Sprite_ then return end
+
+    local anim = HERO1_ANIMATIONS[hero1AnimName_]
+    if not anim then return end
+
+    hero1FrameTimer_ = hero1FrameTimer_ + timeStep
+    local frameDuration = 1 / anim.fps
+    if hero1FrameTimer_ < frameDuration then return end
+
+    hero1FrameTimer_ = hero1FrameTimer_ - frameDuration
+    hero1FrameIndex_ = hero1FrameIndex_ + 1
+    if hero1FrameIndex_ > #anim.frames then
+        if anim.loop then
+            hero1FrameIndex_ = 1
+        else
+            SetHero1Animation(anim.returnTo or "idle")
+            return
+        end
+    end
+
+    hero1Sprite_:SetBackgroundImage(GetHero1FramePath(anim.frames[hero1FrameIndex_]))
 end
 
 local function UpdateHomeLabels()
@@ -122,6 +192,7 @@ function HandleUpdate(eventType, eventData)
         stageForestOffset_ = (stageForestOffset_ + STAGE_FOREST_SPEED * timeStep) % STAGE_FOREST_WIDTH
         UpdateStageForestLayers()
     end
+    UpdateHero1Animation(timeStep)
 end
 
 local function CreateResourcePill(id, value)
@@ -265,6 +336,49 @@ local function CreateBottomNav(label, index)
     }
 end
 
+local function CreateHero1Actor()
+    hero1AnimName_ = "idle"
+    hero1FrameIndex_ = 1
+    hero1FrameTimer_ = 0
+    hero1ActionOrderIndex_ = 1
+
+    hero1Sprite_ = UI.Panel {
+        width = 300,
+        height = 240,
+        backgroundImage = GetHero1FramePath(1),
+        backgroundFit = "contain",
+        imageTint = { 255, 255, 255, 255 },
+        transition = "scale 0.12s easeOut",
+    }
+    hero1ActionLabel_ = UI.Label {
+        text = "勇者1 · 待机",
+        height = 28,
+        fontSize = 20,
+        fontWeight = "bold",
+        fontColor = { 255, 248, 214, 255 },
+        textAlign = "center",
+        textStroke = { width = 2, color = { 36, 28, 18, 230 } },
+    }
+
+    return UI.Panel {
+        position = "absolute",
+        top = 54,
+        left = 205,
+        width = 310,
+        height = 246,
+        alignItems = "center",
+        justifyContent = "flex-end",
+        backgroundColor = { 255, 255, 255, 0 },
+        onClick = function()
+            PlayNextHero1Action()
+        end,
+        children = {
+            hero1Sprite_,
+            hero1ActionLabel_,
+        },
+    }
+end
+
 local function CreateTopHud()
     local saveData = SaveManager.GetSaveData()
     return UI.Panel {
@@ -382,6 +496,7 @@ local function CreateStageForestPanel()
                 backgroundFit = "contain",
                 onClick = function()
                     print("[Home] Player challenge clicked")
+                    SetHero1Animation("attack")
                 end,
             },
             UI.Panel {
@@ -394,8 +509,10 @@ local function CreateStageForestPanel()
                 backgroundFit = "contain",
                 onClick = function()
                     print("[Home] Player growth clicked")
+                    SetHero1Animation("move")
                 end,
             },
+            CreateHero1Actor(),
             UI.Label {
                 text = "伙伴 Lv." .. tostring(saveData.partner.level),
                 position = "absolute",
@@ -412,6 +529,8 @@ end
 local function CreateHomeScreen()
     coinLabel_ = nil
     offlineLabel_ = nil
+    hero1Sprite_ = nil
+    hero1ActionLabel_ = nil
 
     local root = UI.Panel {
         id = "homeScreen",
@@ -741,4 +860,6 @@ function Stop()
     offlineLabel_ = nil
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
+    hero1Sprite_ = nil
+    hero1ActionLabel_ = nil
 end
