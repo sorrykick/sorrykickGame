@@ -16,9 +16,9 @@ local TITLE_TOP_IMAGE = "image/P-标题-上.png"
 local HERO1_CLIP_DIR = "image/npcClip/1"
 
 local HERO1_ANIMATIONS = {
-    idle = { label = "待机", frames = { 1, 2, 3, 4 }, fps = 5, loop = true },
-    move = { label = "移动", frames = { 6, 7, 8, 9 }, fps = 8, loop = true },
-    attack = { label = "攻击", frames = { 10, 11, 12, 13, 14 }, fps = 10, loop = false, returnTo = "idle" },
+    idle = { label = "待机", frames = { 1, 2, 3, 4 }, fps = 5, loop = true, width = 300, height = 240 },
+    move = { label = "移动", frames = { 6, 7, 8, 9 }, fps = 8, loop = true, width = 300, height = 240 },
+    attack = { label = "攻击", frames = { 10, 11, 12, 13, 14 }, fps = 10, loop = false, returnTo = "idle", width = 360, height = 240 },
 }
 local HERO1_ACTION_ORDER = { "idle", "move", "attack" }
 
@@ -108,7 +108,11 @@ local function SetHero1Animation(name)
     hero1FrameTimer_ = 0
 
     if hero1Sprite_ then
-        hero1Sprite_:SetBackgroundImage(GetHero1FramePath(anim.frames[hero1FrameIndex_]))
+        hero1Sprite_:SetStyle({
+            width = anim.width,
+            height = anim.height,
+            backgroundImage = GetHero1FramePath(anim.frames[hero1FrameIndex_]),
+        })
     end
     if hero1ActionLabel_ then
         hero1ActionLabel_:SetText("勇者1 · " .. anim.label)
@@ -363,8 +367,8 @@ local function CreateHero1Actor()
     return UI.Panel {
         position = "absolute",
         top = 54,
-        left = 205,
-        width = 310,
+        left = 180,
+        width = 360,
         height = 246,
         alignItems = "center",
         justifyContent = "flex-end",

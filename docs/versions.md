@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-06-29 | hero1-animation-size-normalization | 统一勇者1待机、移动、攻击动作显示高度；攻击动作使用更宽承载框避免攻击帧因素材宽度不同而视觉变小；LSP 0 Error，官方构建成功。 |
 | 2026-06-29 | hero1-ui-frame-animation | 接入 `assets/image/npcClip/1/` 勇者1序列帧动画：待机 01-04、移动 06-09、攻击 10-14；主界面森林关卡区展示勇者1，并通过点击勇者/挑战徽章/成长徽章触发动作；LSP 服务不可用，官方构建成功。 |
 | 2026-06-28 | save-manager-modularization | 将登录读档、云同步、运行时副本、基础合法性校验从 `main.lua` 拆分为 `SaveManager` / `SaveSchema` / `SaveValidator` / `RuntimeSave` 模块；LSP 服务不可用，官方构建成功。 |
 | 2026-06-27 | inspector-top-home-layout | 落实 Inspector 主界面上半区修改：顶部功能区图标放大到 96×96、删除资源短标签和右上角数字、调整标题条/章节文字/模式行/挑战徽章布局，LSP 0 Error，构建成功。 |
