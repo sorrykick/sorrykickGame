@@ -98,9 +98,10 @@ function GridBattleScene:CreateRoot()
     self.gridLayer = UI.Panel {
         position = "absolute",
         left = GRID_LEFT,
-        top = GRID_TOP,
+        top = 600,
         width = GRID_SIZE,
         height = GRID_SIZE,
+        visible = false,
         flexDirection = "row",
         flexWrap = "wrap",
         backgroundColor = { 18, 24, 26, 255 },
@@ -247,9 +248,9 @@ end
 function GridBattleScene:CreateBottomPanel()
     return UI.Panel {
         position = "absolute",
-        left = 32,
-        right = 32,
-        bottom = 38,
+        left = 37,
+        right = 27,
+        bottom = 832,
         height = 170,
         padding = 18,
         gap = 12,

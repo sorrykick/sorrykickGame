@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-06-29 | inspector-battle-layout | 按 Inspector 修改战斗布局：隐藏网格显示层并设置 `top=600`，自动战斗说明面板移动到 `left=37,right=27,bottom=832`；LSP 0 Error，官方构建成功。 |
 | 2026-06-29 | inspector-battle-background | 按 Inspector 修改战斗场景背景 Panel：背景资源改为 `image/BattleRes/1.png`，同步 `borderRadius=0`、`zIndex=0`；LSP 0 Error，官方构建成功。 |
 | 2026-06-29 | enemy-auto-battle-ai | 敌方接入与勇者相同的自动战斗逻辑：双方单位都会自动寻找最近敌对单位、按格靠近，并在敌方位于身前 1 格时攻击；LSP 0 Error，官方构建成功。 |
 | 2026-06-29 | auto-grid-battle-20x20 | 将网格战斗改为 20×20 自动战斗：勇者无需玩家控制，自动寻找最近敌方、按格靠近，只有敌方位于身前 1 格时自动攻击并扣血；LSP 0 Error，官方构建成功。 |
