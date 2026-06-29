@@ -121,7 +121,7 @@ function GridBattleScene:CreateRoot()
     }
 
     self.statusLabel = UI.Label {
-        text = "战场 20×20：勇者自动寻敌，攻击身前 1 格",
+        text = "战场 20×20：双方单位自动寻敌，攻击身前 1 格",
         fontSize = 22,
         fontColor = { 255, 244, 210, 255 },
         textAlign = "center",
@@ -237,7 +237,7 @@ function GridBattleScene:CreateTopPanel()
             },
             self.statusLabel,
             UI.Label {
-                text = "规则：所有勇者自动行动；每个单位占 1 格；只有敌人在身前 1 格时才会攻击。",
+                text = "规则：双方单位自动行动；每个单位占 1 格；只有敌人在身前 1 格时才会攻击。",
                 fontSize = 18,
                 fontColor = { 218, 232, 212, 235 },
                 textAlign = "left",
@@ -268,7 +268,7 @@ function GridBattleScene:CreateBottomPanel()
                 fontColor = { 255, 242, 205, 255 },
             },
             UI.Label {
-                text = "勇者会选择最近敌方，优先调整面向；目标不在身前 1 格时按格子靠近。",
+                text = "双方都会选择最近敌对单位，优先调整面向；目标不在身前 1 格时按格子靠近。",
                 fontSize = 19,
                 fontColor = { 225, 242, 226, 235 },
                 flexShrink = 1,
@@ -483,16 +483,29 @@ end
 
 function GridBattleScene:UpdateAutoBattle()
     for _, unit in pairs(self.units) do
-        if not unit.dead and not unit.moving and unit.camp == "hero" then
-            self:UpdateHeroAI(unit)
+        if not unit.dead and not unit.moving then
+            self:UpdateUnitAI(unit)
         end
     end
 end
 
-function GridBattleScene:UpdateHeroAI(unit)
+function GridBattleScene:HasLivingCamp(camp)
+    for _, unit in pairs(self.units) do
+        if not unit.dead and unit.camp == camp then
+            return true
+        end
+    end
+    return false
+end
+
+function GridBattleScene:UpdateUnitAI(unit)
     local target = self:FindNearestEnemy(unit)
     if not target then
-        self:SetStatus("战斗胜利：敌方已清除")
+        if unit.camp == "hero" then
+            self:SetStatus("战斗胜利：敌方已清除")
+        elseif not self:HasLivingCamp("hero") then
+            self:SetStatus("战斗失败：勇者已被击败")
+        end
         return
     end
 
