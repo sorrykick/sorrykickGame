@@ -1,5 +1,6 @@
 local UI = require("urhox-libs/UI")
 local SaveManager = require("Save.SaveManager")
+local GridBattleScene = require("Battle.GridBattleScene")
 
 local DESIGN_WIDTH = 720
 local DESIGN_HEIGHT = 1280
@@ -40,6 +41,8 @@ local stageForestLayerB_ = nil
 local hero1Sprite_ = nil
 ---@type Widget|nil
 local hero1ActionLabel_ = nil
+---@type table|nil
+local battleScene_ = nil
 
 local STAGE_FOREST_WIDTH = 1024
 local STAGE_FOREST_HEIGHT = 309
@@ -178,6 +181,16 @@ local function ShowRoot(root)
     UI.SetRoot(uiRoot_, true)
 end
 
+local EnterHomeScreen
+local EnterBattleScreen
+
+local function DestroyBattleScene()
+    if battleScene_ then
+        battleScene_:Destroy()
+        battleScene_ = nil
+    end
+end
+
 local function UpdateStageForestLayers()
     if not stageForestLayerA_ or not stageForestLayerB_ then
         return
@@ -192,6 +205,10 @@ end
 ---@param eventData UpdateEventData
 function HandleUpdate(eventType, eventData)
     local timeStep = eventData["TimeStep"]:GetFloat()
+    if battleScene_ then
+        battleScene_:Update(timeStep)
+        return
+    end
     if stageForestLayerA_ and stageForestLayerB_ then
         stageForestOffset_ = (stageForestOffset_ + STAGE_FOREST_SPEED * timeStep) % STAGE_FOREST_WIDTH
         UpdateStageForestLayers()
@@ -701,6 +718,7 @@ local function CreateHomeScreen()
                         justifyContent = "center",
                         onClick = function()
                             print("[Home] Secret challenge clicked")
+                            EnterBattleScreen()
                         end,
                         children = {
                             UI.Label {
@@ -749,10 +767,26 @@ local function CreateHomeScreen()
     return root
 end
 
-local function EnterHomeScreen()
+EnterHomeScreen = function()
+    DestroyBattleScene()
     ShowRoot(CreateHomeScreen())
     UpdateHomeLabels()
     print("[Main] Entered home screen")
+end
+
+EnterBattleScreen = function()
+    stageForestLayerA_ = nil
+    stageForestLayerB_ = nil
+    hero1Sprite_ = nil
+    hero1ActionLabel_ = nil
+
+    battleScene_ = GridBattleScene:new({
+        onExit = function()
+            EnterHomeScreen()
+        end,
+    })
+    ShowRoot(battleScene_:CreateRoot())
+    print("[Main] Entered battle screen")
 end
 
 local function HandleLogin()
@@ -856,6 +890,7 @@ function Start()
 end
 
 function Stop()
+    DestroyBattleScene()
     UI.Shutdown()
     uiRoot_ = nil
     loginButton_ = nil
