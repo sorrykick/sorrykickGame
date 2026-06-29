@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-06-30 | battle-unit-state-animations | 战斗单位接入待机/移动/攻击三状态序列帧：不移动不攻击时循环 01-04，移动时循环 06-09，攻击时播放 10-14 后回到待机；敌方水平反转并保留红色 tint；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | battle-enemy-move-animation | 敌方和勇者使用同一套移动动作设定，敌方移动时也按 8 FPS 循环播放 06-09 移动序列帧并保留红色 tint；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | battle-hero-move-animation | 战斗勇者移动时播放 06-09 移动序列帧：移动开始切换移动首帧，移动中按 8 FPS 循环，移动结束恢复 01 待机图；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | battle-grid-hidden | 隐藏战斗网格显示层，将 `GridBattleScene` 的 `gridLayer.visible` 改为 `false`；战斗单位贴图、敌方红色 tint 与自动战斗逻辑保留；LSP 0 Error，官方构建成功。 |

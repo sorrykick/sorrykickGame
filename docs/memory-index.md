@@ -17,7 +17,7 @@
 ## 当前结构
 
 - `scripts/main.lua`：Yoga UI 入口，包含登录界面、读档/存档更新、离线收益结算、游戏主界面，并接入秘境战斗场景切换。
-- `scripts/Battle/GridBattleScene.lua`：20×20 网格自动战斗原型，管理格子、单位占位、双方自动寻敌、身前 1 格攻击、战斗 HUD 和返回主界面；背景资源为 `image/BattleRes/1.png`；战斗网格逻辑保留但显示层已隐藏，单位显示使用已有 `image/npcClip/1/01.png` 模型图；勇者和敌方移动时都会播放 06-09 移动序列帧。
+- `scripts/Battle/GridBattleScene.lua`：20×20 网格自动战斗原型，管理格子、单位占位、双方自动寻敌、身前 1 格攻击、战斗 HUD 和返回主界面；背景资源为 `image/BattleRes/1.png`；战斗网格逻辑保留但显示层已隐藏，单位显示使用已有 `image/npcClip/1/01.png` 模型图；勇者和敌方都会按状态播放待机 01-04、移动 06-09、攻击 10-14 序列帧，敌方水平反转并保留红色 tint。
 - `assets/image/login_background.png`：登录背景图资源，运行时路径 `image/login_background.png`。
 - `assets/image/`：登录背景、主界面背景、森林关卡、资源图标、顶部功能图标、挑战徽章、收益条、秘境按钮、功能按钮、底部导航等 UI 图片资源。
 - `assets/image/npcClip/1/`：勇者1序列帧动作资源，01-04 为待机、06-09 为移动、10-14 为攻击。
@@ -39,7 +39,7 @@
 - 主界面上半区已按 Inspector 调整：顶部功能区图标 96×96，资源条移除“金/蓝/晶”短标签，右上角数字移除，标题条、章节文字、模式行和挑战徽章位置尺寸更新。
 - 存档系统已模块化：`scripts/Save/SaveSchema.lua`、`SaveValidator.lua`、`RuntimeSave.lua`、`SaveManager.lua`；`main.lua` 通过 `SaveManager.LoginSyncPlayerSave()` 登录读档，通过 `SaveManager.GetSaveData()` 读取运行时副本，通过 `SaveManager.CollectIdleReward()` 领取收益。
 - 勇者1已接入主界面森林关卡区，使用 `assets/image/npcClip/1/` 做 UI 序列帧动画：默认待机（01-04），移动（06-09），攻击（10-14）；点击勇者循环待机/移动/攻击，左侧挑战徽章触发攻击，右侧成长徽章触发移动；待机、移动、攻击已统一显示高度，攻击帧使用更宽承载框避免视觉缩小。
-- 新增 20×20 网格自动战斗原型：`GridBattleScene` 管理战场格子、单位占位、双方自动寻敌、按格靠近、身前 1 格攻击、伤害扣血和死亡移除占位；主界面“秘境挑战”进入战斗，战斗内“返回”回到主界面；战斗背景已按 Inspector 修改为 `image/BattleRes/1.png`；战斗网格显示层已隐藏，单位显示使用已有 `image/npcClip/1/01.png` 模型图（敌方用红色 tint 区分）；勇者和敌方移动时都会播放 `image/npcClip/1/06.png` 到 `09.png`。
+- 新增 20×20 网格自动战斗原型：`GridBattleScene` 管理战场格子、单位占位、双方自动寻敌、按格靠近、身前 1 格攻击、伤害扣血和死亡移除占位；主界面“秘境挑战”进入战斗，战斗内“返回”回到主界面；战斗背景已按 Inspector 修改为 `image/BattleRes/1.png`；战斗网格显示层已隐藏，单位显示使用已有 `image/npcClip/1/01.png` 模型图；勇者和敌方都会按状态播放待机、移动、攻击序列帧，敌方水平反转并使用红色 tint 区分。
 
 ## 下一步候选
 
@@ -52,6 +52,7 @@
 
 ## POST 日志
 
+- 2026-06-30：战斗单位接入完整状态动画：待机循环 01-04，移动循环 06-09，攻击播放 10-14 后回到待机；敌方使用水平反转绘制并保留红色 tint；LSP 0 Error，官方构建成功。
 - 2026-06-30：敌方移动动作与勇者保持一致，敌方移动时同样按 8 FPS 循环播放 `image/npcClip/1/06.png` 到 `09.png`，红色 tint 保留；LSP 0 Error，官方构建成功。
 - 2026-06-30：战斗勇者移动时接入移动序列帧，移动开始切到 `image/npcClip/1/06.png`，移动中按 8 FPS 循环 06-09，移动结束恢复 `01.png`；LSP 0 Error，官方构建成功。
 - 2026-06-30：按需求隐藏战斗网格显示层，将 `GridBattleScene` 的 `gridLayer.visible` 改为 `false`；战斗单位与自动战斗逻辑保留；LSP 0 Error，官方构建成功。

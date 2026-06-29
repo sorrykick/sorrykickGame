@@ -1,4 +1,5 @@
 local UI = require("urhox-libs/UI")
+local ImageCache = require("urhox-libs/UI/Core/ImageCache")
 
 local GridBattleScene = {}
 GridBattleScene.__index = GridBattleScene
@@ -13,12 +14,16 @@ local MOVE_SPEED = 10
 local AI_TICK_INTERVAL = 0.25
 local UNIT_WIDTH = 96
 local UNIT_HEIGHT = 76
-local HERO_MOVE_FRAMES = { 6, 7, 8, 9 }
-local HERO_MOVE_FPS = 8
+local IDLE_FRAMES = { 1, 2, 3, 4 }
+local MOVE_FRAMES = { 6, 7, 8, 9 }
+local ATTACK_FRAMES = { 10, 11, 12, 13, 14 }
+local IDLE_FPS = 5
+local MOVE_FPS = 8
+local ATTACK_FPS = 10
 
 local UNIT_DEFS = {
-    hero = { name = "勇者1", camp = "hero", color = { 88, 190, 255, 255 }, border = { 225, 250, 255, 255 }, sprite = "image/npcClip/1/01.png", tint = { 255, 255, 255, 255 }, moveFrames = HERO_MOVE_FRAMES, moveFps = HERO_MOVE_FPS, hp = 120, damage = 18, attackInterval = 0.8 },
-    enemy = { name = "森林守卫", camp = "enemy", color = { 226, 84, 72, 255 }, border = { 255, 226, 210, 255 }, sprite = "image/npcClip/1/01.png", tint = { 255, 120, 105, 255 }, moveFrames = HERO_MOVE_FRAMES, moveFps = HERO_MOVE_FPS, hp = 80, damage = 8, attackInterval = 1.2 },
+    hero = { name = "勇者1", camp = "hero", color = { 88, 190, 255, 255 }, border = { 225, 250, 255, 255 }, tint = { 255, 255, 255, 255 }, flipX = false, hp = 120, damage = 18, attackInterval = 0.8 },
+    enemy = { name = "森林守卫", camp = "enemy", color = { 226, 84, 72, 255 }, border = { 255, 226, 210, 255 }, tint = { 255, 120, 105, 255 }, flipX = true, hp = 80, damage = 8, attackInterval = 1.2 },
 }
 
 local DIRECTIONS = {
@@ -44,6 +49,16 @@ local function GetNpcClipFramePath(frameNumber)
     return string.format("image/npcClip/1/%02d.png", frameNumber)
 end
 
+local function GetActionDef(action)
+    if action == "move" then
+        return MOVE_FRAMES, MOVE_FPS, true
+    end
+    if action == "attack" then
+        return ATTACK_FRAMES, ATTACK_FPS, false
+    end
+    return IDLE_FRAMES, IDLE_FPS, true
+end
+
 local function Sign(value)
     if value > 0 then return 1 end
     if value < 0 then return -1 end
@@ -58,6 +73,63 @@ local function CreateCellColor(x, y)
     return { 36, 58, 50, 228 }
 end
 
+local UnitSprite = UI.Panel:Extend("UnitSprite")
+
+function UnitSprite:Init(props)
+    ---@diagnostic disable-next-line: param-type-mismatch
+    UI.Panel.Init(self, props)
+end
+
+function UnitSprite:Render(nvg)
+    local props = self.props
+    local imagePath = props.backgroundImage
+    if not imagePath or imagePath == "" then return end
+
+    local l = self:GetAbsoluteLayout()
+    local imgHandle = ImageCache.Get(imagePath)
+    if not imgHandle or imgHandle <= 0 then return end
+
+    local imgW, imgH = ImageCache.GetSize(imagePath)
+    if imgW <= 0 or imgH <= 0 then return end
+
+    local drawX, drawY, drawW, drawH = l.x, l.y, l.w, l.h
+    local imgRatio = imgW / imgH
+    local boxRatio = l.w / l.h
+    if imgRatio > boxRatio then
+        drawW = l.w
+        drawH = l.w / imgRatio
+        drawX = l.x
+        drawY = l.y + (l.h - drawH) / 2
+    else
+        drawH = l.h
+        drawW = l.h * imgRatio
+        drawX = l.x + (l.w - drawW) / 2
+        drawY = l.y
+    end
+
+    local tint = props.imageTint
+    local paint
+    if props.flipX then
+        nvgSave(nvg)
+        nvgTranslate(nvg, drawX + drawW * 0.5, drawY + drawH * 0.5)
+        nvgScale(nvg, -1, 1)
+        nvgTranslate(nvg, -(drawX + drawW * 0.5), -(drawY + drawH * 0.5))
+    end
+    if tint then
+        paint = nvgImagePatternTinted(nvg, drawX, drawY, drawW, drawH, 0, imgHandle, nvgRGBA(tint[1], tint[2], tint[3], tint[4] or 255))
+    else
+        paint = nvgImagePattern(nvg, drawX, drawY, drawW, drawH, 0, imgHandle, 1)
+    end
+
+    nvgBeginPath(nvg)
+    nvgRect(nvg, l.x, l.y, l.w, l.h)
+    nvgFillPaint(nvg, paint)
+    nvgFill(nvg)
+    if props.flipX then
+        nvgRestore(nvg)
+    end
+end
+
 local function CreateUnit(def, id, gridX, gridY)
     return {
         id = id,
@@ -65,10 +137,13 @@ local function CreateUnit(def, id, gridX, gridY)
         camp = def.camp,
         color = def.color,
         border = def.border,
-        sprite = def.sprite,
+        sprite = GetNpcClipFramePath(IDLE_FRAMES[1]),
         tint = def.tint,
-        moveFrames = def.moveFrames,
-        moveFps = def.moveFps or 8,
+        flipX = def.flipX == true,
+        action = "idle",
+        actionFrameIndex = 1,
+        actionFrameTimer = 0,
+        actionLoop = true,
         hp = def.hp,
         maxHp = def.hp,
         damage = def.damage,
@@ -86,8 +161,6 @@ local function CreateUnit(def, id, gridX, gridY)
         spriteWidget = nil,
         hpLabel = nil,
         moving = false,
-        moveFrameIndex = 1,
-        moveFrameTimer = 0,
         dead = false,
     }
 end
@@ -326,12 +399,13 @@ function GridBattleScene:CreateUnitWidgets()
             textAlign = "center",
             textStroke = { width = 1, color = { 0, 0, 0, 220 } },
         }
-        unit.spriteWidget = UI.Panel {
+        unit.spriteWidget = UnitSprite {
             width = UNIT_WIDTH,
             height = UNIT_HEIGHT,
             backgroundImage = unit.sprite,
             backgroundFit = "contain",
             imageTint = unit.tint,
+            flipX = unit.flipX,
         }
         unit.widget = UI.Panel {
             position = "absolute",
@@ -449,6 +523,46 @@ function GridBattleScene:ChooseStepToward(unit, target)
     return nil, nil, 0, 0
 end
 
+function GridBattleScene:SetUnitAction(unit, action)
+    if unit.dead then return end
+    local frames, fps, loop = GetActionDef(action)
+    unit.action = action
+    unit.actionFrameIndex = 1
+    unit.actionFrameTimer = 0
+    unit.actionLoop = loop
+    unit.actionFps = fps
+    unit.actionFrames = frames
+    if unit.spriteWidget then
+        unit.spriteWidget:SetBackgroundImage(GetNpcClipFramePath(frames[1]))
+    end
+end
+
+function GridBattleScene:UpdateUnitActionAnimation(unit, timeStep)
+    if not unit.spriteWidget then return end
+    local frames = unit.actionFrames
+    if not frames then
+        frames, unit.actionFps, unit.actionLoop = GetActionDef(unit.action or "idle")
+        unit.actionFrames = frames
+    end
+
+    unit.actionFrameTimer = unit.actionFrameTimer + timeStep
+    local frameDuration = 1 / unit.actionFps
+    if unit.actionFrameTimer < frameDuration then return end
+
+    unit.actionFrameTimer = unit.actionFrameTimer - frameDuration
+    unit.actionFrameIndex = unit.actionFrameIndex + 1
+    if unit.actionFrameIndex > #frames then
+        if unit.actionLoop then
+            unit.actionFrameIndex = 1
+        else
+            self:SetUnitAction(unit, "idle")
+            return
+        end
+    end
+
+    unit.spriteWidget:SetBackgroundImage(GetNpcClipFramePath(frames[unit.actionFrameIndex]))
+end
+
 function GridBattleScene:RequestMoveUnit(unitId, x, y)
     local unit = self.units[unitId]
     if not unit or unit.dead or unit.moving then return false end
@@ -465,9 +579,7 @@ function GridBattleScene:RequestMoveUnit(unitId, x, y)
     unit.targetGridX = x
     unit.targetGridY = y
     unit.moving = true
-    unit.moveFrameIndex = 1
-    unit.moveFrameTimer = 0
-    self:UpdateUnitMoveAnimation(unit, 0)
+    self:SetUnitAction(unit, "move")
     self.occupancy[GridKey(x, y)] = unit.id
     print(string.format("[Battle] Move %s to (%d,%d)", unit.id, x, y))
     return true
@@ -485,6 +597,7 @@ function GridBattleScene:Update(timeStep)
     for _, unit in pairs(self.units) do
         if not unit.dead then
             unit.attackTimer = math.max(0, unit.attackTimer - timeStep)
+            self:UpdateUnitActionAnimation(unit, timeStep)
             if unit.moving then
                 self:UpdateUnitMove(unit, timeStep)
             end
@@ -550,6 +663,7 @@ function GridBattleScene:AttackFrontCell(unit)
     local frontX, frontY = self:GetFrontCell(unit)
     local target = self:GetUnitAt(frontX, frontY)
     unit.attackTimer = unit.attackInterval
+    self:SetUnitAction(unit, "attack")
 
     if not target or target.dead or target.camp == unit.camp then
         self:SetStatus(unit.name .. " 身前无敌方")
@@ -585,30 +699,11 @@ function GridBattleScene:KillUnit(unit)
     print("[Battle] Unit defeated: " .. unit.id)
 end
 
-function GridBattleScene:UpdateUnitMoveAnimation(unit, timeStep)
-    if not unit.spriteWidget or not unit.moveFrames then return end
-
-    unit.moveFrameTimer = unit.moveFrameTimer + timeStep
-    local frameDuration = 1 / unit.moveFps
-    if timeStep > 0 and unit.moveFrameTimer < frameDuration then return end
-
-    if timeStep > 0 then
-        unit.moveFrameTimer = unit.moveFrameTimer - frameDuration
-        unit.moveFrameIndex = unit.moveFrameIndex + 1
-        if unit.moveFrameIndex > #unit.moveFrames then
-            unit.moveFrameIndex = 1
-        end
-    end
-
-    unit.spriteWidget:SetBackgroundImage(GetNpcClipFramePath(unit.moveFrames[unit.moveFrameIndex]))
-end
-
 function GridBattleScene:UpdateUnitMove(unit, timeStep)
     local targetX, targetY = GridToPixel(unit.targetGridX, unit.targetGridY)
     local alpha = math.min(1, MOVE_SPEED * timeStep)
     unit.pixelX = unit.pixelX + (targetX - unit.pixelX) * alpha
     unit.pixelY = unit.pixelY + (targetY - unit.pixelY) * alpha
-    self:UpdateUnitMoveAnimation(unit, timeStep)
 
     if math.abs(unit.pixelX - targetX) < 0.5 and math.abs(unit.pixelY - targetY) < 0.5 then
         unit.pixelX = targetX
@@ -616,9 +711,7 @@ function GridBattleScene:UpdateUnitMove(unit, timeStep)
         unit.gridX = unit.targetGridX
         unit.gridY = unit.targetGridY
         unit.moving = false
-        if unit.spriteWidget then
-            unit.spriteWidget:SetBackgroundImage(unit.sprite)
-        end
+        self:SetUnitAction(unit, "idle")
     end
 
     self:ApplyUnitWidgetPosition(unit)
