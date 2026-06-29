@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-06-30 | battle-hero-move-animation | 战斗勇者移动时播放 06-09 移动序列帧：移动开始切换移动首帧，移动中按 8 FPS 循环，移动结束恢复 01 待机图；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | battle-grid-hidden | 隐藏战斗网格显示层，将 `GridBattleScene` 的 `gridLayer.visible` 改为 `false`；战斗单位贴图、敌方红色 tint 与自动战斗逻辑保留；LSP 0 Error，官方构建成功。 |
 | 2026-06-29 | battle-grid-model-units | 战斗网格下移并放大：`GRID_TOP=360`、`CELL_SIZE=32`、`GRID_LEFT=40`，网格重新显示；战斗单位从圆形色块改为已有 `image/npcClip/1/01.png` 模型图，敌方使用红色 tint 区分；LSP 0 Error，官方构建成功。 |
 | 2026-06-29 | inspector-battle-layout | 按 Inspector 修改战斗布局：隐藏网格显示层并设置 `top=600`，自动战斗说明面板移动到 `left=37,right=27,bottom=832`；LSP 0 Error，官方构建成功。 |

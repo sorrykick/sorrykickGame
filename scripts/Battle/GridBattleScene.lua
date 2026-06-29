@@ -13,9 +13,11 @@ local MOVE_SPEED = 10
 local AI_TICK_INTERVAL = 0.25
 local UNIT_WIDTH = 96
 local UNIT_HEIGHT = 76
+local HERO_MOVE_FRAMES = { 6, 7, 8, 9 }
+local HERO_MOVE_FPS = 8
 
 local UNIT_DEFS = {
-    hero = { name = "勇者1", camp = "hero", color = { 88, 190, 255, 255 }, border = { 225, 250, 255, 255 }, sprite = "image/npcClip/1/01.png", tint = { 255, 255, 255, 255 }, hp = 120, damage = 18, attackInterval = 0.8 },
+    hero = { name = "勇者1", camp = "hero", color = { 88, 190, 255, 255 }, border = { 225, 250, 255, 255 }, sprite = "image/npcClip/1/01.png", tint = { 255, 255, 255, 255 }, moveFrames = HERO_MOVE_FRAMES, moveFps = HERO_MOVE_FPS, hp = 120, damage = 18, attackInterval = 0.8 },
     enemy = { name = "森林守卫", camp = "enemy", color = { 226, 84, 72, 255 }, border = { 255, 226, 210, 255 }, sprite = "image/npcClip/1/01.png", tint = { 255, 120, 105, 255 }, hp = 80, damage = 8, attackInterval = 1.2 },
 }
 
@@ -36,6 +38,10 @@ end
 
 local function GridDistance(a, b)
     return math.abs(a.gridX - b.gridX) + math.abs(a.gridY - b.gridY)
+end
+
+local function GetNpcClipFramePath(frameNumber)
+    return string.format("image/npcClip/1/%02d.png", frameNumber)
 end
 
 local function Sign(value)
@@ -61,6 +67,8 @@ local function CreateUnit(def, id, gridX, gridY)
         border = def.border,
         sprite = def.sprite,
         tint = def.tint,
+        moveFrames = def.moveFrames,
+        moveFps = def.moveFps or 8,
         hp = def.hp,
         maxHp = def.hp,
         damage = def.damage,
@@ -75,8 +83,11 @@ local function CreateUnit(def, id, gridX, gridY)
         pixelX = 0,
         pixelY = 0,
         widget = nil,
+        spriteWidget = nil,
         hpLabel = nil,
         moving = false,
+        moveFrameIndex = 1,
+        moveFrameTimer = 0,
         dead = false,
     }
 end
@@ -315,6 +326,13 @@ function GridBattleScene:CreateUnitWidgets()
             textAlign = "center",
             textStroke = { width = 1, color = { 0, 0, 0, 220 } },
         }
+        unit.spriteWidget = UI.Panel {
+            width = UNIT_WIDTH,
+            height = UNIT_HEIGHT,
+            backgroundImage = unit.sprite,
+            backgroundFit = "contain",
+            imageTint = unit.tint,
+        }
         unit.widget = UI.Panel {
             position = "absolute",
             left = unit.pixelX - UNIT_WIDTH * 0.5 + CELL_SIZE * 0.5,
@@ -326,13 +344,7 @@ function GridBattleScene:CreateUnitWidgets()
             pointerEvents = "box-none",
             children = {
                 unit.hpLabel,
-                UI.Panel {
-                    width = UNIT_WIDTH,
-                    height = UNIT_HEIGHT,
-                    backgroundImage = unit.sprite,
-                    backgroundFit = "contain",
-                    imageTint = unit.tint,
-                },
+                unit.spriteWidget,
                 UI.Label {
                     text = unit.camp == "hero" and "勇" or "敌",
                     position = "absolute",
@@ -453,6 +465,9 @@ function GridBattleScene:RequestMoveUnit(unitId, x, y)
     unit.targetGridX = x
     unit.targetGridY = y
     unit.moving = true
+    unit.moveFrameIndex = 1
+    unit.moveFrameTimer = 0
+    self:UpdateUnitMoveAnimation(unit, 0)
     self.occupancy[GridKey(x, y)] = unit.id
     print(string.format("[Battle] Move %s to (%d,%d)", unit.id, x, y))
     return true
@@ -560,6 +575,9 @@ function GridBattleScene:KillUnit(unit)
     unit.dead = true
     unit.moving = false
     self.occupancy[GridKey(unit.gridX, unit.gridY)] = nil
+    if unit.spriteWidget then
+        unit.spriteWidget:SetBackgroundImage(unit.sprite)
+    end
     if unit.widget then
         unit.widget:SetStyle({ opacity = 0.25 })
     end
@@ -567,11 +585,30 @@ function GridBattleScene:KillUnit(unit)
     print("[Battle] Unit defeated: " .. unit.id)
 end
 
+function GridBattleScene:UpdateUnitMoveAnimation(unit, timeStep)
+    if not unit.spriteWidget or not unit.moveFrames then return end
+
+    unit.moveFrameTimer = unit.moveFrameTimer + timeStep
+    local frameDuration = 1 / unit.moveFps
+    if timeStep > 0 and unit.moveFrameTimer < frameDuration then return end
+
+    if timeStep > 0 then
+        unit.moveFrameTimer = unit.moveFrameTimer - frameDuration
+        unit.moveFrameIndex = unit.moveFrameIndex + 1
+        if unit.moveFrameIndex > #unit.moveFrames then
+            unit.moveFrameIndex = 1
+        end
+    end
+
+    unit.spriteWidget:SetBackgroundImage(GetNpcClipFramePath(unit.moveFrames[unit.moveFrameIndex]))
+end
+
 function GridBattleScene:UpdateUnitMove(unit, timeStep)
     local targetX, targetY = GridToPixel(unit.targetGridX, unit.targetGridY)
     local alpha = math.min(1, MOVE_SPEED * timeStep)
     unit.pixelX = unit.pixelX + (targetX - unit.pixelX) * alpha
     unit.pixelY = unit.pixelY + (targetY - unit.pixelY) * alpha
+    self:UpdateUnitMoveAnimation(unit, timeStep)
 
     if math.abs(unit.pixelX - targetX) < 0.5 and math.abs(unit.pixelY - targetY) < 0.5 then
         unit.pixelX = targetX
@@ -579,6 +616,9 @@ function GridBattleScene:UpdateUnitMove(unit, timeStep)
         unit.gridX = unit.targetGridX
         unit.gridY = unit.targetGridY
         unit.moving = false
+        if unit.spriteWidget then
+            unit.spriteWidget:SetBackgroundImage(unit.sprite)
+        end
     end
 
     self:ApplyUnitWidgetPosition(unit)
