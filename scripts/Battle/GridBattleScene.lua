@@ -18,7 +18,7 @@ local HERO_MOVE_FPS = 8
 
 local UNIT_DEFS = {
     hero = { name = "勇者1", camp = "hero", color = { 88, 190, 255, 255 }, border = { 225, 250, 255, 255 }, sprite = "image/npcClip/1/01.png", tint = { 255, 255, 255, 255 }, moveFrames = HERO_MOVE_FRAMES, moveFps = HERO_MOVE_FPS, hp = 120, damage = 18, attackInterval = 0.8 },
-    enemy = { name = "森林守卫", camp = "enemy", color = { 226, 84, 72, 255 }, border = { 255, 226, 210, 255 }, sprite = "image/npcClip/1/01.png", tint = { 255, 120, 105, 255 }, hp = 80, damage = 8, attackInterval = 1.2 },
+    enemy = { name = "森林守卫", camp = "enemy", color = { 226, 84, 72, 255 }, border = { 255, 226, 210, 255 }, sprite = "image/npcClip/1/01.png", tint = { 255, 120, 105, 255 }, moveFrames = HERO_MOVE_FRAMES, moveFps = HERO_MOVE_FPS, hp = 80, damage = 8, attackInterval = 1.2 },
 }
 
 local DIRECTIONS = {
