@@ -17,7 +17,7 @@
 ## 当前结构
 
 - `scripts/main.lua`：Yoga UI 入口，包含登录界面、读档/存档更新、离线收益结算、游戏主界面，并接入秘境战斗场景切换。
-- `scripts/Battle/GridBattleScene.lua`：20×20 网格自动战斗原型，管理格子、单位占位、双方自动寻敌、身前 1 格攻击、战斗 HUD 和返回主界面；背景资源为 `image/BattleRes/1.png`；网格显示层已按 Inspector 隐藏，自动战斗说明面板移动到上方。
+- `scripts/Battle/GridBattleScene.lua`：20×20 网格自动战斗原型，管理格子、单位占位、双方自动寻敌、身前 1 格攻击、战斗 HUD 和返回主界面；背景资源为 `image/BattleRes/1.png`；战斗网格逻辑保留但显示层已隐藏，单位显示使用已有 `image/npcClip/1/01.png` 模型图。
 - `assets/image/login_background.png`：登录背景图资源，运行时路径 `image/login_background.png`。
 - `assets/image/`：登录背景、主界面背景、森林关卡、资源图标、顶部功能图标、挑战徽章、收益条、秘境按钮、功能按钮、底部导航等 UI 图片资源。
 - `assets/image/npcClip/1/`：勇者1序列帧动作资源，01-04 为待机、06-09 为移动、10-14 为攻击。
@@ -39,7 +39,7 @@
 - 主界面上半区已按 Inspector 调整：顶部功能区图标 96×96，资源条移除“金/蓝/晶”短标签，右上角数字移除，标题条、章节文字、模式行和挑战徽章位置尺寸更新。
 - 存档系统已模块化：`scripts/Save/SaveSchema.lua`、`SaveValidator.lua`、`RuntimeSave.lua`、`SaveManager.lua`；`main.lua` 通过 `SaveManager.LoginSyncPlayerSave()` 登录读档，通过 `SaveManager.GetSaveData()` 读取运行时副本，通过 `SaveManager.CollectIdleReward()` 领取收益。
 - 勇者1已接入主界面森林关卡区，使用 `assets/image/npcClip/1/` 做 UI 序列帧动画：默认待机（01-04），移动（06-09），攻击（10-14）；点击勇者循环待机/移动/攻击，左侧挑战徽章触发攻击，右侧成长徽章触发移动；待机、移动、攻击已统一显示高度，攻击帧使用更宽承载框避免视觉缩小。
-- 新增 20×20 网格自动战斗原型：`GridBattleScene` 管理战场格子、单位占位、双方自动寻敌、按格靠近、身前 1 格攻击、伤害扣血和死亡移除占位；主界面“秘境挑战”进入战斗，战斗内“返回”回到主界面；战斗背景已按 Inspector 修改为 `image/BattleRes/1.png`；网格显示层已按 Inspector 隐藏，自动战斗说明面板移动到上方。
+- 新增 20×20 网格自动战斗原型：`GridBattleScene` 管理战场格子、单位占位、双方自动寻敌、按格靠近、身前 1 格攻击、伤害扣血和死亡移除占位；主界面“秘境挑战”进入战斗，战斗内“返回”回到主界面；战斗背景已按 Inspector 修改为 `image/BattleRes/1.png`；战斗网格显示层已隐藏，单位显示使用已有 `image/npcClip/1/01.png` 模型图（敌方用红色 tint 区分）。
 
 ## 下一步候选
 
@@ -52,6 +52,8 @@
 
 ## POST 日志
 
+- 2026-06-30：按需求隐藏战斗网格显示层，将 `GridBattleScene` 的 `gridLayer.visible` 改为 `false`；战斗单位与自动战斗逻辑保留；LSP 0 Error，官方构建成功。
+- 2026-06-29：战斗网格下移并放大：`GRID_TOP=360`、`CELL_SIZE=32`、`GRID_LEFT=40`，网格重新显示；战斗单位从圆形色块改为已有 `image/npcClip/1/01.png` 模型图，敌方使用红色 tint 区分；LSP 0 Error，官方构建成功。
 - 2026-06-29：按 Inspector 修改战斗布局：网格显示层 `top=600` 且 `visible=false`，自动战斗说明面板调整为 `left=37,right=27,bottom=832`；LSP 0 Error，官方构建成功。
 - 2026-06-29：按 Inspector 修改战斗场景背景 Panel：背景改为 `image/BattleRes/1.png`，同步 `borderRadius=0`、`zIndex=0`；LSP 0 Error，官方构建成功。
 - 2026-06-29：敌方接入与勇者相同的自动战斗逻辑，双方单位都会自动寻找最近敌对单位、按格靠近，并在敌方位于身前 1 格时攻击；LSP 0 Error，官方构建成功。

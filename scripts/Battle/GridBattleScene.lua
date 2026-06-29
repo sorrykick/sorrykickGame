@@ -5,16 +5,18 @@ GridBattleScene.__index = GridBattleScene
 
 local GRID_COLS = 20
 local GRID_ROWS = 20
-local CELL_SIZE = 27
+local CELL_SIZE = 32
 local GRID_SIZE = GRID_COLS * CELL_SIZE
-local GRID_LEFT = 90
-local GRID_TOP = 260
+local GRID_LEFT = 40
+local GRID_TOP = 360
 local MOVE_SPEED = 10
 local AI_TICK_INTERVAL = 0.25
+local UNIT_WIDTH = 96
+local UNIT_HEIGHT = 76
 
 local UNIT_DEFS = {
-    hero = { name = "勇者1", camp = "hero", color = { 88, 190, 255, 255 }, border = { 225, 250, 255, 255 }, hp = 120, damage = 18, attackInterval = 0.8 },
-    enemy = { name = "森林守卫", camp = "enemy", color = { 226, 84, 72, 255 }, border = { 255, 226, 210, 255 }, hp = 80, damage = 8, attackInterval = 1.2 },
+    hero = { name = "勇者1", camp = "hero", color = { 88, 190, 255, 255 }, border = { 225, 250, 255, 255 }, sprite = "image/npcClip/1/01.png", tint = { 255, 255, 255, 255 }, hp = 120, damage = 18, attackInterval = 0.8 },
+    enemy = { name = "森林守卫", camp = "enemy", color = { 226, 84, 72, 255 }, border = { 255, 226, 210, 255 }, sprite = "image/npcClip/1/01.png", tint = { 255, 120, 105, 255 }, hp = 80, damage = 8, attackInterval = 1.2 },
 }
 
 local DIRECTIONS = {
@@ -57,6 +59,8 @@ local function CreateUnit(def, id, gridX, gridY)
         camp = def.camp,
         color = def.color,
         border = def.border,
+        sprite = def.sprite,
+        tint = def.tint,
         hp = def.hp,
         maxHp = def.hp,
         damage = def.damage,
@@ -98,7 +102,7 @@ function GridBattleScene:CreateRoot()
     self.gridLayer = UI.Panel {
         position = "absolute",
         left = GRID_LEFT,
-        top = 600,
+        top = GRID_TOP,
         width = GRID_SIZE,
         height = GRID_SIZE,
         visible = false,
@@ -313,33 +317,33 @@ function GridBattleScene:CreateUnitWidgets()
         }
         unit.widget = UI.Panel {
             position = "absolute",
-            left = unit.pixelX - 6,
-            top = unit.pixelY - 25,
-            width = CELL_SIZE + 12,
-            height = CELL_SIZE + 28,
+            left = unit.pixelX - UNIT_WIDTH * 0.5 + CELL_SIZE * 0.5,
+            top = unit.pixelY - UNIT_HEIGHT + CELL_SIZE,
+            width = UNIT_WIDTH,
+            height = UNIT_HEIGHT + 18,
             alignItems = "center",
             justifyContent = "flex-end",
             pointerEvents = "box-none",
             children = {
                 unit.hpLabel,
                 UI.Panel {
-                    width = CELL_SIZE + 8,
-                    height = CELL_SIZE + 8,
-                    backgroundColor = unit.color,
-                    borderColor = unit.border,
-                    borderWidth = 2,
-                    borderRadius = 18,
+                    width = UNIT_WIDTH,
+                    height = UNIT_HEIGHT,
+                    backgroundImage = unit.sprite,
+                    backgroundFit = "contain",
+                    imageTint = unit.tint,
                 },
                 UI.Label {
                     text = unit.camp == "hero" and "勇" or "敌",
                     position = "absolute",
                     left = 0,
                     right = 0,
-                    bottom = 4,
+                    bottom = 5,
                     fontSize = 18,
                     fontWeight = "bold",
-                    fontColor = { 20, 24, 28, 255 },
+                    fontColor = unit.camp == "hero" and { 20, 70, 120, 255 } or { 115, 20, 18, 255 },
                     textAlign = "center",
+                    textStroke = { width = 1, color = { 255, 255, 255, 190 } },
                 },
             },
         }
@@ -583,8 +587,8 @@ end
 function GridBattleScene:ApplyUnitWidgetPosition(unit)
     if not unit.widget then return end
     unit.widget:SetStyle({
-        left = unit.pixelX - 6,
-        top = unit.pixelY - 25,
+        left = unit.pixelX - UNIT_WIDTH * 0.5 + CELL_SIZE * 0.5,
+        top = unit.pixelY - UNIT_HEIGHT + CELL_SIZE,
     })
 end
 
