@@ -1,6 +1,7 @@
 local UI = require("urhox-libs/UI")
 local SaveManager = require("Save.SaveManager")
 local GridBattleScene = require("Battle.GridBattleScene")
+local FormationScene = require("Formation.FormationScene")
 
 local DESIGN_WIDTH = 720
 local DESIGN_HEIGHT = 1280
@@ -43,6 +44,8 @@ local hero1Sprite_ = nil
 local hero1ActionLabel_ = nil
 ---@type table|nil
 local battleScene_ = nil
+---@type table|nil
+local formationScene_ = nil
 
 local STAGE_FOREST_WIDTH = 1024
 local STAGE_FOREST_HEIGHT = 309
@@ -181,13 +184,17 @@ local function ShowRoot(root)
     UI.SetRoot(uiRoot_, true)
 end
 
-local EnterHomeScreen
-local EnterBattleScreen
-
 local function DestroyBattleScene()
     if battleScene_ then
         battleScene_:Destroy()
         battleScene_ = nil
+    end
+end
+
+local function DestroyFormationScene()
+    if formationScene_ then
+        formationScene_:Destroy()
+        formationScene_ = nil
     end
 end
 
@@ -318,6 +325,10 @@ local function CreateCircleFeature(label, side)
     }
 end
 
+local EnterHomeScreen
+local EnterBattleScreen
+local EnterFormationScreen
+
 local function CreateBottomNav(label, index)
     local leftOffsets = { 0, 2, 4, 4, 2 }
     local itemHeight = index == 1 and 128 or 126
@@ -334,6 +345,9 @@ local function CreateBottomNav(label, index)
         gap = 2,
         onClick = function()
             print("[Home] Bottom tab clicked: " .. label)
+            if label == "阵型" then
+                EnterFormationScreen()
+            end
         end,
         children = {
             UI.Panel {
@@ -769,12 +783,14 @@ end
 
 EnterHomeScreen = function()
     DestroyBattleScene()
+    DestroyFormationScene()
     ShowRoot(CreateHomeScreen())
     UpdateHomeLabels()
     print("[Main] Entered home screen")
 end
 
 EnterBattleScreen = function()
+    DestroyFormationScene()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
     hero1Sprite_ = nil
@@ -787,6 +803,22 @@ EnterBattleScreen = function()
     })
     ShowRoot(battleScene_:CreateRoot())
     print("[Main] Entered battle screen")
+end
+
+EnterFormationScreen = function()
+    DestroyBattleScene()
+    stageForestLayerA_ = nil
+    stageForestLayerB_ = nil
+    hero1Sprite_ = nil
+    hero1ActionLabel_ = nil
+
+    formationScene_ = FormationScene:new({
+        onExit = function()
+            EnterHomeScreen()
+        end,
+    })
+    ShowRoot(formationScene_:CreateRoot())
+    print("[Main] Entered formation screen")
 end
 
 local function HandleLogin()
@@ -891,6 +923,7 @@ end
 
 function Stop()
     DestroyBattleScene()
+    DestroyFormationScene()
     UI.Shutdown()
     uiRoot_ = nil
     loginButton_ = nil
