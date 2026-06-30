@@ -233,9 +233,9 @@ function FormationScene:AssignHeroToSlot(heroId, slotId)
 
     formation.slots[slotId] = heroId
     formation.savedAt = os.time()
-    self.selectedHeroId = heroId
-    self.selectedSlotId = slotId
-    self:SetStatus("已更新阵容" .. tostring(activeIndex) .. "的" .. SLOT_LABELS[slotId] .. "。")
+    self.selectedHeroId = nil
+    self.selectedSlotId = nil
+    self:SetStatus("已更新阵容" .. tostring(activeIndex) .. "的" .. SLOT_LABELS[slotId] .. "，当前选择已清除。")
     self:SaveAndRefresh("编队上阵/替换")
 end
 
