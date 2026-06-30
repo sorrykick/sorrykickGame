@@ -475,17 +475,17 @@ function GridBattleScene:IsTargetInFront(unit, target)
 end
 
 function GridBattleScene:FindNearestEnemy(unit)
-    local sameRowNearest = nil
-    local sameRowDistance = 99999
+    local sameColumnNearest = nil
+    local sameColumnDistance = 99999
     local nearest = nil
     local nearestDistance = 99999
 
     for _, candidate in pairs(self.units) do
         if not candidate.dead and candidate.camp ~= unit.camp then
             local distance = GridDistance(unit, candidate)
-            if candidate.gridY == unit.gridY and distance < sameRowDistance then
-                sameRowNearest = candidate
-                sameRowDistance = distance
+            if candidate.gridX == unit.gridX and distance < sameColumnDistance then
+                sameColumnNearest = candidate
+                sameColumnDistance = distance
             end
             if distance < nearestDistance then
                 nearest = candidate
@@ -494,7 +494,7 @@ function GridBattleScene:FindNearestEnemy(unit)
         end
     end
 
-    return sameRowNearest or nearest
+    return sameColumnNearest or nearest
 end
 
 function GridBattleScene:ChooseStepToward(unit, target)
