@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-06-30 | formation-background-parenting | 按 Inspector 同步编队页背景父子结构：`CreateBackground` 增加 `id="background"`，背景位置改为 left=-1/top=-1/right=1/bottom=1，并将标题、顶部锁定按钮、总战力、智能推荐移动到背景节点下；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | formation-inspector-layout | 按 Inspector 同步编队页 24 个控件布局：顶部/底部背景透明化、背景图不透明、返回按钮改用 `BT-返回.png`、内容区下移、站位标签删除、站位格固定尺寸、按钮偏移同步；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | formation-page-background | 按 Inspector 修改编队页背景层：使用 `image/page_background.png`，同步黑色背景、0.56 透明度和 zIndex=0；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | formation-clear-selection-after-assign | 编队上阵/替换完成后自动清除当前选择，避免连续误操作；LSP 0 Error，官方构建成功。 |

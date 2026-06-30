@@ -8,27 +8,37 @@ local DESIGN_WIDTH = 720
 local DESIGN_HEIGHT = 1280
 local HERO_IMAGE = "image/npcClip/1/01.png"
 
+local SLOT_WIDTH = 98
+local SLOT_HEIGHT = 104
+
 local SLOT_ROWS = {
     { label = "前排", ids = { "front1", "front2", "front3" } },
+    { label = "中排", ids = { "mid1", "mid2", "mid3" } },
     { label = "后排", ids = { "back1", "back2", "back3" } },
 }
 
 local SLOT_LABELS = {
-    front1 = "前排1",
-    front2 = "前排2",
-    front3 = "前排3",
-    back1 = "后排1",
-    back2 = "后排2",
-    back3 = "后排3",
+    front1 = "前1",
+    front2 = "前2",
+    front3 = "前3",
+    mid1 = "中1",
+    mid2 = "中2",
+    mid3 = "中3",
+    back1 = "后1",
+    back2 = "后2",
+    back3 = "后3",
 }
 
 local SLOT_UNLOCK_LEVEL = {
     front1 = 1,
     front2 = 1,
+    front3 = 1,
+    mid1 = 1,
+    mid2 = 1,
+    mid3 = 1,
     back1 = 1,
     back2 = 1,
-    front3 = 10,
-    back3 = 15,
+    back3 = 1,
 }
 
 local QUALITY_COLORS = {
@@ -366,6 +376,18 @@ end
 function FormationScene:CreateRoot()
     local _, lineup, heroes, heroMap, activeIndex, formation = self:GetData()
     local totalPower = CalculateFormationPower(formation, heroMap)
+    local topBarChildren = self:CreateTopBar(totalPower, lineup, activeIndex, formation)
+    local children = {}
+    children[#children + 1] = self:CreateBackground({
+        topBarChildren[2],
+        topBarChildren[3],
+        topBarChildren[4],
+        topBarChildren[5],
+    })
+    children[#children + 1] = topBarChildren[1]
+    children[#children + 1] = topBarChildren[6]
+    children[#children + 1] = self:CreateContent(heroes, heroMap, formation)
+    children[#children + 1] = self:CreateBottomActions(formation, heroMap)
 
     return UI.Panel {
         id = "formationScreen",
@@ -373,31 +395,25 @@ function FormationScene:CreateRoot()
         height = DESIGN_HEIGHT,
         backgroundColor = { 42, 30, 24, 255 },
         overflow = "hidden",
-        children = {
-            self:CreateBackground(),
-            self:CreateTopBar(totalPower, lineup, activeIndex, formation),
-            self:CreateContent(heroes, heroMap, formation),
-            self:CreateBottomActions(formation, heroMap),
-        },
+        children = children,
     }
 end
 
-function FormationScene:CreateBackground()
+function FormationScene:CreateBackground(children)
     return UI.Panel {
+        id = "background",
         position = "absolute",
-        left = 0,
-        top = 0,
-        right = 0,
-        bottom = 0,
+        left = -1,
+        top = -1,
+        right = 1,
+        bottom = 1,
         zIndex = 0,
         borderRadius = 0,
         backgroundImage = "image/page_background.png",
         backgroundFit = "cover",
         backgroundColor = { 0, 0, 0, 255 },
         opacity = 1,
-        children = {
-            UI.Panel { position = "absolute", left = 18, top = 92, right = 18, bottom = 132, backgroundColor = { 245, 228, 200, 238 }, borderColor = { 68, 45, 25, 255 }, borderWidth = 4, borderRadius = 22 },
-        },
+        children = children,
     }
 end
 
@@ -413,52 +429,21 @@ function FormationScene:CreateTopBar(totalPower, lineup, activeIndex, formation)
             pressedBackgroundColor = { 155, 62, 36, 255 },
             textColor = { 255, 244, 220, 255 },
             borderRadius = 16,
+            left = i == 1 and 1 or nil,
+            top = i == 1 and -1 or nil,
             onClick = function()
                 self:SwitchFormation(i)
             end,
         }
     end
 
-    return UI.Panel {
-        position = "absolute",
-        left = 0,
-        top = 0,
-        right = 0,
-        height = 162,
-        paddingTop = 16,
-        paddingHorizontal = 22,
-        gap = 8,
-        backgroundColor = { 68, 44, 24, 0 },
-        children = {
-            UI.Panel {
-                width = "100%",
-                height = 48,
-                left = -7,
-                top = 85,
-                flexDirection = "row",
-                alignItems = "center",
-                justifyContent = "space-between",
-                children = {
-                    UI.Button { width = 165, height = 64, position = "absolute", left = -17, top = -100, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 18, backgroundImage = "image/BT-返回.png", backgroundFit = "contain", backgroundColor = { 117, 79, 62, 255 }, borderRadius = 0, onClick = function() if self.onExit then self.onExit() end end },
-                    UI.Label { text = "勇者编队", left = 248, top = -2, fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
-                    UI.Button { text = formation and formation.locked and "全锁" or "锁定", width = 86, height = 38, fontSize = 18, backgroundColor = formation and formation.locked and { 168, 48, 40, 255 } or { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 16, onClick = function() self:ToggleFormationLock() end },
-                },
-            },
-            UI.Panel {
-                width = "100%",
-                height = 38,
-                left = -1,
-                top = 82,
-                flexDirection = "row",
-                alignItems = "center",
-                justifyContent = "space-between",
-                children = {
-                    UI.Label { text = "总战力 " .. FormatNumber(totalPower), left = 10, top = -9, fontSize = 24, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
-                    UI.Label { text = lineup.recommendEnabled and "智能推荐：开" or "智能推荐：关", fontSize = 18, fontColor = { 245, 228, 200, 255 } },
-                },
-            },
-            UI.Panel { width = "100%", height = 44, left = -4, top = 78, flexDirection = "row", justifyContent = "center", gap = 12, children = tabs },
-        },
+    return {
+        UI.Button { width = 164, height = 58, position = "absolute", left = 2, top = 2, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, fontSize = 18, backgroundImage = "image/BT-返回.png", backgroundFit = "cover", backgroundColor = { 251, 251, 251, 0 }, opacity = 1, textColor = { 255, 255, 255, 0 }, borderRadius = 0, onClick = function() if self.onExit then self.onExit() end end },
+        UI.Label { text = "勇者编队", position = "absolute", left = 293, top = 60, fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
+        UI.Button { text = formation and formation.locked and "全锁" or "锁定", position = "absolute", left = 620, top = 105, width = 86, height = 38, fontSize = 18, backgroundColor = formation and formation.locked and { 168, 48, 40, 255 } or { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 16, onClick = function() self:ToggleFormationLock() end },
+        UI.Label { text = "总战力 " .. FormatNumber(totalPower), position = "absolute", left = 23, top = 123, fontSize = 24, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
+        UI.Label { text = lineup.recommendEnabled and "智能推荐：开" or "智能推荐：关", position = "absolute", left = 560, top = 132, fontSize = 18, fontColor = { 245, 228, 200, 255 } },
+        UI.Panel { position = "absolute", width = 676, height = 44, left = 25, top = 201, flexDirection = "row", justifyContent = "center", gap = 12, children = tabs },
     }
 end
 
@@ -551,11 +536,12 @@ function FormationScene:CreateHeroCard(hero, formation)
     local qualityColor = QUALITY_COLORS[hero.quality] or QUALITY_COLORS[1]
     return UI.Panel {
         width = "100%",
-        height = 92,
+        height = 104,
         flexDirection = "row",
         alignItems = "center",
         padding = 8,
         gap = 8,
+        overflow = "hidden",
         backgroundColor = selected and { 255, 244, 205, 255 } or { 245, 228, 200, 255 },
         borderColor = selected and { 255, 234, 0, 255 } or qualityColor,
         borderWidth = selected and 4 or 2,
@@ -570,13 +556,14 @@ function FormationScene:CreateHeroCard(hero, formation)
             self:Refresh()
         end,
         children = {
-            UI.Panel { width = 58, height = 58, backgroundImage = HERO_IMAGE, backgroundFit = "contain", imageTint = assigned and { 210, 235, 255, 255 } or { 255, 255, 255, 255 } },
-            UI.Panel { flexGrow = 1, flexShrink = 1, gap = 3, children = {
-                UI.Label { text = hero.name, fontSize = 18, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
-                UI.Label { text = "品质" .. tostring(hero.quality) .. "  星" .. tostring(hero.star) .. "  " .. hero.job, fontSize = 14, fontColor = { 88, 46, 45, 220 }, maxLines = 1 },
-                UI.Label { text = hero.faction .. " · " .. hero.role .. " · 战力" .. FormatNumber(hero.power), fontSize = 13, fontColor = { 74, 56, 42, 220 }, maxLines = 1 },
+            UI.Panel { width = 50, height = 58, flexShrink = 0, backgroundImage = HERO_IMAGE, backgroundFit = "contain", imageTint = assigned and { 210, 235, 255, 255 } or { 255, 255, 255, 255 } },
+            UI.Panel { flexGrow = 1, flexShrink = 1, flexBasis = 0, gap = 4, overflow = "hidden", children = {
+                UI.Label { text = hero.name, width = "100%", fontSize = 17, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
+                UI.Label { text = string.format("品质%d  星%d", hero.quality, hero.star), width = "100%", fontSize = 13, fontColor = { 88, 46, 45, 220 }, maxLines = 1 },
+                UI.Label { text = hero.job .. " · " .. hero.faction, width = "100%", fontSize = 13, fontColor = { 74, 56, 42, 220 }, maxLines = 1 },
+                UI.Label { text = "战力 " .. FormatNumber(hero.power), width = "100%", fontSize = 13, fontColor = { 202, 92, 44, 255 }, maxLines = 1 },
             } },
-            UI.Label { text = assigned and "出战" or "待机", width = 42, fontSize = 15, fontWeight = "bold", fontColor = assigned and { 202, 92, 44, 255 } or { 74, 56, 42, 220 }, textAlign = "center" },
+            UI.Label { text = assigned and "出战" or "待机", width = 36, flexShrink = 0, fontSize = 13, fontWeight = "bold", fontColor = assigned and { 202, 92, 44, 255 } or { 74, 56, 42, 220 }, textAlign = "center", maxLines = 1 },
         },
     }
 end
@@ -605,30 +592,40 @@ end
 
 function FormationScene:CreateSlotRows(heroMap, formation)
     local children = {}
-    for _, row in ipairs(SLOT_ROWS) do
-        local slotWidgets = {}
-        for _, slotId in ipairs(row.ids) do
-            slotWidgets[#slotWidgets + 1] = self:CreateSlot(slotId, heroMap, formation)
+    for rowIndex, row in ipairs(SLOT_ROWS) do
+        for colIndex, slotId in ipairs(row.ids) do
+            children[#children + 1] = self:CreateSlot(slotId, heroMap, formation, rowIndex, colIndex)
         end
-        children[#children + 1] = UI.Panel { width = "100%", height = 148, flexDirection = "row", alignItems = "center", gap = 8, children = slotWidgets }
     end
-    return UI.Panel { width = "100%", gap = 10, children = children }
+    return UI.Panel {
+        width = "91.8%",
+        height = 336,
+        position = "relative",
+        left = 15,
+        top = -1,
+        children = children,
+    }
 end
 
-function FormationScene:CreateSlot(slotId, heroMap, formation)
+function FormationScene:CreateSlot(slotId, heroMap, formation, rowIndex, colIndex)
     local unlocked = IsSlotUnlocked(slotId)
     local hero = formation and formation.slots and heroMap[formation.slots[slotId]] or nil
     local selected = self.selectedSlotId == slotId
     local locked = self:IsSlotLocked(formation, slotId)
+    local slotLeft = ((colIndex or 1) - 1) * (SLOT_WIDTH + 8)
+    local slotTop = ((rowIndex or 1) - 1) * (SLOT_HEIGHT + 8)
     return UI.Panel {
-        width = 105,
-        height = 138,
+        width = SLOT_WIDTH,
+        height = SLOT_HEIGHT,
+        position = "absolute",
+        left = slotLeft,
+        top = slotTop,
         flexDirection = "column",
         flexWrap = "nowrap",
         alignItems = "center",
         justifyContent = "center",
-        padding = 6,
-        gap = 4,
+        padding = 5,
+        gap = 3,
         backgroundColor = selected and { 255, 244, 205, 255 } or { 207, 166, 119, 255 },
         borderColor = locked and { 168, 48, 40, 255 } or { 68, 45, 25, 255 },
         borderWidth = selected and 4 or 2,
@@ -649,8 +646,7 @@ function FormationScene:CreateSlot(slotId, heroMap, formation)
             self:Refresh()
         end,
         children = unlocked and self:CreateSlotContent(slotId, hero, locked) or {
-            UI.Label { text = SLOT_LABELS[slotId], fontSize = 17, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center" },
-            UI.Label { text = "Lv." .. tostring(SLOT_UNLOCK_LEVEL[slotId]) .. "解锁", fontSize = 15, fontColor = { 168, 48, 40, 255 }, textAlign = "center" },
+            UI.Label { text = "Lv." .. tostring(SLOT_UNLOCK_LEVEL[slotId]) .. "解锁", fontSize = 14, fontColor = { 168, 48, 40, 255 }, textAlign = "center" },
         },
     }
 end
@@ -658,16 +654,15 @@ end
 function FormationScene:CreateSlotContent(slotId, hero, locked)
     if not hero then
         return {
-            UI.Label { text = SLOT_LABELS[slotId], fontSize = 17, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center" },
-            UI.Label { text = "可上阵\n提升战力", fontSize = 16, fontColor = { 117, 79, 62, 220 }, textAlign = "center" },
+            UI.Label { text = SLOT_LABELS[slotId], fontSize = 14, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center" },
+            UI.Label { text = "可上阵", fontSize = 14, fontColor = { 117, 79, 62, 220 }, textAlign = "center" },
         }
     end
 
     return {
-        UI.Label { text = locked and "已锁定" or SLOT_LABELS[slotId], fontSize = 14, fontColor = locked and { 168, 48, 40, 255 } or { 88, 46, 45, 255 }, textAlign = "center" },
-        UI.Panel { width = 76, height = 62, backgroundImage = HERO_IMAGE, backgroundFit = "contain" },
-        UI.Label { text = hero.name, fontSize = 16, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 1 },
-        UI.Label { text = FormatNumber(hero.power), fontSize = 14, fontColor = { 202, 92, 44, 255 }, textAlign = "center" },
+        UI.Label { text = locked and "已锁定" or hero.name, fontSize = 13, fontColor = locked and { 168, 48, 40, 255 } or { 88, 46, 45, 255 }, textAlign = "center", maxLines = 1 },
+        UI.Panel { width = 66, height = 48, backgroundImage = HERO_IMAGE, backgroundFit = "contain" },
+        UI.Label { text = FormatNumber(hero.power), fontSize = 13, fontColor = { 202, 92, 44, 255 }, textAlign = "center" },
     }
 end
 
@@ -703,8 +698,8 @@ function FormationScene:CreateSlotActionPanel(formation)
         height = 86,
         gap = 6,
         children = {
-            UI.Label { text = self.statusText, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 2 },
-            UI.Panel { width = "100%", height = 38, flexDirection = "row", gap = 8, children = {
+            UI.Label { text = self.statusText, position = "absolute", left = -1, top = 56, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 2 },
+            UI.Panel { width = "100%", height = 38, left = 0, top = 130, flexDirection = "row", gap = 8, children = {
                 UI.Button { text = "下阵", flexGrow = 1, height = 36, fontSize = 16, backgroundColor = { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 14, onClick = function() if self.selectedSlotId then self:RemoveSlot(self.selectedSlotId) else self:SetStatus("请先选择一个已上阵站位。") self:Refresh() end end },
                 UI.Button { text = "锁定", flexGrow = 1, height = 36, fontSize = 16, backgroundColor = { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 14, onClick = function() if self.selectedSlotId then self:ToggleSlotLock(self.selectedSlotId) else self:SetStatus("请先选择一个站位。") self:Refresh() end end },
                 UI.Button { text = "详情", flexGrow = 1, height = 36, fontSize = 16, backgroundColor = { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 14, onClick = function() self:SetStatus("详情入口已预留：后续接入勇者详情页。") self:Refresh() end },
@@ -717,11 +712,10 @@ function FormationScene:CreateBottomActions(formation, heroMap)
     local assignedCount = CountAssignedSlots(formation)
     return UI.Panel {
         position = "absolute",
-        left = 0,
-        right = 1,
-        bottom = 0,
-        height = 222,
-        padding = 18,
+        left = 14,
+        right = -13,
+        bottom = -17,
+        height = 196,
         gap = 12,
         backgroundColor = { 255, 255, 255, 0 },
         borderWidth = 0,
@@ -729,14 +723,12 @@ function FormationScene:CreateBottomActions(formation, heroMap)
         opacity = 1,
         imageTint = { 255, 255, 255, 0 },
         children = {
-            UI.Label { text = assignedCount < 6 and "空位提示：可上阵提升战力" or "阵容已满员", fontSize = 18, fontColor = { 255, 235, 178, 255 }, textAlign = "center" },
-            UI.Panel { width = "100%", height = 48, flexDirection = "row", gap = 12, children = {
-                UI.Button { text = "一键上阵", flexGrow = 1, height = 46, left = -4, top = 23, fontSize = 20, backgroundColor = { 202, 92, 44, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:AutoFillFormation() end },
-                UI.Button { text = "一键清空", flexGrow = 1, height = 46, left = -3, top = 25, fontSize = 20, backgroundColor = { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ClearFormation() end },
-            } },
-            UI.Panel { width = "100%", height = 48, flexDirection = "row", gap = 12, children = {
-                UI.Button { text = "保存阵容", flexGrow = 1, height = 46, left = -5, top = 17, fontSize = 20, backgroundColor = { 88, 130, 72, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:SaveAndRefresh("手动保存编队") end },
-                UI.Button { text = "推荐开关", flexGrow = 1, height = 46, left = 5, top = 18, fontSize = 20, backgroundColor = { 88, 46, 45, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ToggleRecommend() end },
+            UI.Label { text = assignedCount < 9 and "空位提示：可上阵提升战力" or "阵容已满员", left = 26, top = 77, fontSize = 18, fontColor = { 102, 77, 4, 255 }, textAlign = "center" },
+            UI.Panel { width = "95.2%", height = 51, left = 18, top = 73, flexDirection = "row", gap = 12, children = {
+                UI.Button { text = "一键上阵", width = 138, height = 46, position = "absolute", left = 0, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 202, 92, 44, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:AutoFillFormation() end },
+                UI.Button { text = "一键清空", width = 137.65, height = 46, position = "absolute", left = 170, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ClearFormation() end },
+                UI.Button { text = "保存阵容", width = 137.65, height = 46, position = "absolute", left = 340, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 88, 130, 72, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:SaveAndRefresh("手动保存编队") end },
+                UI.Button { text = "推荐开关", width = 137, height = 47, position = "absolute", left = 510, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 88, 46, 45, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ToggleRecommend() end },
             } },
         },
     }
