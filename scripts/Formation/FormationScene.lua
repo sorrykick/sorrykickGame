@@ -50,6 +50,17 @@ local QUALITY_COLORS = {
     [6] = { 255, 0, 0, 255 },
 }
 
+local QUALITY_ICON_PATHS = {
+    [1] = "image/品质/_D.png",
+    [2] = "image/品质/_C.png",
+    [3] = "image/品质/_B.png",
+    [4] = "image/品质/_A.png",
+    [5] = "image/品质/_S.png",
+    [6] = "image/品质/_SS.png",
+    [7] = "image/品质/_L.png",
+}
+local STAR_ICON_PATH = "image/品质/星级.png"
+
 local SORT_LABELS = {
     power = "战力",
     quality = "品质",
@@ -545,6 +556,20 @@ function FormationScene:CreateSortButton(sortMode)
     }
 end
 
+local function CreateStarIcons(star)
+    local starCount = math.max(1, math.min(6, math.floor(tonumber(star) or 1)))
+    local children = {}
+    for i = 1, starCount do
+        children[#children + 1] = UI.Panel {
+            width = 18,
+            height = 18,
+            backgroundImage = STAR_ICON_PATH,
+            backgroundFit = "contain",
+        }
+    end
+    return children
+end
+
 function FormationScene:CreateHeroCard(hero, formation)
     local assigned = IsHeroAssigned(formation, hero.id)
     local selected = self.selectedHeroId == hero.id
@@ -573,7 +598,8 @@ function FormationScene:CreateHeroCard(hero, formation)
         children = {
             UI.Panel { width = 50, height = 58, left = -2, top = -18, flexShrink = 0, backgroundImage = HERO_IMAGE, backgroundFit = "contain", imageTint = assigned and { 210, 235, 255, 255 } or { 255, 255, 255, 255 } },
             UI.Label { id = "hero_1", text = hero.name, width = 154, position = "absolute", left = 66, top = -7, fontSize = 17, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
-            UI.Label { text = string.format("品质%d  星%d", hero.quality, hero.star), width = 154, position = "absolute", left = 71, top = 28, fontSize = 13, fontColor = { 88, 46, 45, 220 }, maxLines = 1 },
+            UI.Panel { width = 42, height = 24, position = "absolute", left = 71, top = 28, backgroundImage = QUALITY_ICON_PATHS[hero.quality] or QUALITY_ICON_PATHS[1], backgroundFit = "contain" },
+            UI.Panel { width = 112, height = 20, position = "absolute", left = 116, top = 30, flexDirection = "row", gap = 1, children = CreateStarIcons(hero.star) },
             UI.Label { id = "hero_1", text = hero.job .. " · " .. hero.faction, width = 154, position = "absolute", left = 66, top = 58, fontSize = 13, fontColor = { 74, 56, 42, 220 }, maxLines = 1 },
             UI.Label { id = "hero_1", text = "战力 " .. FormatNumber(hero.power), width = 154, position = "absolute", left = 66, top = 88, fontSize = 13, fontColor = { 202, 92, 44, 255 }, maxLines = 1 },
             UI.Label { text = assigned and "出战" or "待机", width = 36, position = "absolute", right = 8, top = 42, fontSize = 13, fontWeight = "bold", fontColor = assigned and { 202, 92, 44, 255 } or { 74, 56, 42, 220 }, textAlign = "center", maxLines = 1 },

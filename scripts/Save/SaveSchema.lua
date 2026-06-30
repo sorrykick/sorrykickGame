@@ -1,10 +1,10 @@
 local DEFAULT_HEROES = {
-    { id = "hero_001", name = "勇者1", quality = 3, star = 2, power = 1280, job = "战士", faction = "森林", role = "前排" },
-    { id = "hero_002", name = "守护者", quality = 2, star = 2, power = 960, job = "坦克", faction = "森林", role = "前排" },
+    { id = "hero_001", name = "勇者1", quality = 3, star = 1, power = 1280, job = "战士", faction = "森林", role = "前排" },
+    { id = "hero_002", name = "守护者", quality = 2, star = 1, power = 960, job = "坦克", faction = "森林", role = "前排" },
     { id = "hero_003", name = "疾风弓手", quality = 4, star = 1, power = 1420, job = "射手", faction = "王国", role = "后排" },
-    { id = "hero_004", name = "星辉法师", quality = 4, star = 2, power = 1580, job = "法师", faction = "奥术", role = "后排" },
-    { id = "hero_005", name = "祈愿祭司", quality = 3, star = 3, power = 1330, job = "辅助", faction = "王国", role = "后排" },
-    { id = "hero_006", name = "荒原剑士", quality = 2, star = 4, power = 1180, job = "战士", faction = "荒原", role = "前排" },
+    { id = "hero_004", name = "星辉法师", quality = 4, star = 1, power = 1580, job = "法师", faction = "奥术", role = "后排" },
+    { id = "hero_005", name = "祈愿祭司", quality = 3, star = 1, power = 1330, job = "辅助", faction = "王国", role = "后排" },
+    { id = "hero_006", name = "荒原剑士", quality = 2, star = 1, power = 1180, job = "战士", faction = "荒原", role = "前排" },
 }
 
 local LINEUP_SLOT_IDS = { "front1", "front2", "front3", "back1", "back2", "back3" }
@@ -22,7 +22,7 @@ local function normalizeHero(rawHero, index)
     return {
         id = tostring(rawHero.id or ("hero_" .. string.format("%03d", index))),
         name = tostring(rawHero.name or ("勇者" .. tostring(index))),
-        quality = math.max(1, math.min(6, math.floor(tonumber(rawHero.quality) or 1))),
+        quality = math.max(1, math.min(7, math.floor(tonumber(rawHero.quality) or 1))),
         star = math.max(1, math.min(6, math.floor(tonumber(rawHero.star) or 1))),
         power = math.max(1, math.floor(tonumber(rawHero.power) or 1)),
         job = tostring(rawHero.job or "战士"),

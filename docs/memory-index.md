@@ -53,6 +53,7 @@
 
 ## POST 日志
 
+- 2026-06-30：勇者卡片改为图片化品质/星级展示：品质映射到 `image/品质/_D.png`、`_C.png`、`_B.png`、`_A.png`、`_S.png`、`_SS.png`、`_L.png`，星级使用 `image/品质/星级.png` 按星级数量重复显示；默认勇者创建星级统一为 1 星，品质归一化上限扩到 7 档；LSP 0 Error，官方构建成功。
 - 2026-06-30：按 Inspector 调整阵型页勇者卡片内部结构：删除文字信息包装 Panel，将名称、品质星级、职业阵营、战力 Label 上提到卡片父级；同步头像 left=-2/top=-18 与品质星级 left=5/top=-1 的视觉偏移；LSP 服务不可用，官方构建成功。
 - 2026-06-30：将主界面顶部资源栏抽为 `CreateTopResourceRow`，保留 `id="顶级"`，并通过 `FormationScene` 的 `createTopResourceRow` 回调在阵型页同样显示该顶部 HUD；LSP 0 Error，官方构建成功。
 - 2026-06-30：按 Inspector 给主界面顶部 HUD 第一行 Panel 增加 `id="顶级"`，用于后续 Inspector 定位；LSP 0 Error，官方构建成功。

@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-06-30 | formation-hero-quality-star-icons | 勇者卡片品质/星级改为图片展示：品质使用 `_D/_C/_B/_A/_S/_SS/_L.png`，星级使用 `星级.png` 按星级数量重复；默认勇者创建星级统一为 1 星，品质归一化上限扩到 7 档；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | formation-hero-card-flatten | 按 Inspector 删除勇者卡片文字信息包装 Panel，将名称、品质星级、职业阵营、战力 Label 上提到卡片父级，并同步头像与品质星级偏移；LSP 服务不可用，官方构建成功。 |
 | 2026-06-30 | formation-show-top-hud | 将主界面顶部资源栏抽为 `CreateTopResourceRow`，保留 `id="顶级"`，并在阵型页通过 `FormationScene` 回调复用显示；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | home-top-hud-id | 按 Inspector 给主界面顶部 HUD 第一行 Panel 增加 `id="顶级"`，便于后续运行时定位；LSP 0 Error，官方构建成功。 |
