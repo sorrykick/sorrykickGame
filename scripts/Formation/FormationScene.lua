@@ -560,7 +560,9 @@ local function CreateStarBadge(star)
     local starCount = math.max(1, math.min(6, math.floor(tonumber(star) or 1)))
     return UI.Panel {
         width = 64,
-        height = 20,
+        height = 34,
+        left = -105,
+        top = -18,
         flexDirection = "row",
         alignItems = "center",
         gap = 3,
@@ -610,12 +612,12 @@ function FormationScene:CreateHeroCard(hero, formation)
             self:Refresh()
         end,
         children = {
-            UI.Panel { width = 50, height = 58, left = -2, top = -18, flexShrink = 0, backgroundImage = HERO_IMAGE, backgroundFit = "contain", imageTint = assigned and { 210, 235, 255, 255 } or { 255, 255, 255, 255 } },
-            UI.Label { id = "hero_1", text = hero.name, width = 154, position = "absolute", left = 66, top = -7, fontSize = 17, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
-            UI.Panel { width = 42, height = 24, position = "absolute", left = 71, top = 28, backgroundImage = QUALITY_ICON_PATHS[hero.quality] or QUALITY_ICON_PATHS[1], backgroundFit = "contain" },
+            UI.Panel { width = 80, height = 90, position = "absolute", left = 7, top = 10, borderRadius = 0, flexShrink = 0, backgroundImage = HERO_IMAGE, backgroundFit = "contain", imageTint = assigned and { 210, 235, 255, 255 } or { 255, 255, 255, 255 } },
+            UI.Label { id = "hero_1", text = hero.name, width = 154, position = "absolute", left = 89, top = 3, fontSize = 17, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
+            UI.Panel { width = 32, height = 32, position = "absolute", left = 58, top = 6, backgroundImage = QUALITY_ICON_PATHS[hero.quality] or QUALITY_ICON_PATHS[1], backgroundFit = "contain" },
             UI.Panel { width = 64, height = 20, position = "absolute", left = 116, top = 30, children = { CreateStarBadge(hero.star) } },
-            UI.Label { id = "hero_1", text = hero.job .. " · " .. hero.faction, width = 154, position = "absolute", left = 66, top = 58, fontSize = 13, fontColor = { 74, 56, 42, 220 }, maxLines = 1 },
-            UI.Label { id = "hero_1", text = "战力 " .. FormatNumber(hero.power), width = 154, position = "absolute", left = 66, top = 88, fontSize = 13, fontColor = { 202, 92, 44, 255 }, maxLines = 1 },
+            UI.Label { id = "hero_1", text = hero.job .. " · " .. hero.faction, width = 126, height = 27, position = "absolute", left = 88, top = 36, fontSize = 13, fontColor = { 74, 56, 42, 220 }, maxLines = 1 },
+            UI.Label { id = "hero_1", text = "战力 " .. FormatNumber(hero.power), width = 131, position = "absolute", left = 94, top = 71, fontSize = 13, fontColor = { 202, 92, 44, 255 }, maxLines = 1 },
             UI.Label { text = assigned and "出战" or "待机", width = 36, position = "absolute", right = 8, top = 42, fontSize = 13, fontWeight = "bold", fontColor = assigned and { 202, 92, 44, 255 } or { 74, 56, 42, 220 }, textAlign = "center", maxLines = 1 },
         },
     }
