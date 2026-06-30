@@ -571,14 +571,12 @@ function FormationScene:CreateHeroCard(hero, formation)
             self:Refresh()
         end,
         children = {
-            UI.Panel { width = 50, height = 58, flexShrink = 0, backgroundImage = HERO_IMAGE, backgroundFit = "contain", imageTint = assigned and { 210, 235, 255, 255 } or { 255, 255, 255, 255 } },
-            UI.Panel { flexGrow = 1, flexShrink = 1, flexBasis = 0, gap = 4, overflow = "hidden", children = {
-                UI.Label { text = hero.name, width = "100%", fontSize = 17, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
-                UI.Label { text = string.format("品质%d  星%d", hero.quality, hero.star), width = "100%", fontSize = 13, fontColor = { 88, 46, 45, 220 }, maxLines = 1 },
-                UI.Label { text = hero.job .. " · " .. hero.faction, width = "100%", fontSize = 13, fontColor = { 74, 56, 42, 220 }, maxLines = 1 },
-                UI.Label { text = "战力 " .. FormatNumber(hero.power), width = "100%", fontSize = 13, fontColor = { 202, 92, 44, 255 }, maxLines = 1 },
-            } },
-            UI.Label { text = assigned and "出战" or "待机", width = 36, flexShrink = 0, fontSize = 13, fontWeight = "bold", fontColor = assigned and { 202, 92, 44, 255 } or { 74, 56, 42, 220 }, textAlign = "center", maxLines = 1 },
+            UI.Panel { width = 50, height = 58, left = -2, top = -18, flexShrink = 0, backgroundImage = HERO_IMAGE, backgroundFit = "contain", imageTint = assigned and { 210, 235, 255, 255 } or { 255, 255, 255, 255 } },
+            UI.Label { id = "hero_1", text = hero.name, width = 154, position = "absolute", left = 66, top = -7, fontSize = 17, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
+            UI.Label { text = string.format("品质%d  星%d", hero.quality, hero.star), width = 154, position = "absolute", left = 71, top = 28, fontSize = 13, fontColor = { 88, 46, 45, 220 }, maxLines = 1 },
+            UI.Label { id = "hero_1", text = hero.job .. " · " .. hero.faction, width = 154, position = "absolute", left = 66, top = 58, fontSize = 13, fontColor = { 74, 56, 42, 220 }, maxLines = 1 },
+            UI.Label { id = "hero_1", text = "战力 " .. FormatNumber(hero.power), width = 154, position = "absolute", left = 66, top = 88, fontSize = 13, fontColor = { 202, 92, 44, 255 }, maxLines = 1 },
+            UI.Label { text = assigned and "出战" or "待机", width = 36, position = "absolute", right = 8, top = 42, fontSize = 13, fontWeight = "bold", fontColor = assigned and { 202, 92, 44, 255 } or { 74, 56, 42, 220 }, textAlign = "center", maxLines = 1 },
         },
     }
 end

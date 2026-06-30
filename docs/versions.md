@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-06-30 | formation-hero-card-flatten | 按 Inspector 删除勇者卡片文字信息包装 Panel，将名称、品质星级、职业阵营、战力 Label 上提到卡片父级，并同步头像与品质星级偏移；LSP 服务不可用，官方构建成功。 |
 | 2026-06-30 | formation-show-top-hud | 将主界面顶部资源栏抽为 `CreateTopResourceRow`，保留 `id="顶级"`，并在阵型页通过 `FormationScene` 回调复用显示；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | home-top-hud-id | 按 Inspector 给主界面顶部 HUD 第一行 Panel 增加 `id="顶级"`，便于后续运行时定位；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | formation-inspector-17-controls | 按 Inspector 同步编队页 17 个控件：总战力、阵容 TAB、内容区、底部按钮组、智能推荐、全锁、返回按钮重排；勇者列表宽度改 307，9 个勇者卡片宽度改为 95%；LSP 0 Error，官方构建成功。 |

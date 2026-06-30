@@ -53,6 +53,7 @@
 
 ## POST 日志
 
+- 2026-06-30：按 Inspector 调整阵型页勇者卡片内部结构：删除文字信息包装 Panel，将名称、品质星级、职业阵营、战力 Label 上提到卡片父级；同步头像 left=-2/top=-18 与品质星级 left=5/top=-1 的视觉偏移；LSP 服务不可用，官方构建成功。
 - 2026-06-30：将主界面顶部资源栏抽为 `CreateTopResourceRow`，保留 `id="顶级"`，并通过 `FormationScene` 的 `createTopResourceRow` 回调在阵型页同样显示该顶部 HUD；LSP 0 Error，官方构建成功。
 - 2026-06-30：按 Inspector 给主界面顶部 HUD 第一行 Panel 增加 `id="顶级"`，用于后续 Inspector 定位；LSP 0 Error，官方构建成功。
 - 2026-06-30：按 Inspector 同步编队页 17 个控件：总战力移动到 left=425/top=119；阵容 TAB 容器移动到 left=34/top=124；内容父级改为 width=678、left=16/top=170/right=26/bottom=327；底部按钮组移动到 left=25/top=1113；智能推荐移到 left=530/top=1070；全锁按钮移到 left=575/top=81；返回按钮移到底部 left=1/top=1183；勇者列表宽度改 307；9 个勇者卡片宽度改为 95%；LSP 0 Error，官方构建成功。
