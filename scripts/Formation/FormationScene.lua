@@ -377,17 +377,20 @@ function FormationScene:CreateRoot()
     local _, lineup, heroes, heroMap, activeIndex, formation = self:GetData()
     local totalPower = CalculateFormationPower(formation, heroMap)
     local topBarChildren = self:CreateTopBar(totalPower, lineup, activeIndex, formation)
+    local bottomActionChildren = self:CreateBottomActions(formation, heroMap)
+    local backgroundChildren = {}
+    backgroundChildren[#backgroundChildren + 1] = topBarChildren[2]
+    backgroundChildren[#backgroundChildren + 1] = topBarChildren[3]
+    backgroundChildren[#backgroundChildren + 1] = topBarChildren[4]
+    backgroundChildren[#backgroundChildren + 1] = topBarChildren[5]
+    backgroundChildren[#backgroundChildren + 1] = bottomActionChildren[1]
+    backgroundChildren[#backgroundChildren + 1] = bottomActionChildren[2]
+
     local children = {}
-    children[#children + 1] = self:CreateBackground({
-        topBarChildren[2],
-        topBarChildren[3],
-        topBarChildren[4],
-        topBarChildren[5],
-    })
+    children[#children + 1] = self:CreateBackground(backgroundChildren)
     children[#children + 1] = topBarChildren[1]
     children[#children + 1] = topBarChildren[6]
     children[#children + 1] = self:CreateContent(heroes, heroMap, formation)
-    children[#children + 1] = self:CreateBottomActions(formation, heroMap)
 
     return UI.Panel {
         id = "formationScreen",
@@ -439,11 +442,11 @@ function FormationScene:CreateTopBar(totalPower, lineup, activeIndex, formation)
 
     return {
         UI.Button { width = 164, height = 58, position = "absolute", left = 2, top = 2, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, fontSize = 18, backgroundImage = "image/BT-返回.png", backgroundFit = "cover", backgroundColor = { 251, 251, 251, 0 }, opacity = 1, textColor = { 255, 255, 255, 0 }, borderRadius = 0, onClick = function() if self.onExit then self.onExit() end end },
-        UI.Label { text = "勇者编队", position = "absolute", left = 293, top = 60, fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
-        UI.Button { text = formation and formation.locked and "全锁" or "锁定", position = "absolute", left = 620, top = 105, width = 86, height = 38, fontSize = 18, backgroundColor = formation and formation.locked and { 168, 48, 40, 255 } or { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 16, onClick = function() self:ToggleFormationLock() end },
-        UI.Label { text = "总战力 " .. FormatNumber(totalPower), position = "absolute", left = 23, top = 123, fontSize = 24, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
-        UI.Label { text = lineup.recommendEnabled and "智能推荐：开" or "智能推荐：关", position = "absolute", left = 560, top = 132, fontSize = 18, fontColor = { 245, 228, 200, 255 } },
-        UI.Panel { position = "absolute", width = 676, height = 44, left = 25, top = 201, flexDirection = "row", justifyContent = "center", gap = 12, children = tabs },
+        UI.Label { text = "勇者编队", position = "absolute", left = 19, top = 66, fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
+        UI.Button { text = formation and formation.locked and "全锁" or "锁定", position = "absolute", left = 429, top = 1175, width = 86, height = 38, fontSize = 18, backgroundColor = formation and formation.locked and { 168, 48, 40, 255 } or { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 16, onClick = function() self:ToggleFormationLock() end },
+        UI.Label { text = "总战力 " .. FormatNumber(totalPower), width = 272, position = "absolute", left = 412, top = 194, fontSize = 24, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
+        UI.Label { text = lineup.recommendEnabled and "智能推荐：开" or "智能推荐：关", position = "absolute", left = 543, top = 1182, fontSize = 18, fontColor = { 245, 228, 200, 255 } },
+        UI.Panel { position = "absolute", width = 373, height = 44, left = 33, top = 196, flexDirection = "row", justifyContent = "center", gap = 12, children = tabs },
     }
 end
 
@@ -710,27 +713,14 @@ end
 
 function FormationScene:CreateBottomActions(formation, heroMap)
     local assignedCount = CountAssignedSlots(formation)
-    return UI.Panel {
-        position = "absolute",
-        left = 14,
-        right = -13,
-        bottom = -17,
-        height = 196,
-        gap = 12,
-        backgroundColor = { 255, 255, 255, 0 },
-        borderWidth = 0,
-        borderRadius = 0,
-        opacity = 1,
-        imageTint = { 255, 255, 255, 0 },
-        children = {
-            UI.Label { text = assignedCount < 9 and "空位提示：可上阵提升战力" or "阵容已满员", left = 26, top = 77, fontSize = 18, fontColor = { 102, 77, 4, 255 }, textAlign = "center" },
-            UI.Panel { width = "95.2%", height = 51, left = 18, top = 73, flexDirection = "row", gap = 12, children = {
-                UI.Button { text = "一键上阵", width = 138, height = 46, position = "absolute", left = 0, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 202, 92, 44, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:AutoFillFormation() end },
-                UI.Button { text = "一键清空", width = 137.65, height = 46, position = "absolute", left = 170, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ClearFormation() end },
-                UI.Button { text = "保存阵容", width = 137.65, height = 46, position = "absolute", left = 340, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 88, 130, 72, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:SaveAndRefresh("手动保存编队") end },
-                UI.Button { text = "推荐开关", width = 137, height = 47, position = "absolute", left = 510, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 88, 46, 45, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ToggleRecommend() end },
-            } },
-        },
+    return {
+        UI.Label { text = assignedCount < 9 and "空位提示：可上阵提升战力" or "阵容已满员", position = "absolute", left = 37, top = 893, fontSize = 18, fontColor = { 102, 77, 4, 255 }, textAlign = "center" },
+        UI.Panel { position = "absolute", width = "95.2%", height = 51, left = 24, top = 1221, flexDirection = "row", gap = 12, children = {
+            UI.Button { text = "一键上阵", width = 138, height = 46, position = "absolute", left = 0, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 202, 92, 44, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:AutoFillFormation() end },
+            UI.Button { text = "一键清空", width = 137.65, height = 46, position = "absolute", left = 170, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ClearFormation() end },
+            UI.Button { text = "保存阵容", width = 137.65, height = 46, position = "absolute", left = 340, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 88, 130, 72, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:SaveAndRefresh("手动保存编队") end },
+            UI.Button { text = "推荐开关", width = 137, height = 47, position = "absolute", left = 510, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 88, 46, 45, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ToggleRecommend() end },
+        } },
     }
 end
 
