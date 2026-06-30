@@ -424,6 +424,7 @@ local function CreateTopHud()
         gap = 8,
         children = {
             UI.Panel {
+                id = "顶级",
                 width = "100%",
                 height = 38,
                 flexDirection = "row",
