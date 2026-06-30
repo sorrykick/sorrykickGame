@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-06-30 | formation-page-background | 按 Inspector 修改编队页背景层：使用 `image/page_background.png`，同步黑色背景、0.56 透明度和 zIndex=0；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | formation-clear-selection-after-assign | 编队上阵/替换完成后自动清除当前选择，避免连续误操作；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | formation-system-page | 新增独立勇者 NPC 上阵编队系统页面：扩展默认勇者与 3 套阵容存档，接入主界面“阵型”入口，支持总战力、排序、6 格站位、上阵/替换/下阵、锁定、一键上阵/清空、保存、推荐开关与羁绊展示；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | battle-target-same-column-first | 更新自动战斗寻敌策略：优先选择同列敌方，同列无目标时再回退到全局最近敌方；LSP 服务不可用，官方构建成功。 |

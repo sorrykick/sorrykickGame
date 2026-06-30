@@ -389,7 +389,11 @@ function FormationScene:CreateBackground()
         top = 0,
         right = 0,
         bottom = 0,
-        backgroundColor = { 88, 52, 34, 255 },
+        zIndex = 0,
+        backgroundImage = "image/page_background.png",
+        backgroundFit = "cover",
+        backgroundColor = { 0, 0, 0, 255 },
+        opacity = 0.56,
         children = {
             UI.Panel { position = "absolute", left = 18, top = 92, right = 18, bottom = 132, backgroundColor = { 245, 228, 200, 238 }, borderColor = { 68, 45, 25, 255 }, borderWidth = 4, borderRadius = 22 },
         },
