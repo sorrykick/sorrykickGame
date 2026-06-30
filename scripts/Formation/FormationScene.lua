@@ -176,6 +176,7 @@ end
 function FormationScene:new(options)
     local o = setmetatable({}, self)
     o.onExit = options and options.onExit or nil
+    o.createTopResourceRow = options and options.createTopResourceRow or nil
     o.root = nil
     o.selectedHeroId = nil
     o.selectedSlotId = nil
@@ -388,6 +389,16 @@ function FormationScene:CreateRoot()
 
     local children = {}
     children[#children + 1] = self:CreateBackground(backgroundChildren)
+    if self.createTopResourceRow then
+        children[#children + 1] = UI.Panel {
+            position = "absolute",
+            top = 10,
+            left = 12,
+            right = 12,
+            zIndex = 20,
+            children = { self.createTopResourceRow() },
+        }
+    end
     children[#children + 1] = topBarChildren[1]
     children[#children + 1] = topBarChildren[6]
     children[#children + 1] = self:CreateContent(heroes, heroMap, formation)

@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-06-30 | formation-show-top-hud | 将主界面顶部资源栏抽为 `CreateTopResourceRow`，保留 `id="顶级"`，并在阵型页通过 `FormationScene` 回调复用显示；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | home-top-hud-id | 按 Inspector 给主界面顶部 HUD 第一行 Panel 增加 `id="顶级"`，便于后续运行时定位；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | formation-inspector-17-controls | 按 Inspector 同步编队页 17 个控件：总战力、阵容 TAB、内容区、底部按钮组、智能推荐、全锁、返回按钮重排；勇者列表宽度改 307，9 个勇者卡片宽度改为 95%；LSP 0 Error，官方构建成功。 |
 | 2026-06-30 | formation-inspector-7-controls | 按 Inspector 同步编队页 7 个控件：阵容 TAB 容器缩到 373 宽并移到 left=33/top=196；标题、总战力、全锁按钮、智能推荐同步试调坐标；删除底部操作外层透明 Panel，将提示文本和按钮组直接挂到 `background` 下；LSP 0 Error，官方构建成功。 |

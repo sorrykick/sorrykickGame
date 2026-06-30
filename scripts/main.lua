@@ -414,6 +414,40 @@ local function CreateHero1Actor()
     }
 end
 
+local function CreateTopResourceRow(saveData)
+    return UI.Panel {
+        id = "顶级",
+        width = "100%",
+        height = 38,
+        flexDirection = "row",
+        alignItems = "center",
+        gap = 10,
+        children = {
+            UI.Panel {
+                width = 104,
+                height = 34,
+                borderRadius = 8,
+                backgroundColor = { 18, 16, 14, 220 },
+                alignItems = "center",
+                justifyContent = "center",
+                children = { UI.Label { text = "23:00", fontSize = 18, fontColor = { 255, 255, 255, 255 } } },
+            },
+            CreateResourcePill("coin", FormatNumber(saveData.coin)),
+            CreateResourcePill("diamond", FormatNumber(saveData.diamond)),
+            CreateResourcePill("crystal", FormatNumber(saveData.crystal)),
+            UI.Panel {
+                width = 44,
+                height = 44,
+                backgroundImage = "image/icon_add.png",
+                backgroundFit = "contain",
+                onClick = function()
+                    print("[Home] Add resource clicked")
+                end,
+            },
+        },
+    }
+end
+
 local function CreateTopHud()
     local saveData = SaveManager.GetSaveData()
     return UI.Panel {
@@ -423,37 +457,7 @@ local function CreateTopHud()
         right = 12,
         gap = 8,
         children = {
-            UI.Panel {
-                id = "顶级",
-                width = "100%",
-                height = 38,
-                flexDirection = "row",
-                alignItems = "center",
-                gap = 10,
-                children = {
-                    UI.Panel {
-                        width = 104,
-                        height = 34,
-                        borderRadius = 8,
-                        backgroundColor = { 18, 16, 14, 220 },
-                        alignItems = "center",
-                        justifyContent = "center",
-                        children = { UI.Label { text = "23:00", fontSize = 18, fontColor = { 255, 255, 255, 255 } } },
-                    },
-                    CreateResourcePill("coin", FormatNumber(saveData.coin)),
-                    CreateResourcePill("diamond", FormatNumber(saveData.diamond)),
-                    CreateResourcePill("crystal", FormatNumber(saveData.crystal)),
-                    UI.Panel {
-                        width = 44,
-                        height = 44,
-                        backgroundImage = "image/icon_add.png",
-                        backgroundFit = "contain",
-                        onClick = function()
-                            print("[Home] Add resource clicked")
-                        end,
-                    },
-                },
-            },
+            CreateTopResourceRow(saveData),
             UI.Panel {
                 width = "100%",
                 height = 38,
@@ -816,6 +820,9 @@ EnterFormationScreen = function()
     formationScene_ = FormationScene:new({
         onExit = function()
             EnterHomeScreen()
+        end,
+        createTopResourceRow = function()
+            return CreateTopResourceRow(SaveManager.GetSaveData())
         end,
     })
     ShowRoot(formationScene_:CreateRoot())
