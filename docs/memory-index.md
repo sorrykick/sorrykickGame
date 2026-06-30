@@ -53,6 +53,7 @@
 
 ## POST 日志
 
+- 2026-06-30：按 Inspector 同步编队页 17 个控件：总战力移动到 left=425/top=119；阵容 TAB 容器移动到 left=34/top=124；内容父级改为 width=678、left=16/top=170/right=26/bottom=327；底部按钮组移动到 left=25/top=1113；智能推荐移到 left=530/top=1070；全锁按钮移到 left=575/top=81；返回按钮移到底部 left=1/top=1183；勇者列表宽度改 307；9 个勇者卡片宽度改为 95%；LSP 0 Error，官方构建成功。
 - 2026-06-30：按 Inspector 同步编队页 7 个控件：阵容 TAB 容器缩到 373 宽并移到 left=33/top=196；标题移到 left=19/top=66；总战力改宽 272 并移到 right/top 区；全锁按钮与智能推荐移到底部区域；删除底部操作外层透明 Panel，将提示文本和按钮组直接挂到 `background` 下并保持按钮组视觉位置；LSP 0 Error，官方构建成功。
 - 2026-06-30：按 Inspector 同步编队页背景父子结构：`CreateBackground` 增加 `id="background"`，背景位置改为 left=-1/top=-1/right=1/bottom=1，并将“勇者编队”标题、顶部“锁定”按钮、“总战力”和“智能推荐”四个顶部控件移动到 `background` 节点下；LSP 0 Error，官方构建成功。
 - 2026-06-30：按 Inspector 同步编队页返回按钮与背景底板：返回按钮移动到 left=2/top=2；删除 `CreateBackground` 中的 `_0002_底板.png` 子 Panel，仅保留页面背景图；LSP 0 Error，官方构建成功。

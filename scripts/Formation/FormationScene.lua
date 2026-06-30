@@ -441,22 +441,23 @@ function FormationScene:CreateTopBar(totalPower, lineup, activeIndex, formation)
     end
 
     return {
-        UI.Button { width = 164, height = 58, position = "absolute", left = 2, top = 2, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, fontSize = 18, backgroundImage = "image/BT-返回.png", backgroundFit = "cover", backgroundColor = { 251, 251, 251, 0 }, opacity = 1, textColor = { 255, 255, 255, 0 }, borderRadius = 0, onClick = function() if self.onExit then self.onExit() end end },
+        UI.Button { width = 164, height = 58, position = "absolute", left = 1, top = 1183, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, fontSize = 18, backgroundImage = "image/BT-返回.png", backgroundFit = "cover", backgroundColor = { 251, 251, 251, 0 }, opacity = 1, textColor = { 255, 255, 255, 0 }, borderRadius = 0, onClick = function() if self.onExit then self.onExit() end end },
         UI.Label { text = "勇者编队", position = "absolute", left = 19, top = 66, fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
-        UI.Button { text = formation and formation.locked and "全锁" or "锁定", position = "absolute", left = 429, top = 1175, width = 86, height = 38, fontSize = 18, backgroundColor = formation and formation.locked and { 168, 48, 40, 255 } or { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 16, onClick = function() self:ToggleFormationLock() end },
-        UI.Label { text = "总战力 " .. FormatNumber(totalPower), width = 272, position = "absolute", left = 412, top = 194, fontSize = 24, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
-        UI.Label { text = lineup.recommendEnabled and "智能推荐：开" or "智能推荐：关", position = "absolute", left = 543, top = 1182, fontSize = 18, fontColor = { 245, 228, 200, 255 } },
-        UI.Panel { position = "absolute", width = 373, height = 44, left = 33, top = 196, flexDirection = "row", justifyContent = "center", gap = 12, children = tabs },
+        UI.Button { text = formation and formation.locked and "全锁" or "锁定", position = "absolute", left = 575, top = 81, width = 86, height = 38, fontSize = 18, backgroundColor = formation and formation.locked and { 168, 48, 40, 255 } or { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 16, onClick = function() self:ToggleFormationLock() end },
+        UI.Label { text = "总战力 " .. FormatNumber(totalPower), width = 272, position = "absolute", left = 425, top = 119, fontSize = 24, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
+        UI.Label { text = lineup.recommendEnabled and "智能推荐：开" or "智能推荐：关", position = "absolute", left = 530, top = 1070, fontSize = 18, fontColor = { 245, 228, 200, 255 } },
+        UI.Panel { position = "absolute", width = 373, height = 44, left = 34, top = 124, flexDirection = "row", justifyContent = "center", gap = 12, children = tabs },
     }
 end
 
 function FormationScene:CreateContent(heroes, heroMap, formation)
     return UI.Panel {
         position = "absolute",
-        left = 27,
-        right = 27,
-        top = 250,
-        bottom = 247,
+        width = 678,
+        left = 16,
+        right = 26,
+        top = 170,
+        bottom = 327,
         height = 890,
         flexDirection = "row",
         gap = 12,
@@ -488,7 +489,7 @@ function FormationScene:CreateHeroList(heroes, formation)
     end
 
     return UI.Panel {
-        width = 288,
+        width = 307,
         height = "100%",
         left = 2,
         top = 0,
@@ -538,7 +539,7 @@ function FormationScene:CreateHeroCard(hero, formation)
     local selected = self.selectedHeroId == hero.id
     local qualityColor = QUALITY_COLORS[hero.quality] or QUALITY_COLORS[1]
     return UI.Panel {
-        width = "100%",
+        width = "95%",
         height = 104,
         flexDirection = "row",
         alignItems = "center",
@@ -715,7 +716,7 @@ function FormationScene:CreateBottomActions(formation, heroMap)
     local assignedCount = CountAssignedSlots(formation)
     return {
         UI.Label { text = assignedCount < 9 and "空位提示：可上阵提升战力" or "阵容已满员", position = "absolute", left = 37, top = 893, fontSize = 18, fontColor = { 102, 77, 4, 255 }, textAlign = "center" },
-        UI.Panel { position = "absolute", width = "95.2%", height = 51, left = 24, top = 1221, flexDirection = "row", gap = 12, children = {
+        UI.Panel { position = "absolute", width = "95.2%", height = 51, left = 25, top = 1113, flexDirection = "row", gap = 12, children = {
             UI.Button { text = "一键上阵", width = 138, height = 46, position = "absolute", left = 0, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 202, 92, 44, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:AutoFillFormation() end },
             UI.Button { text = "一键清空", width = 137.65, height = 46, position = "absolute", left = 170, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ClearFormation() end },
             UI.Button { text = "保存阵容", width = 137.65, height = 46, position = "absolute", left = 340, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 88, 130, 72, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:SaveAndRefresh("手动保存编队") end },
