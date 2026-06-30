@@ -390,10 +390,11 @@ function FormationScene:CreateBackground()
         right = 0,
         bottom = 0,
         zIndex = 0,
+        borderRadius = 0,
         backgroundImage = "image/page_background.png",
         backgroundFit = "cover",
         backgroundColor = { 0, 0, 0, 255 },
-        opacity = 0.56,
+        opacity = 1,
         children = {
             UI.Panel { position = "absolute", left = 18, top = 92, right = 18, bottom = 132, backgroundColor = { 245, 228, 200, 238 }, borderColor = { 68, 45, 25, 255 }, borderWidth = 4, borderRadius = 22 },
         },
@@ -427,32 +428,36 @@ function FormationScene:CreateTopBar(totalPower, lineup, activeIndex, formation)
         paddingTop = 16,
         paddingHorizontal = 22,
         gap = 8,
-        backgroundColor = { 68, 45, 25, 255 },
+        backgroundColor = { 68, 44, 24, 0 },
         children = {
             UI.Panel {
                 width = "100%",
                 height = 48,
+                left = -7,
+                top = 85,
                 flexDirection = "row",
                 alignItems = "center",
                 justifyContent = "space-between",
                 children = {
-                    UI.Button { text = "返回", width = 86, height = 38, fontSize = 18, backgroundColor = { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 16, onClick = function() if self.onExit then self.onExit() end end },
-                    UI.Label { text = "勇者编队", fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
+                    UI.Button { width = 165, height = 64, position = "absolute", left = -17, top = -100, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 18, backgroundImage = "image/BT-返回.png", backgroundFit = "contain", backgroundColor = { 117, 79, 62, 255 }, borderRadius = 0, onClick = function() if self.onExit then self.onExit() end end },
+                    UI.Label { text = "勇者编队", left = 248, top = -2, fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
                     UI.Button { text = formation and formation.locked and "全锁" or "锁定", width = 86, height = 38, fontSize = 18, backgroundColor = formation and formation.locked and { 168, 48, 40, 255 } or { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 16, onClick = function() self:ToggleFormationLock() end },
                 },
             },
             UI.Panel {
                 width = "100%",
                 height = 38,
+                left = -1,
+                top = 82,
                 flexDirection = "row",
                 alignItems = "center",
                 justifyContent = "space-between",
                 children = {
-                    UI.Label { text = "总战力 " .. FormatNumber(totalPower), fontSize = 24, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
+                    UI.Label { text = "总战力 " .. FormatNumber(totalPower), left = 10, top = -9, fontSize = 24, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
                     UI.Label { text = lineup.recommendEnabled and "智能推荐：开" or "智能推荐：关", fontSize = 18, fontColor = { 245, 228, 200, 255 } },
                 },
             },
-            UI.Panel { width = "100%", height = 44, flexDirection = "row", justifyContent = "center", gap = 12, children = tabs },
+            UI.Panel { width = "100%", height = 44, left = -4, top = 78, flexDirection = "row", justifyContent = "center", gap = 12, children = tabs },
         },
     }
 end
@@ -460,10 +465,11 @@ end
 function FormationScene:CreateContent(heroes, heroMap, formation)
     return UI.Panel {
         position = "absolute",
-        left = 28,
-        right = 28,
-        top = 178,
-        bottom = 245,
+        left = 27,
+        right = 27,
+        top = 250,
+        bottom = 247,
+        height = 890,
         flexDirection = "row",
         gap = 12,
         children = {
@@ -496,6 +502,8 @@ function FormationScene:CreateHeroList(heroes, formation)
     return UI.Panel {
         width = 288,
         height = "100%",
+        left = 2,
+        top = 0,
         padding = 10,
         gap = 8,
         backgroundColor = { 113, 74, 58, 245 },
@@ -578,6 +586,8 @@ function FormationScene:CreateFormationBoard(heroMap, formation)
         flexGrow = 1,
         flexShrink = 1,
         height = "100%",
+        left = 2,
+        top = 0,
         padding = 12,
         gap = 10,
         backgroundColor = { 245, 228, 200, 245 },
@@ -597,7 +607,6 @@ function FormationScene:CreateSlotRows(heroMap, formation)
     local children = {}
     for _, row in ipairs(SLOT_ROWS) do
         local slotWidgets = {}
-        slotWidgets[#slotWidgets + 1] = UI.Label { text = row.label, width = 48, fontSize = 20, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center" }
         for _, slotId in ipairs(row.ids) do
             slotWidgets[#slotWidgets + 1] = self:CreateSlot(slotId, heroMap, formation)
         end
@@ -612,9 +621,10 @@ function FormationScene:CreateSlot(slotId, heroMap, formation)
     local selected = self.selectedSlotId == slotId
     local locked = self:IsSlotLocked(formation, slotId)
     return UI.Panel {
-        flexGrow = 1,
-        flexShrink = 1,
+        width = 105,
         height = 138,
+        flexDirection = "column",
+        flexWrap = "nowrap",
         alignItems = "center",
         justifyContent = "center",
         padding = 6,
@@ -708,21 +718,25 @@ function FormationScene:CreateBottomActions(formation, heroMap)
     return UI.Panel {
         position = "absolute",
         left = 0,
-        right = 0,
+        right = 1,
         bottom = 0,
         height = 222,
         padding = 18,
         gap = 12,
-        backgroundColor = { 68, 45, 25, 255 },
+        backgroundColor = { 255, 255, 255, 0 },
+        borderWidth = 0,
+        borderRadius = 0,
+        opacity = 1,
+        imageTint = { 255, 255, 255, 0 },
         children = {
             UI.Label { text = assignedCount < 6 and "空位提示：可上阵提升战力" or "阵容已满员", fontSize = 18, fontColor = { 255, 235, 178, 255 }, textAlign = "center" },
             UI.Panel { width = "100%", height = 48, flexDirection = "row", gap = 12, children = {
-                UI.Button { text = "一键上阵", flexGrow = 1, height = 46, fontSize = 20, backgroundColor = { 202, 92, 44, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:AutoFillFormation() end },
-                UI.Button { text = "一键清空", flexGrow = 1, height = 46, fontSize = 20, backgroundColor = { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ClearFormation() end },
+                UI.Button { text = "一键上阵", flexGrow = 1, height = 46, left = -4, top = 23, fontSize = 20, backgroundColor = { 202, 92, 44, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:AutoFillFormation() end },
+                UI.Button { text = "一键清空", flexGrow = 1, height = 46, left = -3, top = 25, fontSize = 20, backgroundColor = { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ClearFormation() end },
             } },
             UI.Panel { width = "100%", height = 48, flexDirection = "row", gap = 12, children = {
-                UI.Button { text = "保存阵容", flexGrow = 1, height = 46, fontSize = 20, backgroundColor = { 88, 130, 72, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:SaveAndRefresh("手动保存编队") end },
-                UI.Button { text = "推荐开关", flexGrow = 1, height = 46, fontSize = 20, backgroundColor = { 88, 46, 45, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ToggleRecommend() end },
+                UI.Button { text = "保存阵容", flexGrow = 1, height = 46, left = -5, top = 17, fontSize = 20, backgroundColor = { 88, 130, 72, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:SaveAndRefresh("手动保存编队") end },
+                UI.Button { text = "推荐开关", flexGrow = 1, height = 46, left = 5, top = 18, fontSize = 20, backgroundColor = { 88, 46, 45, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ToggleRecommend() end },
             } },
         },
     }
