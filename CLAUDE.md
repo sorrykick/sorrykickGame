@@ -29,8 +29,9 @@
 - 已新增 `scripts/Battle/GridBattleScene.lua`，实现 20×20 网格自动战斗原型：每个单位占一个格子，双方单位无需玩家控制，会优先寻找同列敌方，同列无目标时再寻找最近敌方，按格子靠近，敌方位于身前 1 格时自动攻击；战斗背景使用 `assets/image/BattleRes/1.png`，运行时路径 `image/BattleRes/1.png`；战斗网格显示层已隐藏；勇者和敌方都会按状态播放待机 01-04、移动 06-09、攻击 10-14 序列帧，敌方水平反转并保留红色 tint。
 - 登录按钮已接入“请求存档 → 读取玩家数据 → 离线收益结算 → 请求更新存档 → 跳转主界面”流程。
 - 已新增 `scripts/Formation/FormationScene.lua`，实现独立勇者 NPC 上阵编队页面：三套阵容 TAB、总战力、勇者列表排序、9 格三排站位、上阵/替换/下阵、单格锁定、全阵容锁定、一键上阵、一键清空、保存阵容、推荐开关与羁绊展示；主界面底部“阵型”入口已接入。
-- 最近一次修改已读取 `docs/setting/level_design.json`，复制到 `assets/Config/level_design.json` 并新增 `LevelManager`；主界面标题/摘要会显示当前章节小关，战斗场景按当前小关生成配置敌人，胜利后推进关卡进度并保存。
-- 最近一次 LSP 客户端不可用，官方构建成功。
+- 最近一次修改已修复运行时 NPC 序列帧资源缺失：将 `assets/image/npcClip/0001/` 等 112 个被 NPC/关卡配置引用的序列帧目录纳入构建跟踪，避免 `.meta` UUID 指向的 PNG 未打包导致大量 `<game>/assets/*.png` not found。
+- 最近一次资源缺失排查确认 `resources.json` 已使用全量引用 `groups.default=["**"]`，并将 `.project/resources.json` 的 `preload_groups` 设置为 `["default"]`，避免启动阶段 UI/序列帧动态加载资源尚未下载导致 `<game>/assets/*.png` not found。
+- 最近一次 LSP 诊断 0 Error，官方构建成功。
 - 后续开发需先按 UrhoX 文档流程阅读 Lua 指南、相关示例和脚手架，再实现。
 
 ## likely_next_task

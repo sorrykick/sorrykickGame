@@ -56,6 +56,8 @@
 
 ## POST 日志
 
+- 2026-07-02：排查 TapTap Maker 大量 `<game>/assets/*.png` not found：报错 UUID 可反查到 `assets/image/npcClip/*/*.png.meta` 和 `assets/image/BattleRes/1.png.meta`，源资源和 manifest 条目存在；确认 `.project/resources.json` 为全量引用 `groups.default=["**"]`，进一步将 `preload_groups` 设置为 `["default"]`，避免启动阶段 UI/序列帧动态加载时资源尚未下载；LSP 0 Error，官方构建成功。
+
 - 2026-07-02：读取 `docs/setting/level_design.json` 并接入关卡系统：复制配置到 `assets/Config/level_design.json`，新增 `scripts/Level/LevelManager.lua`，`ConfigManager` 读取关卡配置；存档新增 `stageProgress`；主界面标题/摘要显示当前章节小关；战斗场景按当前小关生成配置敌人，使用 `sceneImage` 选择战斗背景，胜利后推进关卡并保存；LSP 客户端不可用，官方构建成功。
 - 2026-07-01：清理未调用旧资源：确认脚本和配置不再引用 `npcClip/1`、非下划线品质图标与 `BattleRes/2.png` 到 `67.png` 后，删除旧 `assets/image/npcClip/1/` 跟踪资源、`assets/image/品质/A/B/C/D/L/S/SS.png` 及 meta、`assets/image/BattleRes/2.png` 到 `67.png` 及 meta，并移除重复的 `docs/data/` 配置副本；官方构建成功。
 - 2026-07-01：读取 `docs/setting/npcdata.json` 并生成 112 条 NPC/勇者配置到 `assets/Config/npc.json`；`SaveSchema` 默认勇者改为从 `ConfigManager` 读取 NPC 配置生成，并补充 `npcId/configId/profession/story/clipDir/skills` 字段；阵型页站位/列表和战斗场景改用每个 NPC 的 `clipDir` 序列帧；LSP 客户端不可用，官方构建成功。
