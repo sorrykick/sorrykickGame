@@ -1,17 +1,122 @@
-local DEFAULT_HEROES = {
-    { id = "hero_001", name = "勇者1", quality = 3, star = 1, power = 1280, job = "战士", faction = "森林", role = "前排" },
-    { id = "hero_002", name = "守护者", quality = 2, star = 1, power = 960, job = "坦克", faction = "森林", role = "前排" },
-    { id = "hero_003", name = "疾风弓手", quality = 4, star = 1, power = 1420, job = "射手", faction = "王国", role = "后排" },
-    { id = "hero_004", name = "星辉法师", quality = 4, star = 1, power = 1580, job = "法师", faction = "奥术", role = "后排" },
-    { id = "hero_005", name = "祈愿祭司", quality = 3, star = 1, power = 1330, job = "辅助", faction = "王国", role = "后排" },
-    { id = "hero_006", name = "荒原剑士", quality = 2, star = 1, power = 1180, job = "战士", faction = "荒原", role = "前排" },
+local FALLBACK_HEROES = {
+    { id = "hero_001", name = "勇者1", quality = 3, star = 1, power = 1280, job = "战士", faction = "森林", role = "前排", npcId = "0001", clipDir = "image/npcClip/0001" },
+    { id = "hero_002", name = "守护者", quality = 2, star = 1, power = 960, job = "骑士", faction = "森林", role = "前排", npcId = "0004", clipDir = "image/npcClip/0004" },
+    { id = "hero_003", name = "疾风弓手", quality = 4, star = 1, power = 1420, job = "射手", faction = "王国", role = "后排", npcId = "0010", clipDir = "image/npcClip/0010" },
+    { id = "hero_004", name = "星辉法师", quality = 4, star = 1, power = 1580, job = "法师", faction = "奥术", role = "后排", npcId = "0009", clipDir = "image/npcClip/0009" },
+    { id = "hero_005", name = "祈愿祭司", quality = 3, star = 1, power = 1330, job = "祭司", faction = "王国", role = "后排", npcId = "0015", clipDir = "image/npcClip/0015" },
+    { id = "hero_006", name = "荒原剑士", quality = 2, star = 1, power = 1180, job = "战士", faction = "荒原", role = "前排", npcId = "0012", clipDir = "image/npcClip/0012" },
+    { id = "hero_007", name = "影刃游侠", quality = 3, star = 1, power = 1260, job = "刺客", faction = "荒原", role = "中排", npcId = "0002", clipDir = "image/npcClip/0002" },
+    { id = "hero_008", name = "秘法学徒", quality = 2, star = 1, power = 1090, job = "法师", faction = "奥术", role = "中排", npcId = "0038", clipDir = "image/npcClip/0038" },
+    { id = "hero_009", name = "圣盾骑士", quality = 3, star = 1, power = 1210, job = "骑士", faction = "王国", role = "前排", npcId = "0039", clipDir = "image/npcClip/0039" },
 }
 
-local LINEUP_SLOT_IDS = { "front1", "front2", "front3", "back1", "back2", "back3" }
+local LINEUP_SLOT_IDS = { "front1", "front2", "front3", "mid1", "mid2", "mid3", "back1", "back2", "back3" }
 
-local function createDefaultFormations()
+local ROLE_BY_JOB = {
+    ["战士"] = "前排",
+    ["骑士"] = "前排",
+    ["刺客"] = "中排",
+    ["射手"] = "后排",
+    ["法师"] = "后排",
+    ["祭司"] = "后排",
+}
+
+local function cloneValue(value)
+    if type(value) ~= "table" then
+        return value
+    end
+
+    local result = {}
+    for k, v in pairs(value) do
+        result[cloneValue(k)] = cloneValue(v)
+    end
+    return result
+end
+
+local function clampInt(value, minValue, maxValue)
+    value = math.floor(tonumber(value) or minValue)
+    if value < minValue then return minValue end
+    if value > maxValue then return maxValue end
+    return value
+end
+
+local function isCommentKey(key)
+    return type(key) == "string" and string.sub(key, 1, 1) == "#"
+end
+
+local function getSortedNpcIds(npcTable)
+    local ids = {}
+    for key, value in pairs(npcTable or {}) do
+        if not isCommentKey(key) and type(value) == "table" then
+            ids[#ids + 1] = tostring(key)
+        end
+    end
+    table.sort(ids, function(a, b)
+        return (tonumber(a) or 0) < (tonumber(b) or 0)
+    end)
+    return ids
+end
+
+local function getNpcInitialSkills(npcConfig)
+    local ok, ConfigManager = pcall(require, "Config.ConfigManager")
+    if not ok or not ConfigManager then return {} end
+    local okSkills, skills = pcall(ConfigManager.GetNpcInitialSkills, npcConfig)
+    if okSkills and type(skills) == "table" then
+        return skills
+    end
+    return {}
+end
+
+local function createHeroFromNpcConfig(npcId, npcConfig, index)
+    local job = tostring(npcConfig.profession or npcConfig.job or "战士")
+    local quality = clampInt(npcConfig.quality, 1, 7)
     return {
-        { name = "阵容1", usage = "通用主线", locked = false, slots = { front1 = "hero_001", front2 = "hero_002", back1 = "hero_003", back2 = "hero_004" }, slotLocks = {} },
+        id = "npc_" .. tostring(npcId),
+        npcId = tostring(npcId),
+        configId = tostring(npcId),
+        name = tostring(npcConfig.name or ("勇者" .. tostring(index))),
+        quality = quality,
+        star = clampInt(npcConfig.BaseStarID or npcConfig.star, 1, 6),
+        power = math.max(1, math.floor(tonumber(npcConfig.power) or (900 + index * 17 + quality * 220))),
+        job = job,
+        profession = job,
+        faction = tostring(npcConfig.faction or "王国"),
+        role = tostring(npcConfig.role or ROLE_BY_JOB[job] or "前排"),
+        story = tostring(npcConfig.story or ""),
+        clipDir = tostring(npcConfig.clipDir or ("image/npcClip/" .. tostring(npcId))),
+        skills = getNpcInitialSkills(npcConfig),
+    }
+end
+
+local function createDefaultHeroes()
+    local ok, ConfigManager = pcall(require, "Config.ConfigManager")
+    if ok and ConfigManager then
+        local okTables, tables = pcall(ConfigManager.GetTables)
+        local npcTable = okTables and tables and tables.npc or nil
+        local ids = getSortedNpcIds(npcTable)
+        if #ids > 0 then
+            local heroes = {}
+            for index, npcId in ipairs(ids) do
+                heroes[#heroes + 1] = createHeroFromNpcConfig(npcId, npcTable[npcId], index)
+            end
+            print("[SaveSchema] Loaded NPC heroes from config: " .. tostring(#heroes))
+            return heroes
+        end
+    end
+
+    print("[SaveSchema] Using fallback heroes")
+    return cloneValue(FALLBACK_HEROES)
+end
+
+local function createDefaultFormations(heroes)
+    local slots = {}
+    for index, slotId in ipairs(LINEUP_SLOT_IDS) do
+        if heroes and heroes[index] then
+            slots[slotId] = heroes[index].id
+        end
+    end
+    return {
+        { name = "阵容1", usage = "通用主线", locked = false, slots = slots, slotLocks = {} },
         { name = "阵容2", usage = "副本专用", locked = false, slots = {}, slotLocks = {} },
         { name = "阵容3", usage = "竞技专用", locked = false, slots = {}, slotLocks = {} },
     }
@@ -19,15 +124,23 @@ end
 
 local function normalizeHero(rawHero, index)
     rawHero = type(rawHero) == "table" and rawHero or {}
+    local npcId = tostring(rawHero.npcId or rawHero.configId or rawHero.id or index)
+    local job = tostring(rawHero.job or rawHero.profession or "战士")
     return {
         id = tostring(rawHero.id or ("hero_" .. string.format("%03d", index))),
+        npcId = npcId,
+        configId = tostring(rawHero.configId or npcId),
         name = tostring(rawHero.name or ("勇者" .. tostring(index))),
-        quality = math.max(1, math.min(7, math.floor(tonumber(rawHero.quality) or 1))),
-        star = math.max(1, math.min(6, math.floor(tonumber(rawHero.star) or 1))),
+        quality = clampInt(rawHero.quality, 1, 7),
+        star = clampInt(rawHero.star or rawHero.BaseStarID, 1, 6),
         power = math.max(1, math.floor(tonumber(rawHero.power) or 1)),
-        job = tostring(rawHero.job or "战士"),
+        job = job,
+        profession = tostring(rawHero.profession or job),
         faction = tostring(rawHero.faction or "王国"),
-        role = tostring(rawHero.role or "前排"),
+        role = tostring(rawHero.role or ROLE_BY_JOB[job] or "前排"),
+        story = tostring(rawHero.story or ""),
+        clipDir = tostring(rawHero.clipDir or ("image/npcClip/" .. npcId)),
+        skills = type(rawHero.skills) == "table" and cloneValue(rawHero.skills) or {},
     }
 end
 
@@ -42,7 +155,7 @@ local function normalizeLineup(rawLineup, heroes)
     end
 
     rawLineup = type(rawLineup) == "table" and rawLineup or {}
-    local sourceFormations = type(rawLineup.formations) == "table" and rawLineup.formations or createDefaultFormations()
+    local sourceFormations = type(rawLineup.formations) == "table" and rawLineup.formations or createDefaultFormations(heroes)
     local formations = {}
     for i = 1, 3 do
         local source = type(sourceFormations[i]) == "table" and sourceFormations[i] or {}
@@ -79,28 +192,26 @@ local function normalizeLineup(rawLineup, heroes)
     }
 end
 
+local function hasNpcBackedHeroes(heroes)
+    for _, hero in ipairs(heroes or {}) do
+        if type(hero) == "table" and (hero.npcId or hero.configId or (type(hero.id) == "string" and string.sub(hero.id, 1, 4) == "npc_")) then
+            return true
+        end
+    end
+    return false
+end
+
 local SaveSchema = {}
 
 SaveSchema.SAVE_KEY = "partner_idle_save_v1"
 SaveSchema.MAX_OFFLINE_SECONDS = 12 * 60 * 60
-
-local function cloneValue(value)
-    if type(value) ~= "table" then
-        return value
-    end
-
-    local result = {}
-    for k, v in pairs(value) do
-        result[cloneValue(k)] = cloneValue(v)
-    end
-    return result
-end
 
 function SaveSchema.DeepClone(value)
     return cloneValue(value)
 end
 
 function SaveSchema.CreateDefaultSave(now)
+    local defaultHeroes = createDefaultHeroes()
     return {
         schemaVersion = 1,
         saveVersion = 1,
@@ -118,8 +229,8 @@ function SaveSchema.CreateDefaultSave(now)
             exp = 0,
             power = 10,
         },
-        heroes = SaveSchema.DeepClone(DEFAULT_HEROES),
-        lineup = normalizeLineup(nil, DEFAULT_HEROES),
+        heroes = SaveSchema.DeepClone(defaultHeroes),
+        lineup = normalizeLineup(nil, defaultHeroes),
         initialHeroGranted = true,
         idle = {
             baseRate = 8,
@@ -158,13 +269,28 @@ function SaveSchema.Normalize(rawSave, now)
     save.partner.exp = math.floor(tonumber(save.partner.exp) or 0)
     save.partner.power = math.floor(tonumber(save.partner.power) or 10)
 
-    local sourceHeroes = type(save.heroes) == "table" and save.heroes or DEFAULT_HEROES
+    local defaultHeroes = createDefaultHeroes()
+    local sourceHeroes = type(save.heroes) == "table" and save.heroes or defaultHeroes
+    if not hasNpcBackedHeroes(sourceHeroes) and #defaultHeroes > #FALLBACK_HEROES then
+        sourceHeroes = defaultHeroes
+        save.lineup = nil
+    end
     local heroes = {}
     if #sourceHeroes == 0 then
-        sourceHeroes = DEFAULT_HEROES
+        sourceHeroes = defaultHeroes
     end
+    local existingHeroIds = {}
     for i, rawHero in ipairs(sourceHeroes) do
-        heroes[#heroes + 1] = normalizeHero(rawHero, i)
+        local hero = normalizeHero(rawHero, i)
+        heroes[#heroes + 1] = hero
+        existingHeroIds[hero.id] = true
+    end
+    for _, defaultHero in ipairs(defaultHeroes) do
+        if not existingHeroIds[defaultHero.id] then
+            local hero = normalizeHero(defaultHero, #heroes + 1)
+            heroes[#heroes + 1] = hero
+            existingHeroIds[hero.id] = true
+        end
     end
     save.heroes = heroes
     save.lineup = normalizeLineup(save.lineup, save.heroes)

@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-01 | npcdata-config-integration | 读取 `docs/setting/npcdata.json` 生成 112 条 NPC/勇者配置到 `assets/Config/npc.json`，存档默认勇者改为从配置生成，阵型页和战斗场景改用各 NPC 的 `clipDir` 序列帧；LSP 客户端不可用，官方构建成功。 |
 | 2026-07-01 | formation-hero-card-inspector-8-controls | 按 Inspector 同步阵型页勇者卡片 8 个控件：头像扩大并贴左，品质图标移到左上，星级徽章加宽下移，星星图标和数字重新对齐，名称/职业阵营/战力整体微调；LSP 0 Error，官方构建成功。 |
 | 2026-07-01 | formation-hero-card-polish | 优化阵型页勇者列表卡片规整度：头像增加统一底框，品质图标固定右上，星级徽章固定底部，名称/职业阵营/战力统一信息列左对齐；LSP 0 Error，官方构建成功。 |
 | 2026-07-01 | formation-hero-card-inspector-6-controls | 按 Inspector 同步阵型页勇者卡片 6 个控件：头像放大并绝对定位，品质图标改 32×32，名称/职业阵营/战力文本移动到试调坐标，星级徽章内部高度与偏移同步；LSP 0 Error，官方构建成功。 |

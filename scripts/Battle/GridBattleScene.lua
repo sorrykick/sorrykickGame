@@ -1,5 +1,6 @@
 local UI = require("urhox-libs/UI")
 local ImageCache = require("urhox-libs/UI/Core/ImageCache")
+local SaveManager = require("Save.SaveManager")
 
 local GridBattleScene = {}
 GridBattleScene.__index = GridBattleScene
@@ -26,6 +27,20 @@ local UNIT_DEFS = {
     enemy = { name = "森林守卫", camp = "enemy", color = { 226, 84, 72, 255 }, border = { 255, 226, 210, 255 }, tint = { 255, 120, 105, 255 }, flipX = true, hp = 80, damage = 8, attackInterval = 1.2 },
 }
 
+local BATTLE_SLOT_POSITIONS = {
+    front1 = { x = 6, y = 8 },
+    front2 = { x = 6, y = 11 },
+    front3 = { x = 6, y = 14 },
+    mid1 = { x = 4, y = 8 },
+    mid2 = { x = 4, y = 11 },
+    mid3 = { x = 4, y = 14 },
+    back1 = { x = 2, y = 8 },
+    back2 = { x = 2, y = 11 },
+    back3 = { x = 2, y = 14 },
+}
+
+local BATTLE_SLOT_ORDER = { "front1", "front2", "front3", "mid1", "mid2", "mid3", "back1", "back2", "back3" }
+
 local DIRECTIONS = {
     { x = 1, y = 0 },
     { x = -1, y = 0 },
@@ -45,8 +60,9 @@ local function GridDistance(a, b)
     return math.abs(a.gridX - b.gridX) + math.abs(a.gridY - b.gridY)
 end
 
-local function GetNpcClipFramePath(frameNumber)
-    return string.format("image/npcClip/1/%02d.png", frameNumber)
+local function GetNpcClipFramePath(clipDir, frameNumber)
+    local dir = clipDir or "image/npcClip/0001"
+    return string.format("%s/%02d.png", dir, frameNumber)
 end
 
 local function GetActionDef(action)
@@ -130,23 +146,28 @@ function UnitSprite:Render(nvg)
     end
 end
 
-local function CreateUnit(def, id, gridX, gridY)
+local function CreateUnit(def, id, gridX, gridY, heroData)
+    heroData = type(heroData) == "table" and heroData or nil
+    local power = heroData and math.max(1, math.floor(tonumber(heroData.power) or def.hp)) or nil
+    local hp = power and math.max(60, math.floor(power * 0.12)) or def.hp
+    local damage = power and math.max(8, math.floor(power * 0.018)) or def.damage
     return {
         id = id,
-        name = def.name,
+        name = heroData and heroData.name or def.name,
         camp = def.camp,
         color = def.color,
         border = def.border,
-        sprite = GetNpcClipFramePath(IDLE_FRAMES[1]),
+        sprite = GetNpcClipFramePath(heroData and heroData.clipDir or nil, IDLE_FRAMES[1]),
+        clipDir = heroData and heroData.clipDir or "image/npcClip/0001",
         tint = def.tint,
         flipX = def.flipX == true,
         action = "idle",
         actionFrameIndex = 1,
         actionFrameTimer = 0,
         actionLoop = true,
-        hp = def.hp,
-        maxHp = def.hp,
-        damage = def.damage,
+        hp = hp,
+        maxHp = hp,
+        damage = damage,
         attackInterval = def.attackInterval,
         attackTimer = 0,
         gridX = gridX,
@@ -237,6 +258,26 @@ function GridBattleScene:CreateRoot()
     return self.root
 end
 
+local function GetHeroMap(heroes)
+    local heroMap = {}
+    for _, hero in ipairs(heroes or {}) do
+        heroMap[hero.id] = hero
+    end
+    return heroMap
+end
+
+local function GetActiveFormation(saveData)
+    local lineup = saveData and saveData.lineup or {}
+    local activeIndex = math.max(1, math.min(3, math.floor(tonumber(lineup.activeFormation) or 1)))
+    return lineup.formations and lineup.formations[activeIndex] or nil
+end
+
+local function GetEnemyMirrorPosition(slotId)
+    local pos = BATTLE_SLOT_POSITIONS[slotId]
+    if not pos then return nil end
+    return { x = GRID_COLS - pos.x + 1, y = pos.y }
+end
+
 function GridBattleScene:CreateBattleData()
     self.cells = {}
     self.units = {}
@@ -244,13 +285,35 @@ function GridBattleScene:CreateBattleData()
     self.battleTime = 0
     self.aiTimer = 0
 
-    local hero = CreateUnit(UNIT_DEFS.hero, "hero1", 4, 11)
-    local enemyA = CreateUnit(UNIT_DEFS.enemy, "enemy1", 17, 8)
-    local enemyB = CreateUnit(UNIT_DEFS.enemy, "enemy2", 16, 15)
+    local saveData = SaveManager.GetSaveData() or {}
+    local heroMap = GetHeroMap(saveData.heroes or {})
+    local formation = GetActiveFormation(saveData)
+    local createdCount = 0
 
-    self.units[hero.id] = hero
-    self.units[enemyA.id] = enemyA
-    self.units[enemyB.id] = enemyB
+    for _, slotId in ipairs(BATTLE_SLOT_ORDER) do
+        local hero = formation and formation.slots and heroMap[formation.slots[slotId]] or nil
+        local heroPos = BATTLE_SLOT_POSITIONS[slotId]
+        local enemyPos = GetEnemyMirrorPosition(slotId)
+        if hero and heroPos and enemyPos then
+            createdCount = createdCount + 1
+            local heroUnit = CreateUnit(UNIT_DEFS.hero, "hero_" .. slotId, heroPos.x, heroPos.y, hero)
+            local enemyData = {
+                name = "镜像" .. hero.name,
+                power = hero.power,
+                clipDir = hero.clipDir,
+            }
+            local enemyUnit = CreateUnit(UNIT_DEFS.enemy, "enemy_" .. slotId, enemyPos.x, enemyPos.y, enemyData)
+            self.units[heroUnit.id] = heroUnit
+            self.units[enemyUnit.id] = enemyUnit
+        end
+    end
+
+    if createdCount == 0 then
+        local fallbackHero = CreateUnit(UNIT_DEFS.hero, "hero_front2", 6, 11, { name = "勇者1", power = 1280 })
+        local fallbackEnemy = CreateUnit(UNIT_DEFS.enemy, "enemy_front2", 15, 11, { name = "镜像勇者1", power = 1280 })
+        self.units[fallbackHero.id] = fallbackHero
+        self.units[fallbackEnemy.id] = fallbackEnemy
+    end
 
     for _, unit in pairs(self.units) do
         local px, py = GridToPixel(unit.gridX, unit.gridY)
@@ -541,7 +604,7 @@ function GridBattleScene:SetUnitAction(unit, action)
     unit.actionFps = fps
     unit.actionFrames = frames
     if unit.spriteWidget then
-        unit.spriteWidget:SetBackgroundImage(GetNpcClipFramePath(frames[1]))
+        unit.spriteWidget:SetBackgroundImage(GetNpcClipFramePath(unit.clipDir, frames[1]))
     end
 end
 
@@ -568,7 +631,7 @@ function GridBattleScene:UpdateUnitActionAnimation(unit, timeStep)
         end
     end
 
-    unit.spriteWidget:SetBackgroundImage(GetNpcClipFramePath(frames[unit.actionFrameIndex]))
+    unit.spriteWidget:SetBackgroundImage(GetNpcClipFramePath(unit.clipDir, frames[unit.actionFrameIndex]))
 end
 
 function GridBattleScene:RequestMoveUnit(unitId, x, y)

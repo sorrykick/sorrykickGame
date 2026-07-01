@@ -16,12 +16,13 @@
 
 ## 当前结构
 
-- `scripts/main.lua`：Yoga UI 入口，包含登录界面、读档/存档更新、离线收益结算、游戏主界面，并接入秘境战斗场景切换和勇者编队页面切换。
+- `scripts/main.lua`：Yoga UI 入口，包含登录界面、读档/存档更新、离线收益结算、游戏主界面，并接入秘境战斗场景切换和勇者编队页面切换；主界面勇者序列帧默认使用 `image/npcClip/0001/`。
 - `scripts/Formation/FormationScene.lua`：独立勇者 NPC 上阵编队页面，包含三套阵容 TAB、实时总战力、勇者列表排序、9 格三排站位、上阵/替换/下阵、单格锁定、全阵容锁定、一键上阵、一键清空、保存阵容、推荐开关与羁绊展示。
 - `scripts/Battle/GridBattleScene.lua`：20×20 网格自动战斗原型，管理格子、单位占位、双方自动寻敌、身前 1 格攻击、战斗 HUD 和返回主界面；背景资源为 `image/BattleRes/1.png`；战斗网格逻辑保留但显示层已隐藏；寻敌优先选择同列敌方，同列无目标时再选择最近敌方；勇者和敌方都会按状态播放待机 01-04、移动 06-09、攻击 10-14 序列帧，敌方水平反转并保留红色 tint。
 - `assets/image/login_background.png`：登录背景图资源，运行时路径 `image/login_background.png`。
 - `assets/image/`：登录背景、主界面背景、森林关卡、资源图标、顶部功能图标、挑战徽章、收益条、秘境按钮、功能按钮、底部导航等 UI 图片资源。
-- `assets/image/npcClip/1/`：勇者1序列帧动作资源，01-04 为待机、06-09 为移动、10-14 为攻击。
+- `assets/image/npcClip/0001/` 等：NPC 序列帧动作资源，01-04 为待机、06-09 为移动、10-14 为攻击。
+- `assets/Config/npc.json`：由 `docs/setting/npcdata.json` 生成的 NPC/勇者基础配置，包含 112 条 NPC 的名称、职业、阵营、故事、品质、战力、站位角色和 `clipDir`。
 - `.project/`：构建后由工具生成。
 - `docs/`：记忆系统目录。
 
@@ -40,7 +41,7 @@
 - 主界面上半区已按 Inspector 调整：顶部功能区图标 96×96，资源条移除“金/蓝/晶”短标签，右上角数字移除，标题条、章节文字、模式行和挑战徽章位置尺寸更新。
 - 存档系统已模块化：`scripts/Save/SaveSchema.lua`、`SaveValidator.lua`、`RuntimeSave.lua`、`SaveManager.lua`；`main.lua` 通过 `SaveManager.LoginSyncPlayerSave()` 登录读档，通过 `SaveManager.GetSaveData()` 读取运行时副本，通过 `SaveManager.CollectIdleReward()` 领取收益。
 - 勇者1已接入主界面森林关卡区，使用 `assets/image/npcClip/1/` 做 UI 序列帧动画：默认待机（01-04），移动（06-09），攻击（10-14）；点击勇者循环待机/移动/攻击，左侧挑战徽章触发攻击，右侧成长徽章触发移动；待机、移动、攻击已统一显示高度，攻击帧使用更宽承载框避免视觉缩小。
-- 新增独立勇者 NPC 上阵编队页面：`FormationScene` 支持三套阵容 TAB、实时总战力、勇者列表按战力/品质/职业排序、9 格三排站位、上阵/替换/下阵、单格锁定、全阵容锁定、一键上阵、一键清空、保存阵容、推荐开关与羁绊展示；主界面底部“阵型”入口已接入；`SaveSchema` 默认提供 9 名勇者和 3 套独立阵容存档，并在编队修改时通过 `SaveManager.SaveGameSnapshot()` 更新存档；`GridBattleScene` 会读取当前激活阵容的出战站位生成我方单位，并用同样站位镜像生成敌方单位。
+- NPC/勇者数据已从 `docs/setting/npcdata.json` 生成到 `assets/Config/npc.json`，共 112 条。`SaveSchema` 通过 `ConfigManager` 读取 NPC 配置生成默认勇者列表，字段包括 `npcId/configId/name/quality/star/power/job/profession/faction/role/story/clipDir/skills`；旧存档若仍是占位勇者，会在 Normalize 时切换为配置生成的 NPC 勇者并重建默认阵容；阵型页和战斗场景均使用 `hero.clipDir` 显示对应 NPC 序列帧。
 
 ## 下一步候选
 
@@ -53,6 +54,7 @@
 
 ## POST 日志
 
+- 2026-07-01：读取 `docs/setting/npcdata.json` 并生成 112 条 NPC/勇者配置到 `assets/Config/npc.json`；`SaveSchema` 默认勇者改为从 `ConfigManager` 读取 NPC 配置生成，并补充 `npcId/configId/profession/story/clipDir/skills` 字段；阵型页站位/列表和战斗场景改用每个 NPC 的 `clipDir` 序列帧；LSP 客户端不可用，官方构建成功。
 - 2026-07-01：按 Inspector 同步阵型页勇者卡片 8 个控件：头像扩大到 106×97 并贴左，品质图标移到 left=11/top=2，星级徽章改为 71×22 并下移到 left=14/top=79，星星图标改 20×20 且数字改白色，名称/职业阵营/战力整体微调到 left=100；LSP 0 Error，官方构建成功。
 - 2026-07-01：优化阵型页勇者列表卡片规整度：头像增加统一底框，品质图标固定在头像右上，星级徽章固定在头像底部，名称/职业阵营/战力统一左对齐到同一信息列，出战状态标签保持右侧独立显示；LSP 0 Error，官方构建成功。
 - 2026-07-01：按 Inspector 同步阵型页勇者卡片 6 个控件：头像改为 80×90 并绝对定位到 left=7/top=10，品质图标改 32×32 并移动到 left=58/top=6，名称/职业阵营/战力文本移动到 Inspector 坐标，星级徽章内部高度改 34 并偏移 left=-105/top=-18；LSP 0 Error，官方构建成功。

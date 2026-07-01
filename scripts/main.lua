@@ -15,7 +15,7 @@ local SECRET_BUTTON_IMAGE = "image/btn_secret_challenge.png"
 local CHALLENGE_BADGE_LEFT_IMAGE = "image/challenge_badge_left.png"
 local CHALLENGE_BADGE_RIGHT_IMAGE = "image/challenge_badge_right.png"
 local TITLE_TOP_IMAGE = "image/P-标题-上.png"
-local HERO1_CLIP_DIR = "image/npcClip/1"
+local HERO1_CLIP_DIR = "image/npcClip/0001"
 
 local HERO1_ANIMATIONS = {
     idle = { label = "待机", frames = { 1, 2, 3, 4 }, fps = 5, loop = true, width = 300, height = 240 },

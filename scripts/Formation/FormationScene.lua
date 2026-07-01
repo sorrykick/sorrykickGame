@@ -6,7 +6,7 @@ FormationScene.__index = FormationScene
 
 local DESIGN_WIDTH = 720
 local DESIGN_HEIGHT = 1280
-local HERO_IMAGE = "image/npcClip/1/01.png"
+local HERO_IMAGE = "image/npcClip/0001/01.png"
 
 local SLOT_WIDTH = 98
 local SLOT_HEIGHT = 104
@@ -76,6 +76,13 @@ local function FormatNumber(value)
         return string.format("%.1f万", value / 10000)
     end
     return tostring(value)
+end
+
+local function GetHeroPreviewImage(hero)
+    if hero and hero.clipDir and hero.clipDir ~= "" then
+        return tostring(hero.clipDir) .. "/01.png"
+    end
+    return HERO_IMAGE
 end
 
 local function CopyArray(source)
@@ -635,7 +642,7 @@ function FormationScene:CreateHeroCard(hero, formation)
                 borderWidth = 1,
                 borderRadius = 12,
             },
-            UI.Panel { width = 106, height = 97, position = "absolute", left = -1, top = 0, borderRadius = 0, flexShrink = 0, backgroundImage = HERO_IMAGE, backgroundFit = "contain", imageTint = assigned and { 210, 235, 255, 255 } or { 255, 255, 255, 255 } },
+            UI.Panel { width = 106, height = 97, position = "absolute", left = -1, top = 0, borderRadius = 0, flexShrink = 0, backgroundImage = GetHeroPreviewImage(hero), backgroundFit = "contain", imageTint = assigned and { 210, 235, 255, 255 } or { 255, 255, 255, 255 } },
             UI.Panel { width = 30, height = 30, position = "absolute", left = 11, top = 2, backgroundImage = QUALITY_ICON_PATHS[hero.quality] or QUALITY_ICON_PATHS[1], backgroundFit = "contain" },
             CreateStarBadge(hero.star),
             UI.Label { id = "hero_1", text = hero.name, width = 142, height = 26, position = "absolute", left = 100, top = 5, fontSize = 17, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
@@ -739,7 +746,7 @@ function FormationScene:CreateSlotContent(slotId, hero, locked)
 
     return {
         UI.Label { text = locked and "已锁定" or hero.name, fontSize = 13, fontColor = locked and { 168, 48, 40, 255 } or { 88, 46, 45, 255 }, textAlign = "center", maxLines = 1 },
-        UI.Panel { width = 66, height = 48, backgroundImage = HERO_IMAGE, backgroundFit = "contain" },
+        UI.Panel { width = 66, height = 48, backgroundImage = GetHeroPreviewImage(hero), backgroundFit = "contain" },
         UI.Label { text = FormatNumber(hero.power), fontSize = 13, fontColor = { 202, 92, 44, 255 }, textAlign = "center" },
     }
 end
