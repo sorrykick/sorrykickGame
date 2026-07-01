@@ -8,6 +8,7 @@ local CONFIG_FILES = {
     attributes = "Config/Attributes.json",
     icon = "Config/icon.json",
     npcStarLimit = "Config/NpcStarLimit.json",
+    levelDesign = "Config/level_design.json",
 }
 
 local function decodeJsonFile(path)
@@ -56,6 +57,7 @@ function ConfigManager.LoadAll()
         attributes = decodeJsonFile(CONFIG_FILES.attributes),
         icon = decodeJsonFile(CONFIG_FILES.icon),
         npcStarLimit = decodeJsonFile(CONFIG_FILES.npcStarLimit),
+        levelDesign = decodeJsonFile(CONFIG_FILES.levelDesign),
     }
 
     print("[ConfigManager] Configs loaded")

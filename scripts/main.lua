@@ -2,6 +2,7 @@ local UI = require("urhox-libs/UI")
 local SaveManager = require("Save.SaveManager")
 local GridBattleScene = require("Battle.GridBattleScene")
 local FormationScene = require("Formation.FormationScene")
+local LevelManager = require("Level.LevelManager")
 
 local DESIGN_WIDTH = 720
 local DESIGN_HEIGHT = 1280
@@ -34,6 +35,10 @@ local loginStatusLabel_ = nil
 local coinLabel_ = nil
 ---@type Widget|nil
 local offlineLabel_ = nil
+---@type Widget|nil
+local stageTitleLabel_ = nil
+---@type Widget|nil
+local stageSummaryLabel_ = nil
 ---@type Widget|nil
 local stageForestLayerA_ = nil
 ---@type Widget|nil
@@ -170,6 +175,12 @@ local function UpdateHomeLabels()
         else
             offlineLabel_:SetText("当前可以领取 12.35万")
         end
+    end
+    if stageTitleLabel_ then
+        stageTitleLabel_:SetText(LevelManager.GetCurrentStageTitle(saveData))
+    end
+    if stageSummaryLabel_ then
+        stageSummaryLabel_:SetText(LevelManager.GetCurrentStageSummary(saveData))
     end
 end
 
@@ -554,13 +565,17 @@ local function CreateStageForestPanel()
             },
             CreateHero1Actor(),
             UI.Label {
-                text = "伙伴 Lv." .. tostring(saveData.partner.level),
+                id = "stageSummaryLabel",
+                text = LevelManager.GetCurrentStageSummary(saveData),
                 position = "absolute",
-                left = 64,
+                left = 165,
+                right = 165,
                 bottom = 18,
-                fontSize = 22,
-                fontColor = { 255, 255, 255, 255 },
-                textStroke = { width = 2, color = { 0, 0, 0, 220 } },
+                height = 28,
+                fontSize = 18,
+                fontColor = { 255, 248, 214, 255 },
+                textAlign = "center",
+                textStroke = { width = 2, color = { 36, 28, 18, 230 } },
             },
         },
     }
@@ -569,6 +584,8 @@ end
 local function CreateHomeScreen()
     coinLabel_ = nil
     offlineLabel_ = nil
+    stageTitleLabel_ = nil
+    stageSummaryLabel_ = nil
     hero1Sprite_ = nil
     hero1ActionLabel_ = nil
 
@@ -620,8 +637,9 @@ local function CreateHomeScreen()
                 justifyContent = "center",
                 children = {
                     UI.Label {
-                        text = "第一章  迷失森林",
-                        width = 388,
+                        id = "stageTitleLabel",
+                        text = LevelManager.GetCurrentStageTitle(SaveManager.GetSaveData()),
+                        width = 420,
                         height = 41,
                         left = -3,
                         top = -2,
@@ -783,6 +801,8 @@ local function CreateHomeScreen()
 
     coinLabel_ = root:FindById("coinValue")
     offlineLabel_ = root:FindById("offlineRewardLabel")
+    stageTitleLabel_ = root:FindById("stageTitleLabel")
+    stageSummaryLabel_ = root:FindById("stageSummaryLabel")
     return root
 end
 
@@ -798,6 +818,8 @@ EnterBattleScreen = function()
     DestroyFormationScene()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
+    stageTitleLabel_ = nil
+    stageSummaryLabel_ = nil
     hero1Sprite_ = nil
     hero1ActionLabel_ = nil
 
@@ -814,6 +836,8 @@ EnterFormationScreen = function()
     DestroyBattleScene()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
+    stageTitleLabel_ = nil
+    stageSummaryLabel_ = nil
     hero1Sprite_ = nil
     hero1ActionLabel_ = nil
 
@@ -940,6 +964,8 @@ function Stop()
     offlineLabel_ = nil
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
+    stageTitleLabel_ = nil
+    stageSummaryLabel_ = nil
     hero1Sprite_ = nil
     hero1ActionLabel_ = nil
 end

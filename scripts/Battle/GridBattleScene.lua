@@ -1,6 +1,7 @@
 local UI = require("urhox-libs/UI")
 local ImageCache = require("urhox-libs/UI/Core/ImageCache")
 local SaveManager = require("Save.SaveManager")
+local LevelManager = require("Level.LevelManager")
 
 local GridBattleScene = {}
 GridBattleScene.__index = GridBattleScene
@@ -62,7 +63,11 @@ end
 
 local function GetNpcClipFramePath(clipDir, frameNumber)
     local dir = clipDir or "image/npcClip/0001"
-    return string.format("%s/%02d.png", dir, frameNumber)
+    local path = string.format("%s/%02d.png", dir, frameNumber)
+    if cache and not cache:GetFile(path) then
+        return string.format("image/npcClip/0001/%02d.png", frameNumber)
+    end
+    return path
 end
 
 local function GetActionDef(action)
@@ -196,8 +201,9 @@ function GridBattleScene:new(options)
     o.battleTime = 0
     o.aiTimer = 0
     o.cells = {}
-    o.units = {}
-    o.occupancy = {}
+    o.stage = nil
+    o.subLevel = nil
+    o.victoryHandled = false
     return o
 end
 
@@ -231,7 +237,7 @@ function GridBattleScene:CreateRoot()
     }
 
     self.statusLabel = UI.Label {
-        text = "战场 20×20：双方单位自动寻敌，攻击身前 1 格",
+        text = LevelManager.GetCurrentStageSummary(SaveManager.GetSaveData()),
         fontSize = 22,
         fontColor = { 255, 244, 210, 255 },
         textAlign = "center",
@@ -284,34 +290,42 @@ function GridBattleScene:CreateBattleData()
     self.occupancy = {}
     self.battleTime = 0
     self.aiTimer = 0
+    self.victoryHandled = false
 
     local saveData = SaveManager.GetSaveData() or {}
     local heroMap = GetHeroMap(saveData.heroes or {})
     local formation = GetActiveFormation(saveData)
-    local createdCount = 0
+    self.subLevel, self.stage = LevelManager.GetCurrentSubLevel(saveData)
+    local levelEnemies = LevelManager.GetCurrentEnemies(saveData)
+    local createdHeroCount = 0
+    local createdEnemyCount = 0
 
     for _, slotId in ipairs(BATTLE_SLOT_ORDER) do
         local hero = formation and formation.slots and heroMap[formation.slots[slotId]] or nil
         local heroPos = BATTLE_SLOT_POSITIONS[slotId]
-        local enemyPos = GetEnemyMirrorPosition(slotId)
-        if hero and heroPos and enemyPos then
-            createdCount = createdCount + 1
+        if hero and heroPos then
+            createdHeroCount = createdHeroCount + 1
             local heroUnit = CreateUnit(UNIT_DEFS.hero, "hero_" .. slotId, heroPos.x, heroPos.y, hero)
-            local enemyData = {
-                name = "镜像" .. hero.name,
-                power = hero.power,
-                clipDir = hero.clipDir,
-            }
-            local enemyUnit = CreateUnit(UNIT_DEFS.enemy, "enemy_" .. slotId, enemyPos.x, enemyPos.y, enemyData)
             self.units[heroUnit.id] = heroUnit
+        end
+    end
+
+    for index, enemy in ipairs(levelEnemies) do
+        local slotId = LevelManager.GetEnemySlotId(index)
+        local enemyPos = GetEnemyMirrorPosition(slotId)
+        if enemy and enemyPos then
+            createdEnemyCount = createdEnemyCount + 1
+            local enemyUnit = CreateUnit(UNIT_DEFS.enemy, "enemy_" .. tostring(index), enemyPos.x, enemyPos.y, enemy)
             self.units[enemyUnit.id] = enemyUnit
         end
     end
 
-    if createdCount == 0 then
+    if createdHeroCount == 0 then
         local fallbackHero = CreateUnit(UNIT_DEFS.hero, "hero_front2", 6, 11, { name = "勇者1", power = 1280 })
-        local fallbackEnemy = CreateUnit(UNIT_DEFS.enemy, "enemy_front2", 15, 11, { name = "镜像勇者1", power = 1280 })
         self.units[fallbackHero.id] = fallbackHero
+    end
+    if createdEnemyCount == 0 then
+        local fallbackEnemy = CreateUnit(UNIT_DEFS.enemy, "enemy_front2", 15, 11, { name = "草原守卫", power = 1280 })
         self.units[fallbackEnemy.id] = fallbackEnemy
     end
 
@@ -332,7 +346,7 @@ function GridBattleScene:CreateBackground()
         bottom = 0,
         zIndex = 0,
         borderRadius = 0,
-        backgroundImage = "image/BattleRes/1.png",
+        backgroundImage = LevelManager.GetCurrentSceneImagePath(SaveManager.GetSaveData()),
         backgroundFit = "cover",
         pointerEvents = "none",
     }
@@ -360,8 +374,8 @@ function GridBattleScene:CreateTopPanel()
                 justifyContent = "space-between",
                 children = {
                     UI.Label {
-                        text = "秘境战斗",
-                        fontSize = 34,
+                        text = LevelManager.GetCurrentStageTitle(SaveManager.GetSaveData()),
+                        fontSize = 30,
                         fontWeight = "bold",
                         fontColor = { 255, 235, 178, 255 },
                         textStroke = { width = 2, color = { 42, 24, 12, 240 } },
@@ -386,7 +400,7 @@ function GridBattleScene:CreateTopPanel()
             },
             self.statusLabel,
             UI.Label {
-                text = "规则：双方单位自动行动；每个单位占 1 格；只有敌人在身前 1 格时才会攻击。",
+                text = "按 level_design.json 生成当前关卡敌人；双方都会自动行动，身前 1 格时发动攻击。",
                 fontSize = 18,
                 fontColor = { 218, 232, 212, 235 },
                 textAlign = "left",
@@ -683,6 +697,15 @@ function GridBattleScene:Update(timeStep)
 end
 
 function GridBattleScene:UpdateAutoBattle()
+    if not self:HasLivingCamp("enemy") then
+        self:HandleBattleVictory()
+        return
+    end
+    if not self:HasLivingCamp("hero") then
+        self:HandleBattleDefeat()
+        return
+    end
+
     for _, unit in pairs(self.units) do
         if not unit.dead and not unit.moving then
             self:UpdateUnitAI(unit)
@@ -697,6 +720,23 @@ function GridBattleScene:HasLivingCamp(camp)
         end
     end
     return false
+end
+
+function GridBattleScene:HandleBattleVictory()
+    if self.victoryHandled then return end
+    self.victoryHandled = true
+    local saveData = SaveManager.GetSaveData()
+    LevelManager.AdvanceStageProgress(saveData)
+    self:SetStatus("战斗胜利：已推进到 " .. LevelManager.GetCurrentStageTitle(saveData))
+    SaveManager.SaveGameSnapshot("关卡战斗胜利", nil, function(reason)
+        print("[Battle] Save stage progress failed: " .. tostring(reason))
+    end)
+end
+
+function GridBattleScene:HandleBattleDefeat()
+    if self.victoryHandled then return end
+    self.victoryHandled = true
+    self:SetStatus("战斗失败：勇者已被击败")
 end
 
 function GridBattleScene:UpdateUnitAI(unit)

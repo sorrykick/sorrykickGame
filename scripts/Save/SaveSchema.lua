@@ -231,6 +231,11 @@ function SaveSchema.CreateDefaultSave(now)
         },
         heroes = SaveSchema.DeepClone(defaultHeroes),
         lineup = normalizeLineup(nil, defaultHeroes),
+        stageProgress = {
+            currentStageId = 1,
+            currentSubLevelId = 1,
+            clearedSubLevels = 0,
+        },
         initialHeroGranted = true,
         idle = {
             baseRate = 8,
@@ -294,6 +299,10 @@ function SaveSchema.Normalize(rawSave, now)
     end
     save.heroes = heroes
     save.lineup = normalizeLineup(save.lineup, save.heroes)
+    save.stageProgress = type(save.stageProgress) == "table" and save.stageProgress or {}
+    save.stageProgress.currentStageId = math.max(1, math.floor(tonumber(save.stageProgress.currentStageId) or 1))
+    save.stageProgress.currentSubLevelId = math.max(1, math.floor(tonumber(save.stageProgress.currentSubLevelId) or 1))
+    save.stageProgress.clearedSubLevels = math.max(0, math.floor(tonumber(save.stageProgress.clearedSubLevels) or 0))
     save.initialHeroGranted = save.initialHeroGranted ~= false
 
     save.idle = type(save.idle) == "table" and save.idle or {}

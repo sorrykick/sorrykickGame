@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-02 | level-design-integration | 读取 `docs/setting/level_design.json` 接入 67 章关卡配置：新增 `LevelManager`，存档新增 `stageProgress`，主界面显示当前章节/小关，战斗按当前小关生成敌人并胜利推进关卡；LSP 客户端不可用，官方构建成功。 |
 | 2026-07-01 | cleanup-unused-old-assets | 删除未调用旧资源：旧 `npcClip/1` 跟踪目录、非下划线品质图标、`BattleRes/2.png` 到 `67.png` 及重复 `docs/data/` 配置副本；官方构建成功。 |
 | 2026-07-01 | npcdata-config-integration | 读取 `docs/setting/npcdata.json` 生成 112 条 NPC/勇者配置到 `assets/Config/npc.json`，存档默认勇者改为从配置生成，阵型页和战斗场景改用各 NPC 的 `clipDir` 序列帧；LSP 客户端不可用，官方构建成功。 |
 | 2026-07-01 | formation-hero-card-inspector-8-controls | 按 Inspector 同步阵型页勇者卡片 8 个控件：头像扩大并贴左，品质图标移到左上，星级徽章加宽下移，星星图标和数字重新对齐，名称/职业阵营/战力整体微调；LSP 0 Error，官方构建成功。 |
