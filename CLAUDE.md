@@ -29,7 +29,7 @@
 - 已新增 `scripts/Battle/GridBattleScene.lua`，实现 20×20 网格自动战斗原型：每个单位占一个格子，双方单位无需玩家控制，会优先寻找同列敌方，同列无目标时再寻找最近敌方，按格子靠近，敌方位于身前 1 格时自动攻击；战斗背景使用 `assets/image/BattleRes/1.png`，运行时路径 `image/BattleRes/1.png`；战斗网格显示层已隐藏；勇者和敌方都会按状态播放待机 01-04、移动 06-09、攻击 10-14 序列帧，敌方水平反转并保留红色 tint。
 - 登录按钮已接入“请求存档 → 读取玩家数据 → 离线收益结算 → 请求更新存档 → 跳转主界面”流程。
 - 已新增 `scripts/Formation/FormationScene.lua`，实现独立勇者 NPC 上阵编队页面：三套阵容 TAB、总战力、勇者列表排序、9 格三排站位、上阵/替换/下阵、单格锁定、全阵容锁定、一键上阵、一键清空、保存阵容、推荐开关与羁绊展示；主界面底部“阵型”入口已接入。
-- 最近一次修改已读取 `docs/setting/npcdata.json` 并生成 112 条 NPC/勇者配置到 `assets/Config/npc.json`；`SaveSchema` 会从 `ConfigManager` 读取配置生成默认勇者列表与初始阵容，阵型页和战斗场景已改为使用每个 NPC 的 `clipDir` 序列帧资源。
+- 最近一次修改已清理未调用旧资源：删除旧 `assets/image/npcClip/1/` 跟踪资源、未引用的非下划线品质图标、未使用的 `BattleRes/2.png` 到 `67.png`，并移除重复的 `docs/data/` 配置副本。
 - 最近一次 LSP 客户端不可用，官方构建成功。
 - 后续开发需先按 UrhoX 文档流程阅读 Lua 指南、相关示例和脚手架，再实现。
 

@@ -54,6 +54,7 @@
 
 ## POST 日志
 
+- 2026-07-01：清理未调用旧资源：确认脚本和配置不再引用 `npcClip/1`、非下划线品质图标与 `BattleRes/2.png` 到 `67.png` 后，删除旧 `assets/image/npcClip/1/` 跟踪资源、`assets/image/品质/A/B/C/D/L/S/SS.png` 及 meta、`assets/image/BattleRes/2.png` 到 `67.png` 及 meta，并移除重复的 `docs/data/` 配置副本；官方构建成功。
 - 2026-07-01：读取 `docs/setting/npcdata.json` 并生成 112 条 NPC/勇者配置到 `assets/Config/npc.json`；`SaveSchema` 默认勇者改为从 `ConfigManager` 读取 NPC 配置生成，并补充 `npcId/configId/profession/story/clipDir/skills` 字段；阵型页站位/列表和战斗场景改用每个 NPC 的 `clipDir` 序列帧；LSP 客户端不可用，官方构建成功。
 - 2026-07-01：按 Inspector 同步阵型页勇者卡片 8 个控件：头像扩大到 106×97 并贴左，品质图标移到 left=11/top=2，星级徽章改为 71×22 并下移到 left=14/top=79，星星图标改 20×20 且数字改白色，名称/职业阵营/战力整体微调到 left=100；LSP 0 Error，官方构建成功。
 - 2026-07-01：优化阵型页勇者列表卡片规整度：头像增加统一底框，品质图标固定在头像右上，星级徽章固定在头像底部，名称/职业阵营/战力统一左对齐到同一信息列，出战状态标签保持右侧独立显示；LSP 0 Error，官方构建成功。
