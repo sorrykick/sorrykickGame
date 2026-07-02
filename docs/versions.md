@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-02 | remove-stage-summary-label | 删除主界面 `stageSummaryLabel` 组件，并清理缓存变量、`FindById` 和 `UpdateHomeLabels` 更新逻辑；LSP 0 Error，官方构建成功。 |
 | 2026-07-02 | inspector-home-hero-reward-layout | 按 Inspector 同步主界面 4 个控件：收益条上移并清零圆角，勇者容器改为 720×148，勇者图缩小并移动到左侧，删除“勇者1 · 待机”动作文字 Label；LSP 0 Error，官方构建成功。 |
 | 2026-07-02 | inspector-home-remove-mode-badges | 按 Inspector 删除主界面森林关卡下方模式徽章横排 Panel（原 `homeScreen` 第 5 个子项）；LSP 服务不可连接，官方构建成功。 |
 | 2026-07-02 | resource-preload-default | 排查大量 `<game>/assets/*.png` not found：源资源和 manifest 条目存在，启用 `.project/resources.json` 的 `preload_groups=["default"]`，避免启动阶段 UI/序列帧动态加载时资源尚未下载；LSP 0 Error，官方构建成功。 |

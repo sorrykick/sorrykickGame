@@ -38,8 +38,6 @@ local offlineLabel_ = nil
 ---@type Widget|nil
 local stageTitleLabel_ = nil
 ---@type Widget|nil
-local stageSummaryLabel_ = nil
----@type Widget|nil
 local stageForestLayerA_ = nil
 ---@type Widget|nil
 local stageForestLayerB_ = nil
@@ -178,9 +176,6 @@ local function UpdateHomeLabels()
     end
     if stageTitleLabel_ then
         stageTitleLabel_:SetText(LevelManager.GetCurrentStageTitle(saveData))
-    end
-    if stageSummaryLabel_ then
-        stageSummaryLabel_:SetText(LevelManager.GetCurrentStageSummary(saveData))
     end
 end
 
@@ -556,19 +551,6 @@ local function CreateStageForestPanel()
                 end,
             },
             CreateHero1Actor(),
-            UI.Label {
-                id = "stageSummaryLabel",
-                text = LevelManager.GetCurrentStageSummary(saveData),
-                position = "absolute",
-                left = 165,
-                right = 165,
-                bottom = 18,
-                height = 28,
-                fontSize = 18,
-                fontColor = { 255, 248, 214, 255 },
-                textAlign = "center",
-                textStroke = { width = 2, color = { 36, 28, 18, 230 } },
-            },
         },
     }
 end
@@ -577,7 +559,6 @@ local function CreateHomeScreen()
     coinLabel_ = nil
     offlineLabel_ = nil
     stageTitleLabel_ = nil
-    stageSummaryLabel_ = nil
     hero1Sprite_ = nil
     hero1ActionLabel_ = nil
 
@@ -771,7 +752,6 @@ local function CreateHomeScreen()
     coinLabel_ = root:FindById("coinValue")
     offlineLabel_ = root:FindById("offlineRewardLabel")
     stageTitleLabel_ = root:FindById("stageTitleLabel")
-    stageSummaryLabel_ = root:FindById("stageSummaryLabel")
     return root
 end
 
@@ -788,7 +768,6 @@ EnterBattleScreen = function()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
     stageTitleLabel_ = nil
-    stageSummaryLabel_ = nil
     hero1Sprite_ = nil
     hero1ActionLabel_ = nil
 
@@ -806,7 +785,6 @@ EnterFormationScreen = function()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
     stageTitleLabel_ = nil
-    stageSummaryLabel_ = nil
     hero1Sprite_ = nil
     hero1ActionLabel_ = nil
 
@@ -934,7 +912,6 @@ function Stop()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
     stageTitleLabel_ = nil
-    stageSummaryLabel_ = nil
     hero1Sprite_ = nil
     hero1ActionLabel_ = nil
 end
