@@ -41,6 +41,7 @@
 - 收益条、领取按钮、离线收益文案、四个圆形功能入口、秘境挑战按钮、章节标题条已按 Inspector 调整；章节标题条使用 `image/P-标题-上.png`。
 - 按 Inspector 同步主界面 4 个控件：收益条上移到 top=530 且圆角清零；勇者容器调整为 720×148、left=0/top=159；勇者图缩小为 150×120 并移动到 left=-283/top=36；删除“勇者1 · 待机”动作文字 Label。
 - 按要求删除主界面 `stageSummaryLabel` 组件，并清理对应缓存变量、查找和更新逻辑。
+- 按 Inspector 将勇者容器标记为 `id="Hanginglist"`，并将勇者图 `top` 从 36 调整为 0。
 - 森林关卡背景 `stage_forest_bg.png` 确认为 1024×309，并改为两个图层横向无缝滚动。
 - 主界面上半区已按 Inspector 调整：顶部功能区图标 96×96，资源条移除“金/蓝/晶”短标签，右上角数字移除，标题条、章节文字、模式行和挑战徽章位置尺寸更新。
 - 存档系统已模块化：`scripts/Save/SaveSchema.lua`、`SaveValidator.lua`、`RuntimeSave.lua`、`SaveManager.lua`；`main.lua` 通过 `SaveManager.LoginSyncPlayerSave()` 登录读档，通过 `SaveManager.GetSaveData()` 读取运行时副本，通过 `SaveManager.CollectIdleReward()` 领取收益。
@@ -58,6 +59,8 @@
 - 在 `GridBattleScene` 上继续实现寻路、技能范围、敌方 AI、攻击表现、胜负结算和战斗结果存档。
 
 ## POST 日志
+
+- 2026-07-02：按 Inspector 将勇者容器增加 `id="Hanginglist"`，并将勇者图 `top` 从 36 调整为 0；LSP 0 Error，官方构建成功。
 
 - 2026-07-02：删除主界面 `stageSummaryLabel` 组件，同时清理 `stageSummaryLabel_` 缓存变量、`FindById` 和 `UpdateHomeLabels` 更新逻辑；LSP 0 Error，官方构建成功。
 

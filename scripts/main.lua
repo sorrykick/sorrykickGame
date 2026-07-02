@@ -387,7 +387,7 @@ local function CreateHero1Actor()
         width = 150,
         height = 120,
         left = -283,
-        top = 36,
+        top = 0,
         backgroundImage = GetHero1FramePath(1),
         backgroundFit = "contain",
         imageTint = { 255, 255, 255, 255 },
@@ -395,6 +395,7 @@ local function CreateHero1Actor()
     }
 
     return UI.Panel {
+        id = "Hanginglist",
         position = "absolute",
         top = 159,
         left = 0,
