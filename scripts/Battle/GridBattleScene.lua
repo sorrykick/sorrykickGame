@@ -670,6 +670,7 @@ function GridBattleScene:HandleBattleVictory()
     self.victoryHandled = true
     local saveData = SaveManager.GetSaveData()
     LevelManager.AdvanceStageProgress(saveData)
+    SaveManager.MarkDirty("stageProgress")
     self:SetStatus("战斗胜利：已推进到 " .. LevelManager.GetCurrentStageTitle(saveData))
     SaveManager.SaveGameSnapshot("关卡战斗胜利", nil, function(reason)
         print("[Battle] Save stage progress failed: " .. tostring(reason))

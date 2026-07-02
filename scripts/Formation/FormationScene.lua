@@ -218,6 +218,7 @@ function FormationScene:SetStatus(text)
 end
 
 function FormationScene:SaveAndRefresh(reason)
+    SaveManager.MarkDirty("lineup")
     SaveManager.SaveGameSnapshot(reason, function()
         print("[Formation] Saved: " .. tostring(reason))
     end, function(errorMessage)

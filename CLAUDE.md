@@ -31,8 +31,8 @@
 - 已新增 `scripts/Formation/FormationScene.lua`，实现独立勇者 NPC 上阵编队页面：三套阵容 TAB、总战力、勇者列表排序、9 格三排站位、上阵/替换/下阵、单格锁定、全阵容锁定、一键上阵、一键清空、保存阵容、推荐开关与羁绊展示；主界面底部“阵型”入口已接入。
 - 最近一次修改已修复运行时 NPC 序列帧资源缺失：将 `assets/image/npcClip/0001/` 等 112 个被 NPC/关卡配置引用的序列帧目录纳入构建跟踪，避免 `.meta` UUID 指向的 PNG 未打包导致大量 `<game>/assets/*.png` not found。
 - 最近一次资源缺失排查确认 `resources.json` 已使用全量引用 `groups.default=["**"]`，并将 `.project/resources.json` 的 `preload_groups` 设置为 `["default"]`，避免启动阶段 UI/序列帧动态加载资源尚未下载导致 `<game>/assets/*.png` not found。
-- 最近一次功能修改已新增 `scripts/UI/NormalizedSprite.lua`，按每张 `npcClip` 帧图透明包围盒归一化绘制尺寸，并接入主界面、阵型页和战斗页的勇者/单位图片，统一同界面内不同勇者和动作的视觉大小。
-- 最近一次 LSP 诊断 0 Error，官方构建成功。
+- 最近一次功能修改已按 `docs/login.md` 优化登录/云存档流程：`SaveSchema` 增加增量字段 key/meta key；`RuntimeSave` 增加 dirty 字段追踪、本地版本首次变更递增、字段校验和与增量提交状态；`SaveManager.UpdatePlayerSave()` 只上传 dirty 字段，登录下载/存档上传均自动重试 3 次，上传连续失败后强制退出；登录会兼容旧整包存档并迁移为字段级存档；编队和战斗胜利保存前分别标记 `lineup`、`stageProgress` dirty；离线收益按钮不再固定发放 12.35 万。
+- 最近一次 LSP 服务不可连接，官方构建成功。
 - 后续开发需先按 UrhoX 文档流程阅读 Lua 指南、相关示例和脚手架，再实现。
 
 ## likely_next_task

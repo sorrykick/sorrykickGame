@@ -204,7 +204,36 @@ end
 local SaveSchema = {}
 
 SaveSchema.SAVE_KEY = "partner_idle_save_v1"
+SaveSchema.META_KEY = SaveSchema.SAVE_KEY .. "__meta"
+SaveSchema.FIELD_PREFIX = SaveSchema.SAVE_KEY .. "__field__"
+SaveSchema.DELTA_FIELDS = {
+    "lastLoginTime",
+    "coin",
+    "diamond",
+    "crystal",
+    "energy",
+    "partner",
+    "heroes",
+    "lineup",
+    "stageProgress",
+    "initialHeroGranted",
+    "idle",
+    "stats",
+    "security",
+}
 SaveSchema.MAX_OFFLINE_SECONDS = 12 * 60 * 60
+
+function SaveSchema.GetFieldKey(fieldName)
+    return SaveSchema.FIELD_PREFIX .. tostring(fieldName)
+end
+
+function SaveSchema.GetAllCloudKeys()
+    local keys = { SaveSchema.SAVE_KEY, SaveSchema.META_KEY }
+    for _, fieldName in ipairs(SaveSchema.DELTA_FIELDS) do
+        keys[#keys + 1] = SaveSchema.GetFieldKey(fieldName)
+    end
+    return keys
+end
 
 function SaveSchema.DeepClone(value)
     return cloneValue(value)

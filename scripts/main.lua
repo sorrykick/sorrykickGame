@@ -229,7 +229,7 @@ local function UpdateHomeLabels()
         if pendingOfflineCoin > 0 then
             offlineLabel_:SetText("本次离线收益 +" .. FormatNumber(pendingOfflineCoin))
         else
-            offlineLabel_:SetText("当前可以领取 12.35万")
+            offlineLabel_:SetText("暂无可领取收益")
         end
     end
     if stageTitleLabel_ then
@@ -705,7 +705,7 @@ local function CreateHomeScreen()
                 children = {
                     UI.Label {
                         id = "offlineRewardLabel",
-                        text = SaveManager.GetPendingOfflineCoin() > 0 and ("本次离线收益 +" .. FormatNumber(SaveManager.GetPendingOfflineCoin())) or "当前可以领取 12.35万",
+                        text = SaveManager.GetPendingOfflineCoin() > 0 and ("本次离线收益 +" .. FormatNumber(SaveManager.GetPendingOfflineCoin())) or "暂无可领取收益",
                         left = -78,
                         top = -2,
                         fontSize = 22,
@@ -731,8 +731,10 @@ local function CreateHomeScreen()
                         borderWidth = 1,
                         borderRadius = 30,
                         onClick = function()
-                            SaveManager.CollectIdleReward(123500, function()
+                            SaveManager.CollectIdleReward(SaveManager.GetPendingOfflineCoin(), function()
                                 UpdateHomeLabels()
+                            end, function(reason)
+                                print("[Home] Collect idle reward failed: " .. tostring(reason))
                             end)
                         end,
                     },
@@ -882,6 +884,8 @@ local function HandleLogin()
             loginButton_:SetText("重试")
         end
         SetLoginStatus("读档失败：" .. tostring(reason))
+    end, function(statusText)
+        SetLoginStatus(statusText)
     end)
 end
 
