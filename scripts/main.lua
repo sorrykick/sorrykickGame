@@ -17,13 +17,15 @@ local CHALLENGE_BADGE_LEFT_IMAGE = "image/challenge_badge_left.png"
 local CHALLENGE_BADGE_RIGHT_IMAGE = "image/challenge_badge_right.png"
 local TITLE_TOP_IMAGE = "image/P-标题-上.png"
 local HERO1_CLIP_DIR = "image/npcClip/0001"
+local HOME_HERO_SWITCH_MIN_SECONDS = 3.0
+local HOME_HERO_SWITCH_MAX_SECONDS = 5.0
 
 local HERO1_ANIMATIONS = {
-    idle = { label = "待机", frames = { 1, 2, 3, 4 }, fps = 5, loop = true, width = 300, height = 240 },
-    move = { label = "移动", frames = { 6, 7, 8, 9 }, fps = 8, loop = true, width = 300, height = 240 },
-    attack = { label = "攻击", frames = { 10, 11, 12, 13, 14 }, fps = 10, loop = false, returnTo = "idle", width = 360, height = 240 },
+    idle = { label = "待机", frames = { 1, 2, 3, 4 }, fps = 5, loop = true, width = 150, height = 120 },
+    move = { label = "移动", frames = { 6, 7, 8, 9 }, fps = 8, loop = true, width = 150, height = 120 },
+    attack = { label = "攻击", frames = { 10, 11, 12, 13, 14 }, fps = 10, loop = false, returnTo = "move", width = 150, height = 120 },
 }
-local HERO1_ACTION_ORDER = { "idle", "move", "attack" }
+local HERO1_ACTION_ORDER = { "move", "attack" }
 
 ---@type Widget|nil
 local uiRoot_ = nil
@@ -43,8 +45,6 @@ local stageForestLayerA_ = nil
 local stageForestLayerB_ = nil
 ---@type Widget|nil
 local hero1Sprite_ = nil
----@type Widget|nil
-local hero1ActionLabel_ = nil
 ---@type table|nil
 local battleScene_ = nil
 ---@type table|nil
@@ -56,7 +56,11 @@ local STAGE_FOREST_SPEED = 28
 
 local isLoggingIn_ = false
 local stageForestOffset_ = 0
-local hero1AnimName_ = "idle"
+local hero1ClipDir_ = HERO1_CLIP_DIR
+local hero1CurrentHeroId_ = nil
+local hero1SwitchTimer_ = 0
+local hero1SwitchInterval_ = HOME_HERO_SWITCH_MIN_SECONDS
+local hero1AnimName_ = "move"
 local hero1FrameIndex_ = 1
 local hero1FrameTimer_ = 0
 local hero1ActionOrderIndex_ = 1
@@ -101,8 +105,8 @@ local function FormatNumber(value)
     return tostring(value)
 end
 
-local function GetHero1FramePath(frameNumber)
-    return string.format("%s/%02d.png", HERO1_CLIP_DIR, frameNumber)
+local function GetHeroFramePath(clipDir, frameNumber)
+    return string.format("%s/%02d.png", tostring(clipDir or HERO1_CLIP_DIR), frameNumber)
 end
 
 local function SetHero1Animation(name)
@@ -120,11 +124,8 @@ local function SetHero1Animation(name)
         hero1Sprite_:SetStyle({
             width = anim.width,
             height = anim.height,
-            backgroundImage = GetHero1FramePath(anim.frames[hero1FrameIndex_]),
+            backgroundImage = GetHeroFramePath(hero1ClipDir_, anim.frames[hero1FrameIndex_]),
         })
-    end
-    if hero1ActionLabel_ then
-        hero1ActionLabel_:SetText("勇者1 · " .. anim.label)
     end
 
     print("[Hero1] Play animation: " .. anim.label)
@@ -156,7 +157,63 @@ local function UpdateHero1Animation(timeStep)
         end
     end
 
-    hero1Sprite_:SetBackgroundImage(GetHero1FramePath(anim.frames[hero1FrameIndex_]))
+    hero1Sprite_:SetBackgroundImage(GetHeroFramePath(hero1ClipDir_, anim.frames[hero1FrameIndex_]))
+end
+
+local function ScheduleNextHomeHeroSwitch()
+    hero1SwitchTimer_ = 0
+    hero1SwitchInterval_ = HOME_HERO_SWITCH_MIN_SECONDS + math.random() * (HOME_HERO_SWITCH_MAX_SECONDS - HOME_HERO_SWITCH_MIN_SECONDS)
+end
+
+local function GetOwnedDisplayHeroes()
+    local saveData = SaveManager.GetSaveData()
+    local result = {}
+    for _, hero in ipairs(saveData and saveData.heroes or {}) do
+        if type(hero) == "table" and hero.clipDir and hero.clipDir ~= "" then
+            result[#result + 1] = hero
+        end
+    end
+    return result
+end
+
+local function SelectRandomHomeHero(forceDifferent)
+    local heroes = GetOwnedDisplayHeroes()
+    if #heroes == 0 then
+        hero1CurrentHeroId_ = nil
+        hero1ClipDir_ = HERO1_CLIP_DIR
+        SetHero1Animation("move")
+        ScheduleNextHomeHeroSwitch()
+        return
+    end
+
+    local candidates = heroes
+    if forceDifferent and #heroes > 1 and hero1CurrentHeroId_ then
+        candidates = {}
+        for _, hero in ipairs(heroes) do
+            if tostring(hero.id or hero.npcId or hero.configId or "") ~= tostring(hero1CurrentHeroId_) then
+                candidates[#candidates + 1] = hero
+            end
+        end
+        if #candidates == 0 then
+            candidates = heroes
+        end
+    end
+
+    local selected = candidates[math.random(1, #candidates)]
+    hero1CurrentHeroId_ = tostring(selected.id or selected.npcId or selected.configId or "")
+    hero1ClipDir_ = tostring(selected.clipDir or HERO1_CLIP_DIR)
+    SetHero1Animation("move")
+    ScheduleNextHomeHeroSwitch()
+    print("[HomeHero] Switch display hero: " .. tostring(selected.name or hero1CurrentHeroId_))
+end
+
+local function UpdateHomeHeroSwitch(timeStep)
+    if not hero1Sprite_ then return end
+
+    hero1SwitchTimer_ = hero1SwitchTimer_ + timeStep
+    if hero1SwitchTimer_ >= hero1SwitchInterval_ then
+        SelectRandomHomeHero(true)
+    end
 end
 
 local function UpdateHomeLabels()
@@ -227,6 +284,7 @@ function HandleUpdate(eventType, eventData)
         UpdateStageForestLayers()
     end
     UpdateHero1Animation(timeStep)
+    UpdateHomeHeroSwitch(timeStep)
 end
 
 local function CreateResourcePill(id, value)
@@ -378,7 +436,11 @@ local function CreateBottomNav(label, index)
 end
 
 local function CreateHero1Actor()
-    hero1AnimName_ = "idle"
+    hero1ClipDir_ = HERO1_CLIP_DIR
+    hero1CurrentHeroId_ = nil
+    hero1SwitchTimer_ = 0
+    hero1SwitchInterval_ = HOME_HERO_SWITCH_MIN_SECONDS
+    hero1AnimName_ = "move"
     hero1FrameIndex_ = 1
     hero1FrameTimer_ = 0
     hero1ActionOrderIndex_ = 1
@@ -388,7 +450,7 @@ local function CreateHero1Actor()
         height = 120,
         left = -283,
         top = 0,
-        backgroundImage = GetHero1FramePath(1),
+        backgroundImage = GetHeroFramePath(hero1ClipDir_, HERO1_ANIMATIONS.move.frames[1]),
         backgroundFit = "contain",
         imageTint = { 255, 255, 255, 255 },
         transition = "scale 0.12s easeOut",
@@ -561,7 +623,6 @@ local function CreateHomeScreen()
     offlineLabel_ = nil
     stageTitleLabel_ = nil
     hero1Sprite_ = nil
-    hero1ActionLabel_ = nil
 
     local root = UI.Panel {
         id = "homeScreen",
@@ -753,6 +814,7 @@ local function CreateHomeScreen()
     coinLabel_ = root:FindById("coinValue")
     offlineLabel_ = root:FindById("offlineRewardLabel")
     stageTitleLabel_ = root:FindById("stageTitleLabel")
+    SelectRandomHomeHero(false)
     return root
 end
 
@@ -770,7 +832,6 @@ EnterBattleScreen = function()
     stageForestLayerB_ = nil
     stageTitleLabel_ = nil
     hero1Sprite_ = nil
-    hero1ActionLabel_ = nil
 
     battleScene_ = GridBattleScene:new({
         onExit = function()
@@ -787,7 +848,6 @@ EnterFormationScreen = function()
     stageForestLayerB_ = nil
     stageTitleLabel_ = nil
     hero1Sprite_ = nil
-    hero1ActionLabel_ = nil
 
     formationScene_ = FormationScene:new({
         onExit = function()
@@ -889,6 +949,7 @@ end
 
 function Start()
     graphics.windowTitle = "伙伴挂机"
+    math.randomseed(os.time())
 
     UI.Init({
         theme = "default-dark",
@@ -914,5 +975,4 @@ function Stop()
     stageForestLayerB_ = nil
     stageTitleLabel_ = nil
     hero1Sprite_ = nil
-    hero1ActionLabel_ = nil
 end

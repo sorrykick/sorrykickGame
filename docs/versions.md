@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-02 | hanginglist-random-owned-heroes | 主界面 `Hanginglist` 从已拥有 `heroes` 随机选择勇者，按 `clipDir` 播放 06-09 原地移动帧，并每 3-5 秒切换到另一个当前未显示勇者；LSP 0 Error，官方构建成功。 |
 | 2026-07-02 | inspector-hanginglist-id-top | 按 Inspector 将勇者容器增加 `id="Hanginglist"`，并将勇者图 `top` 从 36 调整为 0；LSP 0 Error，官方构建成功。 |
 | 2026-07-02 | remove-stage-summary-label | 删除主界面 `stageSummaryLabel` 组件，并清理缓存变量、`FindById` 和 `UpdateHomeLabels` 更新逻辑；LSP 0 Error，官方构建成功。 |
 | 2026-07-02 | inspector-home-hero-reward-layout | 按 Inspector 同步主界面 4 个控件：收益条上移并清零圆角，勇者容器改为 720×148，勇者图缩小并移动到左侧，删除“勇者1 · 待机”动作文字 Label；LSP 0 Error，官方构建成功。 |
