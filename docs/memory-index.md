@@ -39,6 +39,7 @@
 - 顶部功能图标和四个圆形功能图标已按 Inspector 调整：删除文字标签，仅保留图片。
 - 按 Inspector 删除主界面森林关卡下方的模式徽章横排 Panel（原位于 `scripts/main.lua` 的 `homeScreen` 第 5 个子项，视觉位置 x=5,y=514,w=712,h=110）。
 - 收益条、领取按钮、离线收益文案、四个圆形功能入口、秘境挑战按钮、章节标题条已按 Inspector 调整；章节标题条使用 `image/P-标题-上.png`。
+- 按 Inspector 同步主界面 4 个控件：收益条上移到 top=530 且圆角清零；勇者容器调整为 720×148、left=0/top=159；勇者图缩小为 150×120 并移动到 left=-283/top=36；删除“勇者1 · 待机”动作文字 Label。
 - 森林关卡背景 `stage_forest_bg.png` 确认为 1024×309，并改为两个图层横向无缝滚动。
 - 主界面上半区已按 Inspector 调整：顶部功能区图标 96×96，资源条移除“金/蓝/晶”短标签，右上角数字移除，标题条、章节文字、模式行和挑战徽章位置尺寸更新。
 - 存档系统已模块化：`scripts/Save/SaveSchema.lua`、`SaveValidator.lua`、`RuntimeSave.lua`、`SaveManager.lua`；`main.lua` 通过 `SaveManager.LoginSyncPlayerSave()` 登录读档，通过 `SaveManager.GetSaveData()` 读取运行时副本，通过 `SaveManager.CollectIdleReward()` 领取收益。
@@ -56,6 +57,8 @@
 - 在 `GridBattleScene` 上继续实现寻路、技能范围、敌方 AI、攻击表现、胜负结算和战斗结果存档。
 
 ## POST 日志
+
+- 2026-07-02：按 Inspector 同步主界面 4 个控件：收益条上移到 top=530 并设置 borderRadius=0，勇者容器改为 720×148 且移动到 left=0/top=159，勇者图缩小为 150×120 并移动到 left=-283/top=36，删除“勇者1 · 待机”动作文字 Label；LSP 0 Error，官方构建成功。
 
 - 2026-07-02：按 Inspector 删除主界面森林关卡下方模式徽章横排 Panel（原 `homeScreen` 第 5 个子项，含普通/精英/传说/剧情/奇遇/BOSS/地图徽章）；LSP 服务不可连接，官方构建成功。
 

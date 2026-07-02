@@ -389,29 +389,22 @@ local function CreateHero1Actor()
     hero1ActionOrderIndex_ = 1
 
     hero1Sprite_ = UI.Panel {
-        width = 300,
-        height = 240,
+        width = 150,
+        height = 120,
+        left = -283,
+        top = 36,
         backgroundImage = GetHero1FramePath(1),
         backgroundFit = "contain",
         imageTint = { 255, 255, 255, 255 },
         transition = "scale 0.12s easeOut",
     }
-    hero1ActionLabel_ = UI.Label {
-        text = "勇者1 · 待机",
-        height = 28,
-        fontSize = 20,
-        fontWeight = "bold",
-        fontColor = { 255, 248, 214, 255 },
-        textAlign = "center",
-        textStroke = { width = 2, color = { 36, 28, 18, 230 } },
-    }
 
     return UI.Panel {
         position = "absolute",
-        top = 54,
-        left = 180,
-        width = 360,
-        height = 246,
+        top = 159,
+        left = 0,
+        width = 720,
+        height = 148,
         alignItems = "center",
         justifyContent = "flex-end",
         backgroundColor = { 255, 255, 255, 0 },
@@ -420,7 +413,6 @@ local function CreateHero1Actor()
         end,
         children = {
             hero1Sprite_,
-            hero1ActionLabel_,
         },
     }
 end
@@ -654,11 +646,12 @@ local function CreateHomeScreen()
 
             UI.Panel {
                 position = "absolute",
-                top = 614,
+                top = 530,
                 left = 0,
                 right = 6,
                 width = 720,
                 height = 50,
+                borderRadius = 0,
                 flexDirection = "row",
                 alignItems = "center",
                 justifyContent = "center",
