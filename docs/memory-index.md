@@ -37,6 +37,7 @@
 - 创建参考图风格的游戏主界面，并已从临时整屏参考图升级为分层图片资源 + Yoga UI 叠加：`main_bg_blur.png`、`stage_forest_bg.png`、资源图标、顶部功能图标、挑战徽章、收益条、秘境按钮、功能按钮、底部导航等均已接入。
 - 底部导航已按 Inspector 调整：隐藏文字标签，导航图标放大到 96×96，并调整底部导航项父级布局宽高与偏移。
 - 顶部功能图标和四个圆形功能图标已按 Inspector 调整：删除文字标签，仅保留图片。
+- 按 Inspector 删除主界面森林关卡下方的模式徽章横排 Panel（原位于 `scripts/main.lua` 的 `homeScreen` 第 5 个子项，视觉位置 x=5,y=514,w=712,h=110）。
 - 收益条、领取按钮、离线收益文案、四个圆形功能入口、秘境挑战按钮、章节标题条已按 Inspector 调整；章节标题条使用 `image/P-标题-上.png`。
 - 森林关卡背景 `stage_forest_bg.png` 确认为 1024×309，并改为两个图层横向无缝滚动。
 - 主界面上半区已按 Inspector 调整：顶部功能区图标 96×96，资源条移除“金/蓝/晶”短标签，右上角数字移除，标题条、章节文字、模式行和挑战徽章位置尺寸更新。
@@ -55,6 +56,8 @@
 - 在 `GridBattleScene` 上继续实现寻路、技能范围、敌方 AI、攻击表现、胜负结算和战斗结果存档。
 
 ## POST 日志
+
+- 2026-07-02：按 Inspector 删除主界面森林关卡下方模式徽章横排 Panel（原 `homeScreen` 第 5 个子项，含普通/精英/传说/剧情/奇遇/BOSS/地图徽章）；LSP 服务不可连接，官方构建成功。
 
 - 2026-07-02：排查 TapTap Maker 大量 `<game>/assets/*.png` not found：报错 UUID 可反查到 `assets/image/npcClip/*/*.png.meta` 和 `assets/image/BattleRes/1.png.meta`，源资源和 manifest 条目存在；确认 `.project/resources.json` 为全量引用 `groups.default=["**"]`，进一步将 `preload_groups` 设置为 `["default"]`，避免启动阶段 UI/序列帧动态加载时资源尚未下载；LSP 0 Error，官方构建成功。
 

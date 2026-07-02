@@ -654,30 +654,6 @@ local function CreateHomeScreen()
 
             UI.Panel {
                 position = "absolute",
-                top = 514,
-                left = 5,
-                right = 20,
-                width = 712,
-                height = 110,
-                flexDirection = "row",
-                justifyContent = "space-between",
-                alignItems = "center",
-                children = {
-                    CreateModeBadge("普通", { 150, 155, 150, 255 }),
-                    CreateModeBadge("精英", { 90, 120, 180, 255 }),
-                    CreateModeBadge("传说", { 207, 146, 48, 255 }),
-                    CreateModeBadge("普通", { 110, 130, 110, 255 }),
-                    CreateModeBadge("精英", { 90, 120, 180, 255 }),
-                    CreateModeBadge("传说", { 207, 146, 48, 255 }),
-                    CreateModeBadge("剧情", { 140, 116, 96, 255 }),
-                    CreateModeBadge("奇遇", { 215, 105, 60, 255 }),
-                    CreateModeBadge("BOSS", { 190, 45, 45, 255 }),
-                    CreateModeBadge("地图", { 78, 144, 210, 255 }),
-                },
-            },
-
-            UI.Panel {
-                position = "absolute",
                 top = 614,
                 left = 0,
                 right = 6,
