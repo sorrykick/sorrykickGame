@@ -46,6 +46,7 @@
 - 主界面上半区已按 Inspector 调整：顶部功能区图标 96×96，资源条移除“金/蓝/晶”短标签，右上角数字移除，标题条、章节文字、模式行和挑战徽章位置尺寸更新。
 - 存档系统已模块化：`scripts/Save/SaveSchema.lua`、`SaveValidator.lua`、`RuntimeSave.lua`、`SaveManager.lua`；`main.lua` 通过 `SaveManager.LoginSyncPlayerSave()` 登录读档，通过 `SaveManager.GetSaveData()` 读取运行时副本，通过 `SaveManager.CollectIdleReward()` 领取收益。
 - 勇者序列帧已接入主界面森林关卡区，默认使用 `assets/image/npcClip/0001/` 做 UI 序列帧动画：主界面 `Hanginglist` 会从玩家已拥有 `heroes` 中随机选择一个勇者，使用该勇者 `clipDir` 的 06-09 移动帧做原地移动动作，每 3-5 秒随机切换到另一个当前未显示的勇者；左侧挑战徽章仍可触发攻击，右侧成长徽章触发移动。
+- 已新增 `scripts/UI/NormalizedSprite.lua`，按每张 `npcClip` 帧图的透明像素包围盒做归一化缩放/居中，已接入主界面 `Hanginglist`、阵型页勇者卡/站位预览、战斗页单位精灵，解决同界面不同勇者或不同动作因画布留白不同导致视觉大小不一致。
 - NPC/勇者数据已从 `docs/setting/npcdata.json` 生成到 `assets/Config/npc.json`，共 112 条。`SaveSchema` 通过 `ConfigManager` 读取 NPC 配置生成默认勇者列表，字段包括 `npcId/configId/name/quality/star/power/job/profession/faction/role/story/clipDir/skills`；旧存档若仍是占位勇者，会在 Normalize 时切换为配置生成的 NPC 勇者并重建默认阵容；阵型页和战斗场景均使用 `hero.clipDir` 显示对应 NPC 序列帧。
 - 关卡系统已接入 `docs/setting/level_design.json`：配置复制到 `assets/Config/level_design.json`，新增 `LevelManager` 读取 67 个章节/小关/BOSS/敌人配置；存档新增 `stageProgress`，主界面标题和关卡摘要显示当前章节小关，战斗场景按当前小关生成敌方单位并使用 `sceneImage` 切换 `BattleRes` 背景，胜利后推进关卡进度并保存。
 
@@ -59,6 +60,8 @@
 - 在 `GridBattleScene` 上继续实现寻路、技能范围、敌方 AI、攻击表现、胜负结算和战斗结果存档。
 
 ## POST 日志
+
+- 2026-07-02：新增 `scripts/UI/NormalizedSprite.lua`，用每张 `npcClip` 帧图的透明像素包围盒归一化绘制尺寸，并替换主界面 `Hanginglist`、阵型页勇者卡/站位预览、战斗页单位精灵的显示组件，统一同界面内不同勇者和动作的视觉大小；LSP 0 Error，官方构建成功。
 
 - 2026-07-02：实现主界面 `Hanginglist` 随机已拥有勇者展示：读取存档 `heroes`，按 `clipDir` 播放 06-09 原地移动帧，首次进入主界面随机选择，之后每 3-5 秒切换到另一个当前未显示勇者；LSP 0 Error，官方构建成功。
 

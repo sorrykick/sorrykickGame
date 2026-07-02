@@ -1,4 +1,5 @@
 local UI = require("urhox-libs/UI")
+local NormalizedSprite = require("UI.NormalizedSprite")
 local SaveManager = require("Save.SaveManager")
 local GridBattleScene = require("Battle.GridBattleScene")
 local FormationScene = require("Formation.FormationScene")
@@ -445,7 +446,7 @@ local function CreateHero1Actor()
     hero1FrameTimer_ = 0
     hero1ActionOrderIndex_ = 1
 
-    hero1Sprite_ = UI.Panel {
+    hero1Sprite_ = NormalizedSprite {
         width = 150,
         height = 120,
         left = -283,

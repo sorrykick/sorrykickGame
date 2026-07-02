@@ -1,5 +1,5 @@
 local UI = require("urhox-libs/UI")
-local ImageCache = require("urhox-libs/UI/Core/ImageCache")
+local NormalizedSprite = require("UI.NormalizedSprite")
 local SaveManager = require("Save.SaveManager")
 local LevelManager = require("Level.LevelManager")
 
@@ -92,63 +92,6 @@ local function CreateCellColor(x, y)
         return { 46, 70, 58, 228 }
     end
     return { 36, 58, 50, 228 }
-end
-
-local UnitSprite = UI.Panel:Extend("UnitSprite")
-
-function UnitSprite:Init(props)
-    ---@diagnostic disable-next-line: param-type-mismatch
-    UI.Panel.Init(self, props)
-end
-
-function UnitSprite:Render(nvg)
-    local props = self.props
-    local imagePath = props.backgroundImage
-    if not imagePath or imagePath == "" then return end
-
-    local l = self:GetAbsoluteLayout()
-    local imgHandle = ImageCache.Get(imagePath)
-    if not imgHandle or imgHandle <= 0 then return end
-
-    local imgW, imgH = ImageCache.GetSize(imagePath)
-    if imgW <= 0 or imgH <= 0 then return end
-
-    local drawX, drawY, drawW, drawH = l.x, l.y, l.w, l.h
-    local imgRatio = imgW / imgH
-    local boxRatio = l.w / l.h
-    if imgRatio > boxRatio then
-        drawW = l.w
-        drawH = l.w / imgRatio
-        drawX = l.x
-        drawY = l.y + (l.h - drawH) / 2
-    else
-        drawH = l.h
-        drawW = l.h * imgRatio
-        drawX = l.x + (l.w - drawW) / 2
-        drawY = l.y
-    end
-
-    local tint = props.imageTint
-    local paint
-    if props.flipX then
-        nvgSave(nvg)
-        nvgTranslate(nvg, drawX + drawW * 0.5, drawY + drawH * 0.5)
-        nvgScale(nvg, -1, 1)
-        nvgTranslate(nvg, -(drawX + drawW * 0.5), -(drawY + drawH * 0.5))
-    end
-    if tint then
-        paint = nvgImagePatternTinted(nvg, drawX, drawY, drawW, drawH, 0, imgHandle, nvgRGBA(tint[1], tint[2], tint[3], tint[4] or 255))
-    else
-        paint = nvgImagePattern(nvg, drawX, drawY, drawW, drawH, 0, imgHandle, 1)
-    end
-
-    nvgBeginPath(nvg)
-    nvgRect(nvg, l.x, l.y, l.w, l.h)
-    nvgFillPaint(nvg, paint)
-    nvgFill(nvg)
-    if props.flipX then
-        nvgRestore(nvg)
-    end
 end
 
 local function CreateUnit(def, id, gridX, gridY, heroData)
@@ -476,7 +419,7 @@ function GridBattleScene:CreateUnitWidgets()
             textAlign = "center",
             textStroke = { width = 1, color = { 0, 0, 0, 220 } },
         }
-        unit.spriteWidget = UnitSprite {
+        unit.spriteWidget = NormalizedSprite {
             width = UNIT_WIDTH,
             height = UNIT_HEIGHT,
             backgroundImage = unit.sprite,

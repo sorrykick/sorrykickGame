@@ -1,4 +1,5 @@
 local UI = require("urhox-libs/UI")
+local NormalizedSprite = require("UI.NormalizedSprite")
 local SaveManager = require("Save.SaveManager")
 
 local FormationScene = {}
@@ -642,7 +643,7 @@ function FormationScene:CreateHeroCard(hero, formation)
                 borderWidth = 1,
                 borderRadius = 12,
             },
-            UI.Panel { width = 106, height = 97, position = "absolute", left = -1, top = 0, borderRadius = 0, flexShrink = 0, backgroundImage = GetHeroPreviewImage(hero), backgroundFit = "contain", imageTint = assigned and { 210, 235, 255, 255 } or { 255, 255, 255, 255 } },
+            NormalizedSprite { width = 106, height = 97, position = "absolute", left = -1, top = 0, borderRadius = 0, flexShrink = 0, backgroundImage = GetHeroPreviewImage(hero), imageTint = assigned and { 210, 235, 255, 255 } or { 255, 255, 255, 255 } },
             UI.Panel { width = 30, height = 30, position = "absolute", left = 11, top = 2, backgroundImage = QUALITY_ICON_PATHS[hero.quality] or QUALITY_ICON_PATHS[1], backgroundFit = "contain" },
             CreateStarBadge(hero.star),
             UI.Label { id = "hero_1", text = hero.name, width = 142, height = 26, position = "absolute", left = 100, top = 5, fontSize = 17, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
@@ -746,7 +747,7 @@ function FormationScene:CreateSlotContent(slotId, hero, locked)
 
     return {
         UI.Label { text = locked and "已锁定" or hero.name, fontSize = 13, fontColor = locked and { 168, 48, 40, 255 } or { 88, 46, 45, 255 }, textAlign = "center", maxLines = 1 },
-        UI.Panel { width = 66, height = 48, backgroundImage = GetHeroPreviewImage(hero), backgroundFit = "contain" },
+        NormalizedSprite { width = 66, height = 48, backgroundImage = GetHeroPreviewImage(hero) },
         UI.Label { text = FormatNumber(hero.power), fontSize = 13, fontColor = { 202, 92, 44, 255 }, textAlign = "center" },
     }
 end

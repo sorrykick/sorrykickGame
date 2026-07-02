@@ -31,7 +31,7 @@
 - 已新增 `scripts/Formation/FormationScene.lua`，实现独立勇者 NPC 上阵编队页面：三套阵容 TAB、总战力、勇者列表排序、9 格三排站位、上阵/替换/下阵、单格锁定、全阵容锁定、一键上阵、一键清空、保存阵容、推荐开关与羁绊展示；主界面底部“阵型”入口已接入。
 - 最近一次修改已修复运行时 NPC 序列帧资源缺失：将 `assets/image/npcClip/0001/` 等 112 个被 NPC/关卡配置引用的序列帧目录纳入构建跟踪，避免 `.meta` UUID 指向的 PNG 未打包导致大量 `<game>/assets/*.png` not found。
 - 最近一次资源缺失排查确认 `resources.json` 已使用全量引用 `groups.default=["**"]`，并将 `.project/resources.json` 的 `preload_groups` 设置为 `["default"]`，避免启动阶段 UI/序列帧动态加载资源尚未下载导致 `<game>/assets/*.png` not found。
-- 最近一次功能修改已实现主界面 `Hanginglist` 随机已拥有勇者展示：读取存档 `heroes`，使用勇者 `clipDir` 的 06-09 移动帧做原地移动动作，每 3-5 秒切换到另一个当前未显示勇者。
+- 最近一次功能修改已新增 `scripts/UI/NormalizedSprite.lua`，按每张 `npcClip` 帧图透明包围盒归一化绘制尺寸，并接入主界面、阵型页和战斗页的勇者/单位图片，统一同界面内不同勇者和动作的视觉大小。
 - 最近一次 LSP 诊断 0 Error，官方构建成功。
 - 后续开发需先按 UrhoX 文档流程阅读 Lua 指南、相关示例和脚手架，再实现。
 
