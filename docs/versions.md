@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-03 | github-origin-sorrykick-sync-success | 修正 remote 为 `https://github.com/sorrykick/sorrykickGame.git`，确认 PAT 对该仓库有 push 权限，使用本地 hook 的 `x-access-token` Basic header 自动推送；`master` 已成功推送到 `origin/master`。 |
 | 2026-07-03 | github-origin-auto-sync | 配置 `origin=https://github.com/HYsorrykick/sorrykickGame.git`，设置本地 Git HTTP/HTTPS 代理，并新增本地 `post-commit` hook 使每次提交后自动尝试推送；当前 GitHub 返回 401，需配置凭据后推送成功。 |
 | 2026-07-03 | project-title-sorrykickGame1 | 修改 `.project/project.json` 的 `taptap_publish.title` 为 `sorrykickGame1`；JSON 校验通过，官方构建成功。 |
 | 2026-07-03 | login-delta-cloud-save-flow | 按 `docs/login.md` 优化登录/云存档流程：新增字段级 dirty、字段校验和、本地版本首次变更递增、增量上传、下载/上传 3 次重试、上传失败强制退出、旧整包存档兼容迁移；编队/战斗保存显式标记 dirty，离线收益按钮移除固定发放占位值；LSP 服务不可连接，官方构建成功。 |

@@ -61,7 +61,9 @@
 
 ## POST 日志
 
-- 2026-07-03：配置 GitHub 同步：`origin` 设置为 `https://github.com/HYsorrykick/sorrykickGame.git`，本地 Git 已配置 HTTP/HTTPS 代理 `http://127.0.0.1:1080`；新增本地 `.git/hooks/post-commit`，每次 commit 后自动尝试 `git push origin <当前分支>`。当前 GitHub 连接可达但返回 401，需配置 GitHub 凭据/Token 后自动推送才会成功。
+- 2026-07-03：修正 GitHub 同步地址并成功推送：`origin` 改为 `https://github.com/sorrykick/sorrykickGame.git`，确认 PAT 对该仓库有 `push` 权限；通过本地-only `.git/hooks/post-commit` 使用 `x-access-token` Basic header 方式自动推送，当前 `master` 已推送到 `origin/master`。注意：hook 内含本地 token，仅存在 `.git/hooks/`，不会进入仓库。
+
+- 2026-07-03：配置 GitHub 同步：初次将 `origin` 设置为 `https://github.com/HYsorrykick/sorrykickGame.git` 并配置 post-commit 自动推送，后续确认该地址 owner 错误，已更正为 `sorrykick/sorrykickGame`。
 
 - 2026-07-03：将 `.project/project.json` 的 `taptap_publish.title` 修改为 `sorrykickGame1`，JSON 校验通过，官方构建成功。
 
