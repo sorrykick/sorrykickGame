@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-03 | project-title-sorrykickGame1 | 修改 `.project/project.json` 的 `taptap_publish.title` 为 `sorrykickGame1`；JSON 校验通过，官方构建成功。 |
 | 2026-07-03 | login-delta-cloud-save-flow | 按 `docs/login.md` 优化登录/云存档流程：新增字段级 dirty、字段校验和、本地版本首次变更递增、增量上传、下载/上传 3 次重试、上传失败强制退出、旧整包存档兼容迁移；编队/战斗保存显式标记 dirty，离线收益按钮移除固定发放占位值；LSP 服务不可连接，官方构建成功。 |
 | 2026-07-02 | normalized-hero-sprite-size | 新增 `scripts/UI/NormalizedSprite.lua`，按 `npcClip` 帧图透明包围盒归一化绘制尺寸，并接入主界面、阵型页、战斗页，统一同界面勇者/动作视觉大小；LSP 0 Error，官方构建成功。 |
 | 2026-07-02 | hanginglist-random-owned-heroes | 主界面 `Hanginglist` 从已拥有 `heroes` 随机选择勇者，按 `clipDir` 播放 06-09 原地移动帧，并每 3-5 秒切换到另一个当前未显示勇者；LSP 0 Error，官方构建成功。 |

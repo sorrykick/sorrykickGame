@@ -61,6 +61,8 @@
 
 ## POST 日志
 
+- 2026-07-03：将 `.project/project.json` 的 `taptap_publish.title` 修改为 `sorrykickGame1`，JSON 校验通过，官方构建成功。
+
 - 2026-07-03：读取 `docs/login.md` 并优化登录/云存档流程：新增增量字段 key 和 meta key、`RuntimeSave` dirty 字段追踪/本地版本首次变更递增/字段校验和、`SaveManager.UpdatePlayerSave()` 增量上传、下载/上传 3 次重试、上传失败强制退出、旧整包存档兼容迁移；编队和战斗胜利保存前显式标记 `lineup`/`stageProgress` dirty；登录状态 UI 展示下载/上传进度；修正离线收益按钮不再固定发放 12.35 万。LSP 服务不可连接，官方构建成功。
 
 - 2026-07-02：新增 `scripts/UI/NormalizedSprite.lua`，用每张 `npcClip` 帧图的透明像素包围盒归一化绘制尺寸，并替换主界面 `Hanginglist`、阵型页勇者卡/站位预览、战斗页单位精灵的显示组件，统一同界面内不同勇者和动作的视觉大小；LSP 0 Error，官方构建成功。
