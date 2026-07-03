@@ -32,6 +32,7 @@
 - 最近一次修改已修复运行时 NPC 序列帧资源缺失：将 `assets/image/npcClip/0001/` 等 112 个被 NPC/关卡配置引用的序列帧目录纳入构建跟踪，避免 `.meta` UUID 指向的 PNG 未打包导致大量 `<game>/assets/*.png` not found。
 - 最近一次资源缺失排查确认 `resources.json` 已使用全量引用 `groups.default=["**"]`，并将 `.project/resources.json` 的 `preload_groups` 设置为 `["default"]`，避免启动阶段 UI/序列帧动态加载资源尚未下载导致 `<game>/assets/*.png` not found。
 - 已新增 `scripts/Inventory/InventoryScene.lua`，实现与阵型页一致的 Yoga UI 棕色/米黄风格背包系统：分类 TAB、物品格、详情面板、使用/整理/扩充/关闭按钮；主界面底部“背包”入口已接入；存档新增 `inventory` 字段并纳入增量 dirty 上传，小袋金币可使用并保存金币与背包变化。
+- GitHub 同步已改为手动：本地 `post-commit` 自动推送 hook 已禁用；只有用户明确要求“同步 GitHub”或“推送”时才执行 `git push`。
 - 最近一次功能修改已按 `docs/login.md` 优化登录/云存档流程：`SaveSchema` 增加增量字段 key/meta key；`RuntimeSave` 增加 dirty 字段追踪、本地版本首次变更递增、字段校验和与增量提交状态；`SaveManager.UpdatePlayerSave()` 只上传 dirty 字段，登录下载/存档上传均自动重试 3 次，上传连续失败后强制退出；登录会兼容旧整包存档并迁移为字段级存档；编队和战斗胜利保存前分别标记 `lineup`、`stageProgress` dirty；离线收益按钮不再固定发放 12.35 万。
 - 最近一次 LSP 服务不可连接，官方构建成功。
 - 后续开发需先按 UrhoX 文档流程阅读 Lua 指南、相关示例和脚手架，再实现。
@@ -51,3 +52,4 @@
 - 不跳过登录读档流程。
 - 不在玩家数据变化后遗漏存档更新请求。
 - 不写入 `/workspace/dist/`。
+- 不自动上传 GitHub；仅在用户明确要求同步时执行推送。

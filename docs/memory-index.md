@@ -62,6 +62,8 @@
 
 ## POST 日志
 
+- 2026-07-03：按用户偏好关闭 GitHub 自动同步：已禁用本地 `.git/hooks/post-commit` 自动推送 hook，后续仅在用户明确要求同步 GitHub 或推送时才执行 `git push`；该偏好已记录到项目记忆与随行记忆。
+
 - 2026-07-03：新增背包系统：`SaveSchema` 新增并规范化 `inventory` 存档字段，纳入增量 dirty 上传；新增 `scripts/Inventory/InventoryScene.lua`，复用阵型页背景、棕色侧栏、米黄详情面板和底部操作按钮风格，实现分类 TAB、5 列物品格、详情展示、使用小袋金币、整理、扩充容量；主界面底部“背包”入口已接入。LSP 服务不可连接，官方构建成功。
 
 - 2026-07-03：修正 GitHub 同步地址并成功推送：`origin` 改为 `https://github.com/sorrykick/sorrykickGame.git`，确认 PAT 对该仓库有 `push` 权限；通过本地-only `.git/hooks/post-commit` 使用 `x-access-token` Basic header 方式自动推送，当前 `master` 已推送到 `origin/master`。注意：hook 内含本地 token，仅存在 `.git/hooks/`，不会进入仓库。

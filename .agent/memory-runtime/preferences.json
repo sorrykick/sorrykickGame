@@ -1,6 +1,11 @@
 {
   "wake_word": null,
   "communication_style": "简洁、直接、面向执行",
+  "git_workflow": {
+    "auto_push": false,
+    "push_policy": "manual_only",
+    "push_when": "only when the user explicitly requests GitHub sync or push"
+  },
   "scoped_preferences": {
     "gamedev": {
       "orientation": "portrait-only",
