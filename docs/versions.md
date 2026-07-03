@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-03 | top-hud-dynamic-time-resources | 顶部 HUD 的 `time` 改为 24 小时制当前时间，`coinValue`/`diamondValue`/`crystalValue` 绑定玩家金币、蓝钻、白钻；新增统一刷新和页面重建后重新绑定逻辑，资源变化后同步更新显示；LSP 0 Error，官方构建成功。 |
 | 2026-07-03 | home-time-label-inspector-id | 按 Inspector 给主界面顶部时间 Label 增加 `id="time"`，便于后续运行时定位和动态更新时间；LSP 0 Error，官方构建成功。 |
 | 2026-07-03 | inventory-inspector-layout-sync | 按 Inspector 同步背包页 4 个控件：内容父级宽度改 696，物品列表改为上方 693×76.8% 绝对布局，详情面板改到底部并使用 `image/IM-说明-底.png`，删除 Header 包装节点并将其子项上提到根节点；LSP 0 Error，官方构建成功。 |
 | 2026-07-03 | github-sync-manual-only | 按用户偏好禁用本地 `post-commit` 自动推送 hook；后续只在用户明确要求同步 GitHub 时执行 `git push`，本地提交不自动上传。 |

@@ -196,6 +196,7 @@ function FormationScene:new(options)
     local o = setmetatable({}, self)
     o.onExit = options and options.onExit or nil
     o.createTopResourceRow = options and options.createTopResourceRow or nil
+    o.onRootChanged = options and options.onRootChanged or nil
     o.root = nil
     o.selectedHeroId = nil
     o.selectedSlotId = nil
@@ -230,6 +231,9 @@ end
 function FormationScene:Refresh()
     self.root = self:CreateRoot()
     UI.SetRoot(self.root, true)
+    if self.onRootChanged then
+        self.onRootChanged(self.root)
+    end
 end
 
 function FormationScene:IsFormationLocked(formation)

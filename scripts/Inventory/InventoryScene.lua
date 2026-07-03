@@ -100,6 +100,7 @@ function InventoryScene:new(options)
     local o = setmetatable({}, self)
     o.onExit = options and options.onExit or nil
     o.createTopResourceRow = options and options.createTopResourceRow or nil
+    o.onRootChanged = options and options.onRootChanged or nil
     o.root = nil
     o.selectedItemUid = nil
     o.activeTab = "all"
@@ -125,6 +126,9 @@ end
 function InventoryScene:Refresh()
     self.root = self:CreateRoot()
     UI.SetRoot(self.root, true)
+    if self.onRootChanged then
+        self.onRootChanged(self.root)
+    end
 end
 
 function InventoryScene:SaveAndRefresh(reason)

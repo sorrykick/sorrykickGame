@@ -38,6 +38,12 @@ local loginStatusLabel_ = nil
 ---@type Widget|nil
 local coinLabel_ = nil
 ---@type Widget|nil
+local diamondLabel_ = nil
+---@type Widget|nil
+local crystalLabel_ = nil
+---@type Widget|nil
+local timeLabel_ = nil
+---@type Widget|nil
 local offlineLabel_ = nil
 ---@type Widget|nil
 local stageTitleLabel_ = nil
@@ -60,6 +66,7 @@ local STAGE_FOREST_SPEED = 28
 
 local isLoggingIn_ = false
 local stageForestOffset_ = 0
+local topResourceRefreshTimer_ = 0
 local hero1ClipDir_ = HERO1_CLIP_DIR
 local hero1CurrentHeroId_ = nil
 local hero1SwitchTimer_ = 0
@@ -107,6 +114,10 @@ local function FormatNumber(value)
         return string.format("%.1f万", value / 10000)
     end
     return tostring(value)
+end
+
+local function FormatClockTime()
+    return os.date("%H:%M", os.time())
 end
 
 local function GetHeroFramePath(clipDir, frameNumber)
@@ -220,13 +231,28 @@ local function UpdateHomeHeroSwitch(timeStep)
     end
 end
 
+local function UpdateTopResourceLabels()
+    local saveData = SaveManager.GetSaveData()
+    if timeLabel_ then
+        timeLabel_:SetText(FormatClockTime())
+    end
+    if not saveData then return end
+    if coinLabel_ then
+        coinLabel_:SetText(FormatNumber(saveData.coin))
+    end
+    if diamondLabel_ then
+        diamondLabel_:SetText(FormatNumber(saveData.diamond))
+    end
+    if crystalLabel_ then
+        crystalLabel_:SetText(FormatNumber(saveData.crystal))
+    end
+end
+
 local function UpdateHomeLabels()
     local saveData = SaveManager.GetSaveData()
     if not saveData then return end
 
-    if coinLabel_ then
-        coinLabel_:SetText(FormatNumber(saveData.coin))
-    end
+    UpdateTopResourceLabels()
     if offlineLabel_ then
         local pendingOfflineCoin = SaveManager.GetPendingOfflineCoin()
         if pendingOfflineCoin > 0 then
@@ -293,6 +319,11 @@ function HandleUpdate(eventType, eventData)
     if stageForestLayerA_ and stageForestLayerB_ then
         stageForestOffset_ = (stageForestOffset_ + STAGE_FOREST_SPEED * timeStep) % STAGE_FOREST_WIDTH
         UpdateStageForestLayers()
+    end
+    topResourceRefreshTimer_ = topResourceRefreshTimer_ + timeStep
+    if topResourceRefreshTimer_ >= 1.0 then
+        topResourceRefreshTimer_ = 0
+        UpdateTopResourceLabels()
     end
     UpdateHero1Animation(timeStep)
     UpdateHomeHeroSwitch(timeStep)
@@ -505,7 +536,7 @@ local function CreateTopResourceRow(saveData)
                 backgroundColor = { 18, 16, 14, 220 },
                 alignItems = "center",
                 justifyContent = "center",
-                children = { UI.Label { id = "time", text = "23:00", fontSize = 18, fontColor = { 255, 255, 255, 255 } } },
+                children = { UI.Label { id = "time", text = FormatClockTime(), fontSize = 18, fontColor = { 255, 255, 255, 255 } } },
             },
             CreateResourcePill("coin", FormatNumber(saveData.coin)),
             CreateResourcePill("diamond", FormatNumber(saveData.diamond)),
@@ -632,10 +663,25 @@ local function CreateStageForestPanel()
     }
 end
 
-local function CreateHomeScreen()
+local function ClearHomeRuntimeLabels()
+    timeLabel_ = nil
     coinLabel_ = nil
+    diamondLabel_ = nil
+    crystalLabel_ = nil
     offlineLabel_ = nil
     stageTitleLabel_ = nil
+end
+
+local function BindTopResourceLabels(root)
+    timeLabel_ = root and root:FindById("time") or nil
+    coinLabel_ = root and root:FindById("coinValue") or nil
+    diamondLabel_ = root and root:FindById("diamondValue") or nil
+    crystalLabel_ = root and root:FindById("crystalValue") or nil
+    UpdateTopResourceLabels()
+end
+
+local function CreateHomeScreen()
+    ClearHomeRuntimeLabels()
     hero1Sprite_ = nil
 
     local root = UI.Panel {
@@ -827,7 +873,7 @@ local function CreateHomeScreen()
         },
     }
 
-    coinLabel_ = root:FindById("coinValue")
+    BindTopResourceLabels(root)
     offlineLabel_ = root:FindById("offlineRewardLabel")
     stageTitleLabel_ = root:FindById("stageTitleLabel")
     SelectRandomHomeHero(false)
@@ -848,7 +894,7 @@ EnterBattleScreen = function()
     DestroyInventoryScene()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
-    stageTitleLabel_ = nil
+    ClearHomeRuntimeLabels()
     hero1Sprite_ = nil
 
     battleScene_ = GridBattleScene:new({
@@ -865,7 +911,7 @@ EnterFormationScreen = function()
     DestroyInventoryScene()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
-    stageTitleLabel_ = nil
+    ClearHomeRuntimeLabels()
     hero1Sprite_ = nil
 
     formationScene_ = FormationScene:new({
@@ -875,8 +921,13 @@ EnterFormationScreen = function()
         createTopResourceRow = function()
             return CreateTopResourceRow(SaveManager.GetSaveData())
         end,
+        onRootChanged = function(root)
+            BindTopResourceLabels(root)
+        end,
     })
-    ShowRoot(formationScene_:CreateRoot())
+    local root = formationScene_:CreateRoot()
+    ShowRoot(root)
+    BindTopResourceLabels(root)
     print("[Main] Entered formation screen")
 end
 
@@ -885,7 +936,7 @@ EnterInventoryScreen = function()
     DestroyFormationScene()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
-    stageTitleLabel_ = nil
+    ClearHomeRuntimeLabels()
     hero1Sprite_ = nil
 
     inventoryScene_ = InventoryScene:new({
@@ -895,8 +946,13 @@ EnterInventoryScreen = function()
         createTopResourceRow = function()
             return CreateTopResourceRow(SaveManager.GetSaveData())
         end,
+        onRootChanged = function(root)
+            BindTopResourceLabels(root)
+        end,
     })
-    ShowRoot(inventoryScene_:CreateRoot())
+    local root = inventoryScene_:CreateRoot()
+    ShowRoot(root)
+    BindTopResourceLabels(root)
     print("[Main] Entered inventory screen")
 end
 
@@ -1012,9 +1068,12 @@ function Stop()
     loginButton_ = nil
     loginStatusLabel_ = nil
     coinLabel_ = nil
+    diamondLabel_ = nil
+    crystalLabel_ = nil
+    timeLabel_ = nil
     offlineLabel_ = nil
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
-    stageTitleLabel_ = nil
+    ClearHomeRuntimeLabels()
     hero1Sprite_ = nil
 end
