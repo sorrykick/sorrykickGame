@@ -261,7 +261,10 @@ function InventoryScene:CreateRoot()
             children = { self.createTopResourceRow() },
         }
     end
-    children[#children + 1] = self:CreateHeader(inventory, items)
+    local headerChildren = self:CreateHeader(inventory, items)
+    for _, child in ipairs(headerChildren) do
+        children[#children + 1] = child
+    end
     children[#children + 1] = self:CreateContent(saveData, inventory, items, selectedItem)
     children[#children + 1] = self:CreateBottomActions(selectedItem)
 
@@ -291,31 +294,21 @@ function InventoryScene:CreateBackground()
 end
 
 function InventoryScene:CreateHeader(inventory, items)
-    return UI.Panel {
-        position = "absolute",
-        left = 18,
-        right = 18,
-        top = 64,
-        height = 104,
-        zIndex = 10,
-        children = {
-            UI.Label { text = "伙伴背包", position = "absolute", left = 1, top = 2, fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
-            UI.Label { text = "容量 " .. tostring(#items) .. "/" .. tostring(inventory.capacity) .. " · 总数量 " .. FormatNumber(CountItems(items)), position = "absolute", left = 360, top = 50, width = 320, fontSize = 20, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textAlign = "right", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
-            UI.Button { width = 164, height = 58, position = "absolute", left = -18, top = 1119, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, fontSize = 18, backgroundImage = "image/BT-返回.png", backgroundFit = "cover", backgroundColor = { 251, 251, 251, 0 }, opacity = 1, textColor = { 255, 255, 255, 0 }, borderRadius = 0, onClick = function() if self.onExit then self.onExit() end end },
-        },
+    return {
+        UI.Label { text = "伙伴背包", position = "absolute", left = 19, top = 66, zIndex = 10, fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
+        UI.Label { text = "容量 " .. tostring(#items) .. "/" .. tostring(inventory.capacity) .. " · 总数量 " .. FormatNumber(CountItems(items)), position = "absolute", left = 378, top = 114, width = 320, zIndex = 10, fontSize = 20, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textAlign = "right", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
+        UI.Button { width = 164, height = 58, position = "absolute", left = 0, top = 1183, zIndex = 10, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, fontSize = 18, backgroundImage = "image/BT-返回.png", backgroundFit = "cover", backgroundColor = { 251, 251, 251, 0 }, opacity = 1, textColor = { 255, 255, 255, 0 }, borderRadius = 0, onClick = function() if self.onExit then self.onExit() end end },
     }
 end
 
 function InventoryScene:CreateContent(saveData, inventory, items, selectedItem)
     return UI.Panel {
         position = "absolute",
-        width = 678,
+        width = 696,
         left = 16,
         right = 26,
         top = 170,
         height = 890,
-        flexDirection = "row",
-        gap = 12,
         children = {
             self:CreateInventoryGridPanel(inventory, items),
             self:CreateDetailPanel(selectedItem),
@@ -353,9 +346,11 @@ function InventoryScene:CreateInventoryGridPanel(inventory, items)
     end
 
     return UI.Panel {
-        width = 493,
-        height = "100%",
-        padding = 10,
+        position = "absolute",
+        left = 4,
+        top = 4,
+        width = 693,
+        height = "76.8%",
         gap = 8,
         backgroundColor = { 113, 74, 58, 245 },
         borderColor = { 68, 45, 25, 255 },
@@ -436,15 +431,15 @@ end
 
 function InventoryScene:CreateDetailPanel(item)
     return UI.Panel {
-        flexGrow = 1,
-        flexShrink = 1,
-        height = "100%",
-        padding = 12,
+        position = "absolute",
+        left = 0,
+        top = 699,
+        width = 693,
+        height = "21.4%",
         gap = 10,
+        backgroundImage = "image/IM-说明-底.png",
+        backgroundFit = "fill",
         backgroundColor = { 245, 228, 200, 245 },
-        borderColor = { 68, 45, 25, 255 },
-        borderWidth = 3,
-        borderRadius = 18,
         children = item and self:CreateSelectedDetail(item) or self:CreateEmptyDetail(),
     }
 end
