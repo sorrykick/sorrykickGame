@@ -61,6 +61,8 @@
 
 ## POST 日志
 
+- 2026-07-03：配置 GitHub 同步：`origin` 设置为 `https://github.com/HYsorrykick/sorrykickGame.git`，本地 Git 已配置 HTTP/HTTPS 代理 `http://127.0.0.1:1080`；新增本地 `.git/hooks/post-commit`，每次 commit 后自动尝试 `git push origin <当前分支>`。当前 GitHub 连接可达但返回 401，需配置 GitHub 凭据/Token 后自动推送才会成功。
+
 - 2026-07-03：将 `.project/project.json` 的 `taptap_publish.title` 修改为 `sorrykickGame1`，JSON 校验通过，官方构建成功。
 
 - 2026-07-03：读取 `docs/login.md` 并优化登录/云存档流程：新增增量字段 key 和 meta key、`RuntimeSave` dirty 字段追踪/本地版本首次变更递增/字段校验和、`SaveManager.UpdatePlayerSave()` 增量上传、下载/上传 3 次重试、上传失败强制退出、旧整包存档兼容迁移；编队和战斗胜利保存前显式标记 `lineup`/`stageProgress` dirty；登录状态 UI 展示下载/上传进度；修正离线收益按钮不再固定发放 12.35 万。LSP 服务不可连接，官方构建成功。
