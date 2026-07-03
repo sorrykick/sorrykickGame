@@ -3,6 +3,7 @@ local NormalizedSprite = require("UI.NormalizedSprite")
 local SaveManager = require("Save.SaveManager")
 local GridBattleScene = require("Battle.GridBattleScene")
 local FormationScene = require("Formation.FormationScene")
+local InventoryScene = require("Inventory.InventoryScene")
 local LevelManager = require("Level.LevelManager")
 
 local DESIGN_WIDTH = 720
@@ -50,6 +51,8 @@ local hero1Sprite_ = nil
 local battleScene_ = nil
 ---@type table|nil
 local formationScene_ = nil
+---@type table|nil
+local inventoryScene_ = nil
 
 local STAGE_FOREST_WIDTH = 1024
 local STAGE_FOREST_HEIGHT = 309
@@ -262,6 +265,13 @@ local function DestroyFormationScene()
     end
 end
 
+local function DestroyInventoryScene()
+    if inventoryScene_ then
+        inventoryScene_:Destroy()
+        inventoryScene_ = nil
+    end
+end
+
 local function UpdateStageForestLayers()
     if not stageForestLayerA_ or not stageForestLayerB_ then
         return
@@ -393,6 +403,7 @@ end
 local EnterHomeScreen
 local EnterBattleScreen
 local EnterFormationScreen
+local EnterInventoryScreen
 
 local function CreateBottomNav(label, index)
     local leftOffsets = { 0, 2, 4, 4, 2 }
@@ -410,7 +421,9 @@ local function CreateBottomNav(label, index)
         gap = 2,
         onClick = function()
             print("[Home] Bottom tab clicked: " .. label)
-            if label == "阵型" then
+            if label == "背包" then
+                EnterInventoryScreen()
+            elseif label == "阵型" then
                 EnterFormationScreen()
             end
         end,
@@ -824,6 +837,7 @@ end
 EnterHomeScreen = function()
     DestroyBattleScene()
     DestroyFormationScene()
+    DestroyInventoryScene()
     ShowRoot(CreateHomeScreen())
     UpdateHomeLabels()
     print("[Main] Entered home screen")
@@ -831,6 +845,7 @@ end
 
 EnterBattleScreen = function()
     DestroyFormationScene()
+    DestroyInventoryScene()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
     stageTitleLabel_ = nil
@@ -847,6 +862,7 @@ end
 
 EnterFormationScreen = function()
     DestroyBattleScene()
+    DestroyInventoryScene()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
     stageTitleLabel_ = nil
@@ -862,6 +878,26 @@ EnterFormationScreen = function()
     })
     ShowRoot(formationScene_:CreateRoot())
     print("[Main] Entered formation screen")
+end
+
+EnterInventoryScreen = function()
+    DestroyBattleScene()
+    DestroyFormationScene()
+    stageForestLayerA_ = nil
+    stageForestLayerB_ = nil
+    stageTitleLabel_ = nil
+    hero1Sprite_ = nil
+
+    inventoryScene_ = InventoryScene:new({
+        onExit = function()
+            EnterHomeScreen()
+        end,
+        createTopResourceRow = function()
+            return CreateTopResourceRow(SaveManager.GetSaveData())
+        end,
+    })
+    ShowRoot(inventoryScene_:CreateRoot())
+    print("[Main] Entered inventory screen")
 end
 
 local function HandleLogin()
@@ -970,6 +1006,7 @@ end
 function Stop()
     DestroyBattleScene()
     DestroyFormationScene()
+    DestroyInventoryScene()
     UI.Shutdown()
     uiRoot_ = nil
     loginButton_ = nil

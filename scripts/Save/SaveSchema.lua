@@ -192,6 +192,51 @@ local function normalizeLineup(rawLineup, heroes)
     }
 end
 
+local function createDefaultInventory()
+    return {
+        capacity = 36,
+        selectedTab = "all",
+        items = {
+            { uid = "item_coin_box_001", configId = "coin_box_small", name = "小袋金币", type = "material", quality = 2, count = 6, icon = "金", description = "装着少量金币的钱袋，使用后获得金币。", value = 1200, obtainedAt = 0 },
+            { uid = "item_exp_scroll_001", configId = "partner_exp_scroll", name = "伙伴经验书", type = "consumable", quality = 3, count = 4, icon = "书", description = "记录成长心得的经验书，后续可用于伙伴升级。", value = 80, obtainedAt = 0 },
+            { uid = "item_summon_ticket_001", configId = "summon_ticket", name = "召唤券", type = "ticket", quality = 4, count = 3, icon = "券", description = "可用于召唤新勇者的珍贵凭证。", value = 1, obtainedAt = 0 },
+            { uid = "item_iron_sword_001", configId = "iron_sword", name = "制式长剑", type = "equipment", quality = 2, count = 1, icon = "剑", description = "王国工坊打造的基础武器，适合前期开荒。", value = 45, obtainedAt = 0 },
+            { uid = "item_guard_badge_001", configId = "guard_badge", name = "守卫徽章", type = "fragment", quality = 3, count = 18, icon = "徽", description = "收集后可兑换守卫系勇者培养材料。", value = 1, obtainedAt = 0 },
+            { uid = "item_magic_crystal_001", configId = "magic_crystal", name = "魔力结晶", type = "material", quality = 5, count = 2, icon = "晶", description = "秘境中凝结出的高纯度晶体，可用于高级强化。", value = 1, obtainedAt = 0 },
+        },
+    }
+end
+
+local function normalizeInventory(rawInventory)
+    local defaults = createDefaultInventory()
+    rawInventory = type(rawInventory) == "table" and rawInventory or defaults
+    local capacity = math.max(24, math.min(120, math.floor(tonumber(rawInventory.capacity) or defaults.capacity)))
+    local items = {}
+    local sourceItems = type(rawInventory.items) == "table" and rawInventory.items or defaults.items
+    for index, rawItem in ipairs(sourceItems) do
+        if type(rawItem) == "table" and index <= capacity then
+            local count = math.max(1, math.floor(tonumber(rawItem.count) or 1))
+            items[#items + 1] = {
+                uid = tostring(rawItem.uid or ("item_" .. tostring(index))),
+                configId = tostring(rawItem.configId or rawItem.id or ("item_" .. tostring(index))),
+                name = tostring(rawItem.name or "未知物品"),
+                type = tostring(rawItem.type or "material"),
+                quality = clampInt(rawItem.quality, 1, 6),
+                count = count,
+                icon = tostring(rawItem.icon or "物"),
+                description = tostring(rawItem.description or "暂无描述"),
+                value = math.max(0, math.floor(tonumber(rawItem.value) or 0)),
+                obtainedAt = math.max(0, math.floor(tonumber(rawItem.obtainedAt) or 0)),
+            }
+        end
+    end
+    return {
+        capacity = capacity,
+        selectedTab = tostring(rawInventory.selectedTab or "all"),
+        items = items,
+    }
+end
+
 local function hasNpcBackedHeroes(heroes)
     for _, hero in ipairs(heroes or {}) do
         if type(hero) == "table" and (hero.npcId or hero.configId or (type(hero.id) == "string" and string.sub(hero.id, 1, 4) == "npc_")) then
@@ -214,6 +259,7 @@ SaveSchema.DELTA_FIELDS = {
     "energy",
     "partner",
     "heroes",
+    "inventory",
     "lineup",
     "stageProgress",
     "initialHeroGranted",
@@ -259,6 +305,7 @@ function SaveSchema.CreateDefaultSave(now)
             power = 10,
         },
         heroes = SaveSchema.DeepClone(defaultHeroes),
+        inventory = createDefaultInventory(),
         lineup = normalizeLineup(nil, defaultHeroes),
         stageProgress = {
             currentStageId = 1,
@@ -327,6 +374,7 @@ function SaveSchema.Normalize(rawSave, now)
         end
     end
     save.heroes = heroes
+    save.inventory = normalizeInventory(save.inventory)
     save.lineup = normalizeLineup(save.lineup, save.heroes)
     save.stageProgress = type(save.stageProgress) == "table" and save.stageProgress or {}
     save.stageProgress.currentStageId = math.max(1, math.floor(tonumber(save.stageProgress.currentStageId) or 1))
