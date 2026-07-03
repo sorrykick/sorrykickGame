@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-03 | home-time-label-inspector-id | 按 Inspector 给主界面顶部时间 Label 增加 `id="time"`，便于后续运行时定位和动态更新时间；LSP 0 Error，官方构建成功。 |
 | 2026-07-03 | inventory-inspector-layout-sync | 按 Inspector 同步背包页 4 个控件：内容父级宽度改 696，物品列表改为上方 693×76.8% 绝对布局，详情面板改到底部并使用 `image/IM-说明-底.png`，删除 Header 包装节点并将其子项上提到根节点；LSP 0 Error，官方构建成功。 |
 | 2026-07-03 | github-sync-manual-only | 按用户偏好禁用本地 `post-commit` 自动推送 hook；后续只在用户明确要求同步 GitHub 时执行 `git push`，本地提交不自动上传。 |
 | 2026-07-03 | inventory-system-yoga-formation-style | 新增背包系统：存档新增 `inventory` 并纳入增量 dirty；新增 `InventoryScene`，复用阵型页棕色/米黄 Yoga UI 风格，实现分类、物品格、详情、使用小袋金币、整理和扩充；主界面底部“背包”入口接入；LSP 服务不可连接，官方构建成功。 |

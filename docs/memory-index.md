@@ -62,6 +62,8 @@
 
 ## POST 日志
 
+- 2026-07-03：按 Inspector 给主界面顶部时间 Label 增加 `id="time"`，仅同步该控件 id，不调整父级或同级布局。LSP 0 Error，官方构建成功。
+
 - 2026-07-03：按 Inspector 同步背包页布局：内容父级宽度改为 696；物品列表面板改为上方绝对定位 left=4/top=4、width=693、height=76.8%，移除 padding；详情面板改为底部绝对定位 left=0/top=699、width=693、height=21.4%，使用 `image/IM-说明-底.png`；删除 Header 包装节点并将标题、容量、返回按钮上提到根节点。LSP 0 Error，官方构建成功。
 
 - 2026-07-03：按用户偏好关闭 GitHub 自动同步：已禁用本地 `.git/hooks/post-commit` 自动推送 hook，后续仅在用户明确要求同步 GitHub 或推送时才执行 `git push`；该偏好已记录到项目记忆与随行记忆。

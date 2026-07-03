@@ -505,7 +505,7 @@ local function CreateTopResourceRow(saveData)
                 backgroundColor = { 18, 16, 14, 220 },
                 alignItems = "center",
                 justifyContent = "center",
-                children = { UI.Label { text = "23:00", fontSize = 18, fontColor = { 255, 255, 255, 255 } } },
+                children = { UI.Label { id = "time", text = "23:00", fontSize = 18, fontColor = { 255, 255, 255, 255 } } },
             },
             CreateResourcePill("coin", FormatNumber(saveData.coin)),
             CreateResourcePill("diamond", FormatNumber(saveData.diamond)),
