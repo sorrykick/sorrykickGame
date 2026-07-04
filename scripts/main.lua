@@ -5,6 +5,7 @@ local GridBattleScene = require("Battle.GridBattleScene")
 local FormationScene = require("Formation.FormationScene")
 local InventoryScene = require("Inventory.InventoryScene")
 local LevelManager = require("Level.LevelManager")
+local SecretRealmDialog = require("Level.SecretRealmDialog")
 
 local DESIGN_WIDTH = 720
 local DESIGN_HEIGHT = 1280
@@ -63,6 +64,8 @@ local battleScene_ = nil
 local formationScene_ = nil
 ---@type table|nil
 local inventoryScene_ = nil
+---@type table|nil
+local secretRealmDialog_ = nil
 
 local ClearCloudSaveAndRestart = nil
 local CreateLoginScreen = nil
@@ -368,6 +371,13 @@ local function DestroyInventoryScene()
     end
 end
 
+local function DestroySecretRealmDialog()
+    if secretRealmDialog_ then
+        secretRealmDialog_:Destroy()
+        secretRealmDialog_ = nil
+    end
+end
+
 local function UpdateStageForestLayers()
     if not stageForestLayerA_ or not stageForestLayerB_ then
         return
@@ -508,6 +518,7 @@ local EnterHomeScreen
 local EnterBattleScreen
 local EnterFormationScreen
 local EnterInventoryScreen
+local ShowSecretRealmDialog
 
 local function CreateBottomNav(label, index)
     local leftOffsets = { 0, 2, 4, 4, 2 }
@@ -906,7 +917,9 @@ local function CreateHomeScreen()
                         justifyContent = "center",
                         onClick = function()
                             print("[Home] Secret challenge clicked")
-                            EnterBattleScreen()
+                            if ShowSecretRealmDialog then
+                                ShowSecretRealmDialog()
+                            end
                         end,
                         children = {
                             UI.Label {
@@ -961,14 +974,35 @@ EnterHomeScreen = function()
     DestroyBattleScene()
     DestroyFormationScene()
     DestroyInventoryScene()
+    DestroySecretRealmDialog()
     ShowRoot(CreateHomeScreen())
     UpdateHomeLabels()
     print("[Main] Entered home screen")
 end
 
+ShowSecretRealmDialog = function()
+    DestroySecretRealmDialog()
+    secretRealmDialog_ = SecretRealmDialog:new({
+        saveDataProvider = function()
+            return SaveManager.GetSaveData()
+        end,
+        onClose = function()
+            DestroySecretRealmDialog()
+            EnterHomeScreen()
+        end,
+        onChallenge = function()
+            DestroySecretRealmDialog()
+            EnterBattleScreen()
+        end,
+    })
+    ShowRoot(secretRealmDialog_:CreateRoot())
+    print("[Main] Opened secret realm dialog")
+end
+
 EnterBattleScreen = function()
     DestroyFormationScene()
     DestroyInventoryScene()
+    DestroySecretRealmDialog()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
     ClearHomeRuntimeLabels()
@@ -986,6 +1020,7 @@ end
 EnterFormationScreen = function()
     DestroyBattleScene()
     DestroyInventoryScene()
+    DestroySecretRealmDialog()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
     ClearHomeRuntimeLabels()
@@ -1011,6 +1046,7 @@ end
 EnterInventoryScreen = function()
     DestroyBattleScene()
     DestroyFormationScene()
+    DestroySecretRealmDialog()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
     ClearHomeRuntimeLabels()
@@ -1037,6 +1073,7 @@ local function ReturnToLoginScreen(statusText)
     DestroyBattleScene()
     DestroyFormationScene()
     DestroyInventoryScene()
+    DestroySecretRealmDialog()
     ClearHomeRuntimeLabels()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
@@ -1177,6 +1214,7 @@ function Stop()
     DestroyBattleScene()
     DestroyFormationScene()
     DestroyInventoryScene()
+    DestroySecretRealmDialog()
     UI.Shutdown()
     uiRoot_ = nil
     loginButton_ = nil

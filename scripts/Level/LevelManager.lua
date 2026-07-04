@@ -61,6 +61,92 @@ local function getSubLevel(stage, subLevelId)
     return subLevels[subLevelId] or subLevels[1]
 end
 
+local function formatNumber(value)
+    value = math.floor(tonumber(value) or 0)
+    if value >= 100000000 then
+        return string.format("%.1f亿", value / 100000000)
+    end
+    if value >= 10000 then
+        return string.format("%.1f万", value / 10000)
+    end
+    return tostring(value)
+end
+
+local function getConfiguredRewards(source, keys)
+    for _, key in ipairs(keys) do
+        local rewards = source and source[key]
+        if type(rewards) == "table" and #rewards > 0 then
+            return rewards
+        end
+    end
+    return nil
+end
+
+local function normalizeReward(rawReward, fallbackIcon)
+    if type(rawReward) == "table" then
+        local name = rawReward.name or rawReward.itemName or rawReward.id or rawReward.itemId or "奖励"
+        local count = rawReward.count or rawReward.num or rawReward.amount or rawReward.value or 1
+        local icon = rawReward.icon or rawReward.iconText or fallbackIcon or "奖"
+        return { name = tostring(name), count = math.max(1, math.floor(tonumber(count) or 1)), icon = tostring(icon) }
+    end
+    return { name = tostring(rawReward or "奖励"), count = 1, icon = fallbackIcon or "奖" }
+end
+
+local function buildFallbackFirstClearRewards(stage, subLevel)
+    local stageId = math.max(1, math.floor(tonumber(stage and stage.stageId) or 1))
+    local subLevelId = math.max(1, math.floor(tonumber(subLevel and subLevel.subLevelId) or 1))
+    local difficulty = math.max(1, math.floor(tonumber(stage and stage.difficulty) or 1))
+    local rewards = {
+        { name = "金币", count = 800 + stageId * 160 + subLevelId * 40, icon = "金" },
+        { name = "伙伴经验", count = 45 + difficulty * 10 + subLevelId * 5, icon = "书" },
+    }
+    if subLevel and subLevel.isBoss then
+        rewards[#rewards + 1] = { name = "召唤券", count = 1, icon = "券" }
+    end
+    return rewards
+end
+
+local function buildFallbackSweepRewards(stage, subLevel)
+    local stageId = math.max(1, math.floor(tonumber(stage and stage.stageId) or 1))
+    local subLevelId = math.max(1, math.floor(tonumber(subLevel and subLevel.subLevelId) or 1))
+    local rewards = {
+        { name = "金币", count = 260 + stageId * 60 + subLevelId * 18, icon = "金" },
+        { name = "伙伴经验", count = 18 + subLevelId * 3, icon = "书" },
+    }
+    if subLevel and subLevel.isBoss then
+        rewards[#rewards + 1] = { name = "魔力结晶", count = 1, icon = "晶" }
+    end
+    return rewards
+end
+
+local function buildRewards(stage, subLevel, rewardKeys, fallbackBuilder, fallbackIcon)
+    local configured = getConfiguredRewards(subLevel, rewardKeys) or getConfiguredRewards(stage, rewardKeys)
+    if configured then
+        local rewards = {}
+        for _, reward in ipairs(configured) do
+            rewards[#rewards + 1] = normalizeReward(reward, fallbackIcon)
+        end
+        return rewards
+    end
+    return fallbackBuilder(stage, subLevel)
+end
+
+local function getClearedSubLevelCount(saveData)
+    local progress = saveData and saveData.stageProgress or {}
+    return math.max(0, math.floor(tonumber(progress.clearedSubLevels) or 0))
+end
+
+local function getStageStartClearCount(stageId)
+    local total = 0
+    for _, stage in ipairs(getStages()) do
+        local currentStageId = math.floor(tonumber(stage.stageId) or 0)
+        if currentStageId < stageId then
+            total = total + #(stage.subLevels or {})
+        end
+    end
+    return total
+end
+
 local function getNpcClipDir(npcId)
     local dir = "image/npcClip/" .. tostring(npcId)
     local testPath = dir .. "/01.png"
@@ -191,6 +277,58 @@ function LevelManager.AdvanceStageProgress(saveData)
     end
     saveData.stageProgress.clearedSubLevels = math.floor(tonumber(saveData.stageProgress.clearedSubLevels) or 0) + 1
     return true
+end
+
+function LevelManager.IsSubLevelCleared(saveData, stageId, subLevelId)
+    local cleared = getClearedSubLevelCount(saveData)
+    local globalIndex = getStageStartClearCount(math.max(1, math.floor(tonumber(stageId) or 1))) + math.max(1, math.floor(tonumber(subLevelId) or 1))
+    return cleared >= globalIndex
+end
+
+function LevelManager.GetCurrentChapterSubLevels(saveData)
+    local stageId = LevelManager.GetCurrentStageProgress(saveData)
+    local stage = getStageById(stageId)
+    local result = {}
+    for _, subLevel in ipairs((stage and stage.subLevels) or {}) do
+        result[#result + 1] = LevelManager.BuildSubLevelInfo(saveData, stage, subLevel)
+    end
+    return stage, result
+end
+
+function LevelManager.BuildSubLevelInfo(saveData, stage, subLevel)
+    stage = type(stage) == "table" and stage or LevelManager.GetCurrentStage(saveData)
+    subLevel = type(subLevel) == "table" and subLevel or getSubLevel(stage, 1)
+    local stageId = math.max(1, math.floor(tonumber(stage and stage.stageId) or 1))
+    local subLevelId = math.max(1, math.floor(tonumber(subLevel and subLevel.subLevelId) or 1))
+    local sceneName = tostring(stage and stage.sceneName or "未知区域")
+    local isBoss = subLevel and subLevel.isBoss == true
+    local enemies = {}
+    local totalPower = 0
+    for index, enemy in ipairs((subLevel and subLevel.enemies) or {}) do
+        local enemyData = LevelManager.BuildEnemyHeroData(enemy, index)
+        enemyData.slotId = LevelManager.GetEnemySlotId(index)
+        enemies[#enemies + 1] = enemyData
+        totalPower = totalPower + math.max(0, math.floor(tonumber(enemyData.power) or 0))
+    end
+    local firstRewards = buildRewards(stage, subLevel, { "firstClearRewards", "firstRewards", "firstDrop", "firstDrops", "rewards", "drops" }, buildFallbackFirstClearRewards, "奖")
+    local sweepRewards = buildRewards(stage, subLevel, { "sweepRewards", "sweepDrops", "repeatRewards", "repeatDrops" }, buildFallbackSweepRewards, "扫")
+    local cleared = LevelManager.IsSubLevelCleared(saveData, stageId, subLevelId)
+    return {
+        stageId = stageId,
+        subLevelId = subLevelId,
+        sceneName = sceneName,
+        name = string.format("%s-%d%s", sceneName, subLevelId, isBoss and " BOSS" or ""),
+        title = string.format("第%d章 %s-%d%s", stageId, sceneName, subLevelId, isBoss and " BOSS" or ""),
+        isBoss = isBoss,
+        bossName = tostring(subLevel and subLevel.bossName or ""),
+        cleared = cleared,
+        enemies = enemies,
+        totalPower = totalPower,
+        totalPowerText = formatNumber(totalPower),
+        firstClearRewards = firstRewards,
+        sweepRewards = sweepRewards,
+        previewRewards = cleared and sweepRewards or firstRewards,
+    }
 end
 
 return LevelManager

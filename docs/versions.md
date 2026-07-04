@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-04 | secret-realm-challenge-dialog | 新增秘境挑战弹窗：点击主界面“秘境挑战”后打开背包/阵型同风格棕色米黄弹窗，左侧展示当前章节关卡列表和首通掉落，右侧展示关卡阵型、总战力、首通奖励，已通关关卡显示扫荡掉落；LSP 0 Error，官方构建成功。 |
 | 2026-07-04 | hanginglist-max-five-owned-heroes | 主界面 `Hanginglist` 最多同时显示 5 个已拥有勇者；拥有不足 5 个时只显示实际拥有数量，其余槽位隐藏；候选充足时保留 3-5 秒随机替换显示位逻辑；LSP 0 Error，官方构建成功。 |
 | 2026-07-04 | settings-clear-cloud-save | 主界面顶部“设置”按钮临时接入清档：删除当前玩家云存档 legacy/meta/字段级所有 key，成功后回到登录界面，重新登录会创建新存档；LSP 服务不可连接，官方构建成功。 |
 | 2026-07-03 | top-hud-dynamic-time-resources | 顶部 HUD 的 `time` 改为 24 小时制当前时间，`coinValue`/`diamondValue`/`crystalValue` 绑定玩家金币、蓝钻、白钻；新增统一刷新和页面重建后重新绑定逻辑，资源变化后同步更新显示；LSP 0 Error，官方构建成功。 |
