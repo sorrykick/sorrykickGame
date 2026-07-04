@@ -68,6 +68,8 @@
 
 ## POST 日志
 
+- 2026-07-05：按 Inspector 同步阵型页勇者列表卡片状态 Label：`FormationScene:CreateHeroCard()` 中“出战/待机”状态文本 `top` 从 40 调整为 70，仅修改目标 Label。LSP 0 Error，官方构建成功。
+
 - 2026-07-05：按 Inspector 删除秘境挑战底部操作区“关闭”按钮：仅修改 `SecretRealmDialog:CreateFooter()` 中目标按钮，保留左侧提示文本和右侧挑战/扫荡按钮及父级布局不变。LSP 0 Error，官方构建成功。
 
 - 2026-07-05：新增勇者养成界面：`scripts/Hero/HeroGrowthScene.lua` 复用背包/阵型棕色米黄全屏风格，支持勇者列表选择、升级、升星、按配置学习技能；主界面 `Hanginglist` 勇者图与“勇者”圆形入口接入该页面，点击子勇者时阻止事件冒泡避免同时切换动作；`SaveSchema` 新增并规范化 `hero.level`，升级/升星/学习技能分别保存 `heroes` 与资源字段 dirty。LSP 0 Error，官方构建成功。

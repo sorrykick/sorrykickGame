@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-05 | formation-hero-status-label-top | 按 Inspector 将阵型页勇者列表卡片中的出战/待机状态 Label 下移：`top` 从 40 调整为 70，仅修改目标 Label；LSP 0 Error，官方构建成功。 |
 | 2026-07-05 | secret-realm-remove-footer-close | 按 Inspector 删除秘境挑战底部操作区的“关闭”按钮，仅保留提示文本和挑战/扫荡按钮；LSP 0 Error，官方构建成功。 |
 | 2026-07-05 | hero-growth-scene | 新增勇者养成界面：主界面 `Hanginglist` 勇者图和“勇者”圆形入口可进入 `HeroGrowthScene`，页面复用背包/阵型风格，支持勇者列表选择、等级提升、升星和按配置学习技能；升级消耗金币，升星消耗白钻，学习技能消耗蓝钻，并通过 dirty 字段保存 `heroes/coin/crystal/diamond`；`SaveSchema` 新增并规范化 `hero.level`；LSP 0 Error，官方构建成功。 |
 | 2026-07-05 | secret-realm-formation-board-sync | 秘境挑战界面的“关卡阵型信息”改为与阵型页一致的 3×3 九宫格站位样式：复用 98×104 站位格、前/中/后三排顺序、米黄底板和品质边框，并使用 `NormalizedSprite` 展示敌方头像与战力；LSP 0 Error，官方构建成功。 |

@@ -657,7 +657,7 @@ function FormationScene:CreateHeroCard(hero, formation)
             UI.Label { id = "hero_1", text = hero.name, width = 142, height = 26, position = "absolute", left = 100, top = 5, fontSize = 17, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
             UI.Label { id = "hero_1", text = hero.job .. " · " .. hero.faction, width = 126, height = 22, position = "absolute", left = 100, top = 40, fontSize = 13, fontColor = { 74, 56, 42, 220 }, maxLines = 1 },
             UI.Label { id = "hero_1", text = "战力 " .. FormatNumber(hero.power), width = 126, height = 24, position = "absolute", left = 100, top = 74, fontSize = 14, fontWeight = "bold", fontColor = { 202, 92, 44, 255 }, maxLines = 1 },
-            UI.Label { text = assigned and "出战" or "待机", width = 40, height = 24, position = "absolute", right = 8, top = 40, fontSize = 13, fontWeight = "bold", fontColor = assigned and { 202, 92, 44, 255 } or { 74, 56, 42, 220 }, textAlign = "center", maxLines = 1 },
+            UI.Label { text = assigned and "出战" or "待机", width = 40, height = 24, position = "absolute", right = 8, top = 70, fontSize = 13, fontWeight = "bold", fontColor = assigned and { 202, 92, 44, 255 } or { 74, 56, 42, 220 }, textAlign = "center", maxLines = 1 },
         },
     }
 end
