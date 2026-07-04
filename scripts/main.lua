@@ -21,11 +21,15 @@ local TITLE_TOP_IMAGE = "image/P-标题-上.png"
 local HERO1_CLIP_DIR = "image/npcClip/0001"
 local HOME_HERO_SWITCH_MIN_SECONDS = 3.0
 local HOME_HERO_SWITCH_MAX_SECONDS = 5.0
+local HOME_HERO_MAX_DISPLAY = 5
+local HOME_HERO_WIDTH = 150
+local HOME_HERO_HEIGHT = 120
+local HOME_HERO_SLOT_LEFTS = { 2, 142, 282, 422, 562 }
 
 local HERO1_ANIMATIONS = {
-    idle = { label = "待机", frames = { 1, 2, 3, 4 }, fps = 5, loop = true, width = 150, height = 120 },
-    move = { label = "移动", frames = { 6, 7, 8, 9 }, fps = 8, loop = true, width = 150, height = 120 },
-    attack = { label = "攻击", frames = { 10, 11, 12, 13, 14 }, fps = 10, loop = false, returnTo = "move", width = 150, height = 120 },
+    idle = { label = "待机", frames = { 1, 2, 3, 4 }, fps = 5, loop = true, width = HOME_HERO_WIDTH, height = HOME_HERO_HEIGHT },
+    move = { label = "移动", frames = { 6, 7, 8, 9 }, fps = 8, loop = true, width = HOME_HERO_WIDTH, height = HOME_HERO_HEIGHT },
+    attack = { label = "攻击", frames = { 10, 11, 12, 13, 14 }, fps = 10, loop = false, returnTo = "move", width = HOME_HERO_WIDTH, height = HOME_HERO_HEIGHT },
 }
 local HERO1_ACTION_ORDER = { "move", "attack" }
 
@@ -51,8 +55,8 @@ local stageTitleLabel_ = nil
 local stageForestLayerA_ = nil
 ---@type Widget|nil
 local stageForestLayerB_ = nil
----@type Widget|nil
-local hero1Sprite_ = nil
+---@type table
+local homeHeroSprites_ = {}
 ---@type table|nil
 local battleScene_ = nil
 ---@type table|nil
@@ -72,7 +76,7 @@ local isClearingCloudSave_ = false
 local pendingLoginStatusText_ = nil
 local stageForestOffset_ = 0
 local topResourceRefreshTimer_ = 0
-local hero1ClipDir_ = HERO1_CLIP_DIR
+local homeDisplayedHeroes_ = {}
 local hero1CurrentHeroId_ = nil
 local hero1SwitchTimer_ = 0
 local hero1SwitchInterval_ = HOME_HERO_SWITCH_MIN_SECONDS
@@ -129,6 +133,10 @@ local function GetHeroFramePath(clipDir, frameNumber)
     return string.format("%s/%02d.png", tostring(clipDir or HERO1_CLIP_DIR), frameNumber)
 end
 
+local function GetHeroId(hero)
+    return tostring(hero and (hero.id or hero.npcId or hero.configId) or "")
+end
+
 local function SetHero1Animation(name)
     local anim = HERO1_ANIMATIONS[name]
     if not anim then
@@ -140,12 +148,16 @@ local function SetHero1Animation(name)
     hero1FrameIndex_ = 1
     hero1FrameTimer_ = 0
 
-    if hero1Sprite_ then
-        hero1Sprite_:SetStyle({
-            width = anim.width,
-            height = anim.height,
-            backgroundImage = GetHeroFramePath(hero1ClipDir_, anim.frames[hero1FrameIndex_]),
-        })
+    for index, sprite in ipairs(homeHeroSprites_) do
+        local hero = homeDisplayedHeroes_[index]
+        if sprite and hero then
+            sprite:SetStyle({
+                visible = true,
+                width = anim.width,
+                height = anim.height,
+                backgroundImage = GetHeroFramePath(hero.clipDir, anim.frames[hero1FrameIndex_]),
+            })
+        end
     end
 
     print("[Hero1] Play animation: " .. anim.label)
@@ -157,7 +169,7 @@ local function PlayNextHero1Action()
 end
 
 local function UpdateHero1Animation(timeStep)
-    if not hero1Sprite_ then return end
+    if #homeHeroSprites_ == 0 then return end
 
     local anim = HERO1_ANIMATIONS[hero1AnimName_]
     if not anim then return end
@@ -172,12 +184,17 @@ local function UpdateHero1Animation(timeStep)
         if anim.loop then
             hero1FrameIndex_ = 1
         else
-            SetHero1Animation(anim.returnTo or "idle")
+            SetHero1Animation(anim.returnTo or "move")
             return
         end
     end
 
-    hero1Sprite_:SetBackgroundImage(GetHeroFramePath(hero1ClipDir_, anim.frames[hero1FrameIndex_]))
+    for index, sprite in ipairs(homeHeroSprites_) do
+        local hero = homeDisplayedHeroes_[index]
+        if sprite and hero then
+            sprite:SetBackgroundImage(GetHeroFramePath(hero.clipDir, anim.frames[hero1FrameIndex_]))
+        end
+    end
 end
 
 local function ScheduleNextHomeHeroSwitch()
@@ -196,43 +213,91 @@ local function GetOwnedDisplayHeroes()
     return result
 end
 
-local function SelectRandomHomeHero(forceDifferent)
+local function PickInitialHomeHeroes(heroes)
+    local pool = {}
+    for _, hero in ipairs(heroes or {}) do
+        pool[#pool + 1] = hero
+    end
+
+    homeDisplayedHeroes_ = {}
+    local count = math.min(HOME_HERO_MAX_DISPLAY, #pool)
+    for index = 1, count do
+        local pickIndex = math.random(1, #pool)
+        homeDisplayedHeroes_[index] = table.remove(pool, pickIndex)
+    end
+end
+
+local function RefreshHomeHeroSprites()
+    local anim = HERO1_ANIMATIONS[hero1AnimName_] or HERO1_ANIMATIONS.move
+    local frame = anim.frames[hero1FrameIndex_] or anim.frames[1]
+    for index, sprite in ipairs(homeHeroSprites_) do
+        local hero = homeDisplayedHeroes_[index]
+        if sprite then
+            sprite:SetStyle({
+                visible = hero ~= nil,
+                backgroundImage = hero and GetHeroFramePath(hero.clipDir, frame) or GetHeroFramePath(HERO1_CLIP_DIR, frame),
+            })
+        end
+    end
+end
+
+local function SelectHomeHeroes()
     local heroes = GetOwnedDisplayHeroes()
     if #heroes == 0 then
-        hero1CurrentHeroId_ = nil
-        hero1ClipDir_ = HERO1_CLIP_DIR
-        SetHero1Animation("move")
+        homeDisplayedHeroes_ = {}
+        RefreshHomeHeroSprites()
+        ScheduleNextHomeHeroSwitch()
+        print("[HomeHero] Display hero count: 0")
+        return
+    else
+        PickInitialHomeHeroes(heroes)
+    end
+
+    hero1CurrentHeroId_ = homeDisplayedHeroes_[1] and GetHeroId(homeDisplayedHeroes_[1]) or nil
+    SetHero1Animation("move")
+    ScheduleNextHomeHeroSwitch()
+    print("[HomeHero] Display hero count: " .. tostring(#homeDisplayedHeroes_))
+end
+
+local function ReplaceOneHomeHero()
+    local heroes = GetOwnedDisplayHeroes()
+    if #heroes <= #homeDisplayedHeroes_ or #homeDisplayedHeroes_ == 0 then
         ScheduleNextHomeHeroSwitch()
         return
     end
 
-    local candidates = heroes
-    if forceDifferent and #heroes > 1 and hero1CurrentHeroId_ then
-        candidates = {}
-        for _, hero in ipairs(heroes) do
-            if tostring(hero.id or hero.npcId or hero.configId or "") ~= tostring(hero1CurrentHeroId_) then
-                candidates[#candidates + 1] = hero
-            end
-        end
-        if #candidates == 0 then
-            candidates = heroes
+    local displayed = {}
+    for _, hero in ipairs(homeDisplayedHeroes_) do
+        displayed[GetHeroId(hero)] = true
+    end
+
+    local candidates = {}
+    for _, hero in ipairs(heroes) do
+        if not displayed[GetHeroId(hero)] then
+            candidates[#candidates + 1] = hero
         end
     end
 
+    if #candidates == 0 then
+        ScheduleNextHomeHeroSwitch()
+        return
+    end
+
+    local slotIndex = math.random(1, #homeDisplayedHeroes_)
     local selected = candidates[math.random(1, #candidates)]
-    hero1CurrentHeroId_ = tostring(selected.id or selected.npcId or selected.configId or "")
-    hero1ClipDir_ = tostring(selected.clipDir or HERO1_CLIP_DIR)
-    SetHero1Animation("move")
+    homeDisplayedHeroes_[slotIndex] = selected
+    hero1CurrentHeroId_ = GetHeroId(selected)
+    RefreshHomeHeroSprites()
     ScheduleNextHomeHeroSwitch()
-    print("[HomeHero] Switch display hero: " .. tostring(selected.name or hero1CurrentHeroId_))
+    print("[HomeHero] Replace display hero: " .. tostring(selected.name or hero1CurrentHeroId_))
 end
 
 local function UpdateHomeHeroSwitch(timeStep)
-    if not hero1Sprite_ then return end
+    if #homeHeroSprites_ == 0 then return end
 
     hero1SwitchTimer_ = hero1SwitchTimer_ + timeStep
     if hero1SwitchTimer_ >= hero1SwitchInterval_ then
-        SelectRandomHomeHero(true)
+        ReplaceOneHomeHero()
     end
 end
 
@@ -489,7 +554,8 @@ local function CreateBottomNav(label, index)
 end
 
 local function CreateHero1Actor()
-    hero1ClipDir_ = HERO1_CLIP_DIR
+    homeDisplayedHeroes_ = {}
+    homeHeroSprites_ = {}
     hero1CurrentHeroId_ = nil
     hero1SwitchTimer_ = 0
     hero1SwitchInterval_ = HOME_HERO_SWITCH_MIN_SECONDS
@@ -498,16 +564,23 @@ local function CreateHero1Actor()
     hero1FrameTimer_ = 0
     hero1ActionOrderIndex_ = 1
 
-    hero1Sprite_ = NormalizedSprite {
-        width = 150,
-        height = 120,
-        left = -283,
-        top = 0,
-        backgroundImage = GetHeroFramePath(hero1ClipDir_, HERO1_ANIMATIONS.move.frames[1]),
-        backgroundFit = "contain",
-        imageTint = { 255, 255, 255, 255 },
-        transition = "scale 0.12s easeOut",
-    }
+    local children = {}
+    for index = 1, HOME_HERO_MAX_DISPLAY do
+        local sprite = NormalizedSprite {
+            width = HOME_HERO_WIDTH,
+            height = HOME_HERO_HEIGHT,
+            position = "absolute",
+            left = HOME_HERO_SLOT_LEFTS[index] or ((index - 1) * 140 + 2),
+            top = 0,
+            visible = false,
+            backgroundImage = GetHeroFramePath(HERO1_CLIP_DIR, HERO1_ANIMATIONS.move.frames[1]),
+            backgroundFit = "contain",
+            imageTint = { 255, 255, 255, 255 },
+            transition = "scale 0.12s easeOut",
+        }
+        homeHeroSprites_[index] = sprite
+        children[index] = sprite
+    end
 
     return UI.Panel {
         id = "Hanginglist",
@@ -516,15 +589,11 @@ local function CreateHero1Actor()
         left = 0,
         width = 720,
         height = 148,
-        alignItems = "center",
-        justifyContent = "flex-end",
         backgroundColor = { 255, 255, 255, 0 },
         onClick = function()
             PlayNextHero1Action()
         end,
-        children = {
-            hero1Sprite_,
-        },
+        children = children,
     }
 end
 
@@ -690,7 +759,7 @@ end
 
 local function CreateHomeScreen()
     ClearHomeRuntimeLabels()
-    hero1Sprite_ = nil
+    homeHeroSprites_ = {}
 
     local root = UI.Panel {
         id = "homeScreen",
@@ -884,7 +953,7 @@ local function CreateHomeScreen()
     BindTopResourceLabels(root)
     offlineLabel_ = root:FindById("offlineRewardLabel")
     stageTitleLabel_ = root:FindById("stageTitleLabel")
-    SelectRandomHomeHero(false)
+    SelectHomeHeroes()
     return root
 end
 
@@ -903,7 +972,7 @@ EnterBattleScreen = function()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
     ClearHomeRuntimeLabels()
-    hero1Sprite_ = nil
+    homeHeroSprites_ = {}
 
     battleScene_ = GridBattleScene:new({
         onExit = function()
@@ -920,7 +989,7 @@ EnterFormationScreen = function()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
     ClearHomeRuntimeLabels()
-    hero1Sprite_ = nil
+    homeHeroSprites_ = {}
 
     formationScene_ = FormationScene:new({
         onExit = function()
@@ -945,7 +1014,7 @@ EnterInventoryScreen = function()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
     ClearHomeRuntimeLabels()
-    hero1Sprite_ = nil
+    homeHeroSprites_ = {}
 
     inventoryScene_ = InventoryScene:new({
         onExit = function()
@@ -971,7 +1040,8 @@ local function ReturnToLoginScreen(statusText)
     ClearHomeRuntimeLabels()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
-    hero1Sprite_ = nil
+    homeHeroSprites_ = {}
+    homeDisplayedHeroes_ = {}
     pendingLoginStatusText_ = statusText
     isLoggingIn_ = false
     ShowRoot(CreateLoginScreen())
@@ -1111,8 +1181,6 @@ function Stop()
     uiRoot_ = nil
     loginButton_ = nil
     loginStatusLabel_ = nil
-    isClearingCloudSave_ = false
-    pendingLoginStatusText_ = nil
     coinLabel_ = nil
     diamondLabel_ = nil
     crystalLabel_ = nil
@@ -1121,5 +1189,5 @@ function Stop()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
     ClearHomeRuntimeLabels()
-    hero1Sprite_ = nil
+    homeHeroSprites_ = {}
 end
