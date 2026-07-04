@@ -68,6 +68,8 @@
 
 ## POST 日志
 
+- 2026-07-05：按 Inspector 删除秘境挑战底部操作区“关闭”按钮：仅修改 `SecretRealmDialog:CreateFooter()` 中目标按钮，保留左侧提示文本和右侧挑战/扫荡按钮及父级布局不变。LSP 0 Error，官方构建成功。
+
 - 2026-07-05：新增勇者养成界面：`scripts/Hero/HeroGrowthScene.lua` 复用背包/阵型棕色米黄全屏风格，支持勇者列表选择、升级、升星、按配置学习技能；主界面 `Hanginglist` 勇者图与“勇者”圆形入口接入该页面，点击子勇者时阻止事件冒泡避免同时切换动作；`SaveSchema` 新增并规范化 `hero.level`，升级/升星/学习技能分别保存 `heroes` 与资源字段 dirty。LSP 0 Error，官方构建成功。
 
 - 2026-07-05：秘境挑战“关卡阵型信息”改为与阵型页一致的九宫格站位：`SecretRealmDialog` 引入 `NormalizedSprite`，复用 98×104 站位格、前/中/后三排顺序、米黄底板与品质边框，敌方槽位显示敌人名称、归一化头像和战力，空位显示站位标签。LSP 0 Error，官方构建成功。

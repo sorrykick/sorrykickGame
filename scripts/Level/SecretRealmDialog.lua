@@ -517,7 +517,6 @@ function SecretRealmDialog:CreateFooter(selected)
         gap = 12,
         children = {
             UI.Label { text = selected and (selected.cleared and "已通关关卡可查看扫荡掉落" or "未通关关卡展示首通奖励") or "", width = 330, height = 46, position = "absolute", left = 0, top = 0, fontSize = 18, fontColor = { 255, 235, 178, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 180 } }, maxLines = 2 },
-            UI.Button { text = "关闭", width = 137.65, height = 46, position = "absolute", left = 340, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 88, 46, 45, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:Close() end },
             UI.Button { text = selected and (selected.cleared and "扫荡" or "挑战") or "挑战", width = 137, height = 47, position = "absolute", left = 510, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, fontWeight = "bold", backgroundColor = { 202, 92, 44, 255 }, pressedBackgroundColor = { 155, 62, 36, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ChallengeSelected() end },
         },
     }
