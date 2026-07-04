@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-05 | secret-realm-formation-board-sync | 秘境挑战界面的“关卡阵型信息”改为与阵型页一致的 3×3 九宫格站位样式：复用 98×104 站位格、前/中/后三排顺序、米黄底板和品质边框，并使用 `NormalizedSprite` 展示敌方头像与战力；LSP 0 Error，官方构建成功。 |
 | 2026-07-04 | secret-realm-top-hud | 秘境挑战界面接入与主界面/背包页一致的顶部 HUD：通过 `createTopResourceRow` 复用时间、金币、蓝钻、白钻资源栏，打开秘境和切换关卡刷新时重新绑定 `time/coinValue/diamondValue/crystalValue`；LSP 0 Error，官方构建成功。 |
 | 2026-07-04 | secret-realm-inventory-background-sync | 秘境挑战界面顶部和底部背景改为与背包页一致：根节点使用 `image/page_background.png` 全屏背景，标题/章节信息直接挂在顶部背景上，底部返回按钮使用 `image/BT-返回.png`，底部操作区对齐背包页按钮位置；LSP 0 Error，官方构建成功。 |
 | 2026-07-04 | npc-clip-missing-resource-fallback | 修复关卡配置引用未打包 NPC 序列帧时报错：NPC 帧路径存在性检查统一改为 `cache:Exists()`，缺失时回退到 `image/npcClip/0001`；主界面、编队页、战斗页和 `NormalizedSprite` 均增加兜底，避免 `image/npcClip/0171/01.png` 等缺失资源错误；LSP 0 Error，官方构建成功。 |

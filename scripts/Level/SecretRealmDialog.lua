@@ -1,4 +1,5 @@
 local UI = require("urhox-libs/UI")
+local NormalizedSprite = require("UI.NormalizedSprite")
 local LevelManager = require("Level.LevelManager")
 
 local SecretRealmDialog = {}
@@ -15,19 +16,37 @@ local QUALITY_COLORS = {
     UR = { 255, 237, 0, 255 },
 }
 
-local SLOT_POSITIONS = {
-    front1 = { left = 18, top = 54, label = "前1" },
-    front2 = { left = 18, top = 133, label = "前2" },
-    front3 = { left = 18, top = 212, label = "前3" },
-    mid1 = { left = 119, top = 54, label = "中1" },
-    mid2 = { left = 119, top = 133, label = "中2" },
-    mid3 = { left = 119, top = 212, label = "中3" },
-    back1 = { left = 220, top = 54, label = "后1" },
-    back2 = { left = 220, top = 133, label = "后2" },
-    back3 = { left = 220, top = 212, label = "后3" },
+local SLOT_WIDTH = 98
+local SLOT_HEIGHT = 104
+local ENEMY_IMAGE = "image/npcClip/0001/01.png"
+
+local SLOT_ROWS = {
+    { label = "前排", ids = { "front1", "front2", "front3" } },
+    { label = "中排", ids = { "mid1", "mid2", "mid3" } },
+    { label = "后排", ids = { "back1", "back2", "back3" } },
 }
 
-local SLOT_ORDER = { "front1", "front2", "front3", "mid1", "mid2", "mid3", "back1", "back2", "back3" }
+local SLOT_LABELS = {
+    front1 = "前1",
+    front2 = "前2",
+    front3 = "前3",
+    mid1 = "中1",
+    mid2 = "中2",
+    mid3 = "中3",
+    back1 = "后1",
+    back2 = "后2",
+    back3 = "后3",
+}
+
+local function GetEnemyPreviewImage(enemy)
+    if enemy and enemy.clipDir and enemy.clipDir ~= "" then
+        local path = tostring(enemy.clipDir) .. "/01.png"
+        if not cache or cache:Exists(path) then
+            return path
+        end
+    end
+    return ENEMY_IMAGE
+end
 
 local function FormatNumber(value)
     value = math.floor(tonumber(value) or 0)
@@ -359,51 +378,80 @@ function SecretRealmDialog:CreatePowerPanel(selected)
 end
 
 function SecretRealmDialog:CreateEnemyFormationPanel(selected)
-    local slots = {}
-    local enemyBySlot = {}
-    for _, enemy in ipairs(selected.enemies or {}) do
-        enemyBySlot[enemy.slotId] = enemy
-    end
-    for _, slotId in ipairs(SLOT_ORDER) do
-        local slot = SLOT_POSITIONS[slotId]
-        slots[#slots + 1] = self:CreateEnemySlot(slotId, slot, enemyBySlot[slotId])
-    end
     return UI.Panel {
         width = "100%",
-        height = 346,
-        padding = 10,
-        backgroundColor = { 207, 166, 119, 170 },
-        borderColor = { 113, 74, 58, 255 },
-        borderWidth = 2,
-        borderRadius = 16,
+        height = 386,
+        padding = 12,
+        gap = 10,
+        backgroundColor = { 245, 228, 200, 245 },
+        borderColor = { 68, 45, 25, 255 },
+        borderWidth = 3,
+        borderRadius = 18,
         children = {
-            UI.Label { text = "关卡阵型信息", position = "absolute", left = 12, top = 8, fontSize = 20, fontWeight = "bold", fontColor = { 68, 45, 25, 255 } },
-            table.unpack(slots),
+            UI.Label { text = "关卡阵型信息", fontSize = 24, fontWeight = "bold", fontColor = { 117, 79, 62, 255 }, textAlign = "center" },
+            self:CreateEnemySlotRows(selected),
         },
     }
 end
 
-function SecretRealmDialog:CreateEnemySlot(slotId, slot, enemy)
-    local borderColor = enemy and GetQualityColor(enemy) or { 117, 79, 62, 160 }
-    local bgColor = enemy and { 245, 228, 200, 255 } or { 207, 166, 119, 130 }
+function SecretRealmDialog:CreateEnemySlotRows(selected)
+    local enemyBySlot = {}
+    for _, enemy in ipairs((selected and selected.enemies) or {}) do
+        enemyBySlot[enemy.slotId] = enemy
+    end
+
+    local children = {}
+    for rowIndex, row in ipairs(SLOT_ROWS) do
+        for colIndex, slotId in ipairs(row.ids) do
+            children[#children + 1] = self:CreateEnemySlot(slotId, enemyBySlot[slotId], rowIndex, colIndex)
+        end
+    end
+
     return UI.Panel {
+        width = "91.8%",
+        height = 336,
+        position = "relative",
+        left = 15,
+        top = -1,
+        children = children,
+    }
+end
+
+function SecretRealmDialog:CreateEnemySlot(slotId, enemy, rowIndex, colIndex)
+    local slotLeft = ((colIndex or 1) - 1) * (SLOT_WIDTH + 8)
+    local slotTop = ((rowIndex or 1) - 1) * (SLOT_HEIGHT + 8)
+    return UI.Panel {
+        width = SLOT_WIDTH,
+        height = SLOT_HEIGHT,
         position = "absolute",
-        left = slot.left,
-        top = slot.top,
-        width = 88,
-        height = 70,
+        left = slotLeft,
+        top = slotTop,
+        flexDirection = "column",
+        flexWrap = "nowrap",
+        alignItems = "center",
+        justifyContent = "center",
         padding = 5,
-        backgroundColor = bgColor,
-        borderColor = borderColor,
+        gap = 3,
+        backgroundColor = enemy and { 207, 166, 119, 255 } or { 207, 166, 119, 160 },
+        borderColor = enemy and GetQualityColor(enemy) or { 68, 45, 25, 190 },
         borderWidth = enemy and 3 or 2,
-        borderRadius = 14,
-        children = enemy and {
-            UI.Label { text = enemy.name, width = "100%", fontSize = 13, fontWeight = "bold", fontColor = { 68, 45, 25, 255 }, textAlign = "center", maxLines = 1 },
-            UI.Label { text = enemy.profession .. " Lv." .. tostring(enemy.level), width = "100%", fontSize = 12, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 1 },
-            UI.Label { text = "战力 " .. FormatNumber(enemy.power), width = "100%", fontSize = 11, fontColor = { 172, 56, 38, 255 }, textAlign = "center", maxLines = 1 },
-        } or {
-            UI.Label { text = slot.label, fontSize = 15, fontColor = { 88, 46, 45, 150 }, textAlign = "center" },
-        },
+        borderRadius = 16,
+        children = self:CreateEnemySlotContent(slotId, enemy),
+    }
+end
+
+function SecretRealmDialog:CreateEnemySlotContent(slotId, enemy)
+    if not enemy then
+        return {
+            UI.Label { text = SLOT_LABELS[slotId], fontSize = 14, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center" },
+            UI.Label { text = "空位", fontSize = 14, fontColor = { 117, 79, 62, 220 }, textAlign = "center" },
+        }
+    end
+
+    return {
+        UI.Label { text = enemy.name, fontSize = 13, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 1 },
+        NormalizedSprite { width = 66, height = 48, backgroundImage = GetEnemyPreviewImage(enemy), imageTint = { 255, 235, 235, 255 } },
+        UI.Label { text = FormatNumber(enemy.power), fontSize = 13, fontColor = { 202, 92, 44, 255 }, textAlign = "center" },
     }
 end
 
