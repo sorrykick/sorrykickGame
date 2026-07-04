@@ -81,7 +81,10 @@ end
 
 local function GetHeroPreviewImage(hero)
     if hero and hero.clipDir and hero.clipDir ~= "" then
-        return tostring(hero.clipDir) .. "/01.png"
+        local path = tostring(hero.clipDir) .. "/01.png"
+        if not cache or cache:Exists(path) then
+            return path
+        end
     end
     return HERO_IMAGE
 end

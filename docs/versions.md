@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-04 | npc-clip-missing-resource-fallback | 修复关卡配置引用未打包 NPC 序列帧时报错：NPC 帧路径存在性检查统一改为 `cache:Exists()`，缺失时回退到 `image/npcClip/0001`；主界面、编队页、战斗页和 `NormalizedSprite` 均增加兜底，避免 `image/npcClip/0171/01.png` 等缺失资源错误；LSP 0 Error，官方构建成功。 |
 | 2026-07-04 | secret-realm-challenge-dialog | 新增秘境挑战弹窗：点击主界面“秘境挑战”后打开背包/阵型同风格棕色米黄弹窗，左侧展示当前章节关卡列表和首通掉落，右侧展示关卡阵型、总战力、首通奖励，已通关关卡显示扫荡掉落；LSP 0 Error，官方构建成功。 |
 | 2026-07-04 | hanginglist-max-five-owned-heroes | 主界面 `Hanginglist` 最多同时显示 5 个已拥有勇者；拥有不足 5 个时只显示实际拥有数量，其余槽位隐藏；候选充足时保留 3-5 秒随机替换显示位逻辑；LSP 0 Error，官方构建成功。 |
 | 2026-07-04 | settings-clear-cloud-save | 主界面顶部“设置”按钮临时接入清档：删除当前玩家云存档 legacy/meta/字段级所有 key，成功后回到登录界面，重新登录会创建新存档；LSP 服务不可连接，官方构建成功。 |

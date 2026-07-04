@@ -47,7 +47,7 @@
 - 存档系统已模块化：`scripts/Save/SaveSchema.lua`、`SaveValidator.lua`、`RuntimeSave.lua`、`SaveManager.lua`；`main.lua` 通过 `SaveManager.LoginSyncPlayerSave()` 登录读档，通过 `SaveManager.GetSaveData()` 读取运行时副本，通过 `SaveManager.CollectIdleReward()` 领取收益；登录/上传流程已按 `docs/login.md` 优化为字段级 dirty、版本递增、字段校验和、增量上传、下载/上传 3 次重试和旧整包存档兼容迁移。
 - 已新增 `scripts/Inventory/InventoryScene.lua`，实现与阵型页一致的 Yoga UI 棕色/米黄风格背包系统：分类 TAB、5 列物品格、详情面板、使用/整理/扩充/关闭按钮；主界面底部“背包”入口已接入；存档新增 `inventory` 字段并纳入增量 dirty 上传，默认 36 格和 6 个示例物品；小袋金币可使用并同时保存 `coin` 与 `inventory`。最近按 Inspector 同步背包布局：内容父级宽度 696，物品列表绝对定位为上方 693×76.8%，详情面板绝对定位到底部并使用 `image/IM-说明-底.png`，删除顶部 Header 包装节点并把标题、容量、返回按钮上提到根节点。
 - 勇者序列帧已接入主界面森林关卡区，默认使用 `assets/image/npcClip/0001/` 做 UI 序列帧动画：主界面 `Hanginglist` 最多显示 5 个玩家已拥有勇者，拥有不足 5 个时只显示实际拥有数量；每个显示位使用对应勇者 `clipDir` 的 06-09 移动帧做原地移动动作，每 3-5 秒在候选充足时替换其中一个当前显示位；左侧挑战徽章仍可触发攻击，右侧成长徽章触发移动。
-- 已新增 `scripts/UI/NormalizedSprite.lua`，按每张 `npcClip` 帧图的透明像素包围盒做归一化缩放/居中，已接入主界面 `Hanginglist`、阵型页勇者卡/站位预览、战斗页单位精灵，解决同界面不同勇者或不同动作因画布留白不同导致视觉大小不一致。
+- 已新增 `scripts/UI/NormalizedSprite.lua`，按每张 `npcClip` 帧图的透明像素包围盒做归一化缩放/居中，已接入主界面 `Hanginglist`、阵型页勇者卡/站位预览、战斗页单位精灵，解决同界面不同勇者或不同动作因画布留白不同导致视觉大小不一致；当前已增加缺失 NPC 序列帧兜底，主界面、编队页、战斗页和 `NormalizedSprite` 在 `image/npcClip/0171/01.png` 等帧资源不存在时会回退到 `image/npcClip/0001/`，并使用 `cache:Exists()` 做无报错存在性检查。
 - NPC/勇者数据已从 `docs/setting/npcdata.json` 生成到 `assets/Config/npc.json`，共 112 条。`SaveSchema` 通过 `ConfigManager` 读取 NPC 配置生成默认勇者列表，字段包括 `npcId/configId/name/quality/star/power/job/profession/faction/role/story/clipDir/skills`；旧存档若仍是占位勇者，会在 Normalize 时切换为配置生成的 NPC 勇者并重建默认阵容；阵型页和战斗场景均使用 `hero.clipDir` 显示对应 NPC 序列帧。
 - 关卡系统已接入 `docs/setting/level_design.json`：配置复制到 `assets/Config/level_design.json`，新增 `LevelManager` 读取 67 个章节/小关/BOSS/敌人配置；存档新增 `stageProgress`，主界面标题和关卡摘要显示当前章节小关，战斗场景按当前小关生成敌方单位并使用 `sceneImage` 切换 `BattleRes` 背景，胜利后推进关卡进度并保存。
 
@@ -61,6 +61,8 @@
 - 在 `GridBattleScene` 上继续实现寻路、技能范围、敌方 AI、攻击表现、胜负结算和战斗结果存档。
 
 ## POST 日志
+
+- 2026-07-04：修复 `image/npcClip/0171/01.png` 缺失资源错误：确认 `0171` 来自 `assets/Config/level_design.json` 敌方 `npcId`，但当前 `assets/image/npcClip/` 无对应目录；将主界面、编队页、战斗页和 `LevelManager` 的 NPC 帧/战斗背景存在性检查从可能触发缺失资源日志的 `cache:GetFile()` 改为 `cache:Exists()`，并在 `NormalizedSprite` 增加组件级 NPC 帧兜底，缺失时统一回退到 `image/npcClip/0001/`。LSP 0 Error，官方构建成功。
 
 - 2026-07-04：新增秘境挑战弹窗：`scripts/Level/SecretRealmDialog.lua` 使用 Yoga UI 实现与背包/阵型一致的棕色米黄弹窗；点击主界面“秘境挑战”后打开，左侧展示当前章节全部关卡与首通掉落，右侧展示选中关卡阵型信息、总战力、首通奖励，已通关关卡替换为扫荡掉落奖励；`LevelManager` 新增当前章节关卡列表、通关判断、敌方阵型/战力和奖励展示数据接口。LSP 0 Error，官方构建成功。
 

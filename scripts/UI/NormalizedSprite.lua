@@ -1574,6 +1574,25 @@ local IMAGE_BOUNDS = {
     ["image/npcClip/2023/14.png"] = { w = 530, h = 360, x1 = 215, y1 = 102, x2 = 358, y2 = 280 },
 }
 
+local FALLBACK_NPC_CLIP_DIR = "image/npcClip/0001"
+
+local function ResolveSpriteImagePath(imagePath)
+    if not imagePath or imagePath == "" then
+        return imagePath
+    end
+
+    if cache and imagePath:match("^image/npcClip/%d+/%d%d%.png$") and not cache:Exists(imagePath) then
+        local frameName = imagePath:match("([^/]+)$") or "01.png"
+        local fallbackPath = FALLBACK_NPC_CLIP_DIR .. "/" .. frameName
+        if cache:Exists(fallbackPath) then
+            return fallbackPath
+        end
+        return FALLBACK_NPC_CLIP_DIR .. "/01.png"
+    end
+
+    return imagePath
+end
+
 function NormalizedSprite:Init(props)
     ---@diagnostic disable-next-line: param-type-mismatch
     UI.Panel.Init(self, props)
@@ -1581,7 +1600,7 @@ end
 
 function NormalizedSprite:Render(nvg)
     local props = self.props
-    local imagePath = props.backgroundImage
+    local imagePath = ResolveSpriteImagePath(props.backgroundImage)
     if not imagePath or imagePath == "" then return end
 
     local imgHandle = ImageCache.Get(imagePath)

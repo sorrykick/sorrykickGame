@@ -133,7 +133,12 @@ local function FormatClockTime()
 end
 
 local function GetHeroFramePath(clipDir, frameNumber)
-    return string.format("%s/%02d.png", tostring(clipDir or HERO1_CLIP_DIR), frameNumber)
+    local dir = tostring(clipDir or HERO1_CLIP_DIR)
+    local path = string.format("%s/%02d.png", dir, frameNumber)
+    if cache and not cache:Exists(path) then
+        return string.format("%s/%02d.png", HERO1_CLIP_DIR, frameNumber)
+    end
+    return path
 end
 
 local function GetHeroId(hero)

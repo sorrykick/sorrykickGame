@@ -64,7 +64,7 @@ end
 local function GetNpcClipFramePath(clipDir, frameNumber)
     local dir = clipDir or "image/npcClip/0001"
     local path = string.format("%s/%02d.png", dir, frameNumber)
-    if cache and not cache:GetFile(path) then
+    if cache and not cache:Exists(path) then
         return string.format("image/npcClip/0001/%02d.png", frameNumber)
     end
     return path

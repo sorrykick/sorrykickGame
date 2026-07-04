@@ -150,7 +150,7 @@ end
 local function getNpcClipDir(npcId)
     local dir = "image/npcClip/" .. tostring(npcId)
     local testPath = dir .. "/01.png"
-    if cache and not cache:GetFile(testPath) then
+    if cache and not cache:Exists(testPath) then
         return "image/npcClip/0001"
     end
     return dir
@@ -248,7 +248,7 @@ end
 function LevelManager.GetStageSceneImagePath(stage)
     local sceneImage = stage and stage.sceneImage or "1"
     local path = "image/BattleRes/" .. tostring(sceneImage) .. ".png"
-    if cache and not cache:GetFile(path) then
+    if cache and not cache:Exists(path) then
         return "image/BattleRes/1.png"
     end
     return path
