@@ -4,6 +4,9 @@ local LevelManager = require("Level.LevelManager")
 local SecretRealmDialog = {}
 SecretRealmDialog.__index = SecretRealmDialog
 
+local DESIGN_WIDTH = 720
+local DESIGN_HEIGHT = 1280
+
 local QUALITY_COLORS = {
     N = { 181, 181, 181, 255 },
     R = { 162, 255, 148, 255 },
@@ -129,40 +132,49 @@ end
 function SecretRealmDialog:CreateRoot()
     local _, stage, subLevels = self:GetData()
     local selected = self:GetSelectedSubLevel(subLevels)
+    local title = stage and ("第" .. tostring(stage.stageId) .. "章 · " .. tostring(stage.sceneName)) or "秘境挑战"
     return UI.Panel {
         id = "secretRealmDialogRoot",
-        width = 720,
-        height = 1280,
-        backgroundColor = { 0, 0, 0, 148 },
-        justifyContent = "center",
-        alignItems = "center",
+        width = DESIGN_WIDTH,
+        height = DESIGN_HEIGHT,
+        backgroundColor = { 42, 30, 24, 255 },
+        overflow = "hidden",
         children = {
+            self:CreateBackground(),
+            UI.Label { text = "秘境挑战", position = "absolute", left = 19, top = 66, zIndex = 10, fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
+            UI.Label { text = title, position = "absolute", left = 330, top = 114, width = 368, zIndex = 10, fontSize = 20, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textAlign = "right", textStroke = { width = 2, color = { 0, 0, 0, 220 } }, maxLines = 1 },
+            UI.Button { width = 164, height = 58, position = "absolute", left = 0, top = 1183, zIndex = 10, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, fontSize = 18, backgroundImage = "image/BT-返回.png", backgroundFit = "cover", backgroundColor = { 251, 251, 251, 0 }, opacity = 1, textColor = { 255, 255, 255, 0 }, borderRadius = 0, onClick = function() self:Close() end },
             UI.Panel {
-                width = 680,
-                height = 930,
-                backgroundColor = { 58, 38, 28, 248 },
-                borderColor = { 68, 45, 25, 255 },
-                borderWidth = 4,
-                borderRadius = 24,
-                padding = 14,
-                gap = 10,
+                position = "absolute",
+                left = 16,
+                right = 26,
+                top = 170,
+                height = 890,
+                zIndex = 5,
+                flexDirection = "row",
+                gap = 12,
                 children = {
-                    self:CreateHeader(stage),
-                    UI.Panel {
-                        width = "100%",
-                        flexGrow = 1,
-                        flexBasis = 0,
-                        flexDirection = "row",
-                        gap = 12,
-                        children = {
-                            self:CreateLevelList(subLevels),
-                            self:CreateDetailPanel(selected),
-                        },
-                    },
-                    self:CreateFooter(selected),
+                    self:CreateLevelList(subLevels),
+                    self:CreateDetailPanel(selected),
                 },
             },
+            self:CreateFooter(selected),
         },
+    }
+end
+
+function SecretRealmDialog:CreateBackground()
+    return UI.Panel {
+        id = "background",
+        position = "absolute",
+        left = -1,
+        top = -1,
+        right = 1,
+        bottom = 1,
+        zIndex = 0,
+        backgroundImage = "image/page_background.png",
+        backgroundFit = "cover",
+        backgroundColor = { 0, 0, 0, 255 },
     }
 end
 
@@ -430,16 +442,18 @@ end
 
 function SecretRealmDialog:CreateFooter(selected)
     return UI.Panel {
-        width = "100%",
-        height = 62,
+        position = "absolute",
+        width = "95.2%",
+        height = 51,
+        left = 25,
+        top = 1113,
+        zIndex = 10,
         flexDirection = "row",
-        alignItems = "center",
-        justifyContent = "flex-end",
         gap = 12,
         children = {
-            UI.Label { text = selected and (selected.cleared and "已通关关卡可查看扫荡掉落" or "未通关关卡展示首通奖励") or "", flexGrow = 1, flexShrink = 1, fontSize = 18, fontColor = { 255, 235, 178, 255 } },
-            UI.Button { text = "关闭", width = 120, height = 46, fontSize = 20, backgroundColor = { 117, 79, 62, 255 }, pressedBackgroundColor = { 88, 46, 45, 255 }, textColor = { 255, 245, 220, 255 }, borderRadius = 18, onClick = function() self:Close() end },
-            UI.Button { text = selected and (selected.cleared and "扫荡" or "挑战") or "挑战", width = 132, height = 46, fontSize = 22, fontWeight = "bold", backgroundColor = { 202, 92, 44, 255 }, pressedBackgroundColor = { 155, 62, 36, 255 }, textColor = { 255, 245, 220, 255 }, borderRadius = 18, onClick = function() self:ChallengeSelected() end },
+            UI.Label { text = selected and (selected.cleared and "已通关关卡可查看扫荡掉落" or "未通关关卡展示首通奖励") or "", width = 330, height = 46, position = "absolute", left = 0, top = 0, fontSize = 18, fontColor = { 255, 235, 178, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 180 } }, maxLines = 2 },
+            UI.Button { text = "关闭", width = 137.65, height = 46, position = "absolute", left = 340, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 88, 46, 45, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:Close() end },
+            UI.Button { text = selected and (selected.cleared and "扫荡" or "挑战") or "挑战", width = 137, height = 47, position = "absolute", left = 510, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, fontWeight = "bold", backgroundColor = { 202, 92, 44, 255 }, pressedBackgroundColor = { 155, 62, 36, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ChallengeSelected() end },
         },
     }
 end
