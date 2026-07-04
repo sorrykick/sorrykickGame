@@ -991,6 +991,12 @@ ShowSecretRealmDialog = function()
         saveDataProvider = function()
             return SaveManager.GetSaveData()
         end,
+        createTopResourceRow = function()
+            return CreateTopResourceRow(SaveManager.GetSaveData())
+        end,
+        onRootChanged = function(root)
+            BindTopResourceLabels(root)
+        end,
         onClose = function()
             DestroySecretRealmDialog()
             EnterHomeScreen()
@@ -1000,7 +1006,9 @@ ShowSecretRealmDialog = function()
             EnterBattleScreen()
         end,
     })
-    ShowRoot(secretRealmDialog_:CreateRoot())
+    local root = secretRealmDialog_:CreateRoot()
+    ShowRoot(root)
+    BindTopResourceLabels(root)
     print("[Main] Opened secret realm dialog")
 end
 

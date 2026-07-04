@@ -58,6 +58,8 @@ function SecretRealmDialog:new(options)
     o.onClose = options and options.onClose or nil
     o.onChallenge = options and options.onChallenge or nil
     o.saveDataProvider = options and options.saveDataProvider or nil
+    o.createTopResourceRow = options and options.createTopResourceRow or nil
+    o.onRootChanged = options and options.onRootChanged or nil
     o.root = nil
     o.selectedSubLevelId = nil
     o.stage = nil
@@ -110,6 +112,9 @@ end
 function SecretRealmDialog:Refresh()
     self.root = self:CreateRoot()
     UI.SetRoot(self.root, true)
+    if self.onRootChanged then
+        self.onRootChanged(self.root)
+    end
 end
 
 function SecretRealmDialog:SelectSubLevel(subLevelId)
@@ -133,33 +138,45 @@ function SecretRealmDialog:CreateRoot()
     local _, stage, subLevels = self:GetData()
     local selected = self:GetSelectedSubLevel(subLevels)
     local title = stage and ("第" .. tostring(stage.stageId) .. "章 · " .. tostring(stage.sceneName)) or "秘境挑战"
+    local children = {
+        self:CreateBackground(),
+    }
+    if self.createTopResourceRow then
+        children[#children + 1] = UI.Panel {
+            position = "absolute",
+            top = 10,
+            left = 12,
+            right = 12,
+            zIndex = 20,
+            children = { self.createTopResourceRow() },
+        }
+    end
+    table.insert(children, UI.Label { text = "秘境挑战", position = "absolute", left = 19, top = 66, zIndex = 10, fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } })
+    table.insert(children, UI.Label { text = title, position = "absolute", left = 330, top = 114, width = 368, zIndex = 10, fontSize = 20, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textAlign = "right", textStroke = { width = 2, color = { 0, 0, 0, 220 } }, maxLines = 1 })
+    table.insert(children, UI.Button { width = 164, height = 58, position = "absolute", left = 0, top = 1183, zIndex = 10, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, fontSize = 18, backgroundImage = "image/BT-返回.png", backgroundFit = "cover", backgroundColor = { 251, 251, 251, 0 }, opacity = 1, textColor = { 255, 255, 255, 0 }, borderRadius = 0, onClick = function() self:Close() end })
+    table.insert(children, UI.Panel {
+        position = "absolute",
+        left = 16,
+        right = 26,
+        top = 170,
+        height = 890,
+        zIndex = 5,
+        flexDirection = "row",
+        gap = 12,
+        children = {
+            self:CreateLevelList(subLevels),
+            self:CreateDetailPanel(selected),
+        },
+    })
+    table.insert(children, self:CreateFooter(selected))
+
     return UI.Panel {
         id = "secretRealmDialogRoot",
         width = DESIGN_WIDTH,
         height = DESIGN_HEIGHT,
         backgroundColor = { 42, 30, 24, 255 },
         overflow = "hidden",
-        children = {
-            self:CreateBackground(),
-            UI.Label { text = "秘境挑战", position = "absolute", left = 19, top = 66, zIndex = 10, fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
-            UI.Label { text = title, position = "absolute", left = 330, top = 114, width = 368, zIndex = 10, fontSize = 20, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textAlign = "right", textStroke = { width = 2, color = { 0, 0, 0, 220 } }, maxLines = 1 },
-            UI.Button { width = 164, height = 58, position = "absolute", left = 0, top = 1183, zIndex = 10, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, fontSize = 18, backgroundImage = "image/BT-返回.png", backgroundFit = "cover", backgroundColor = { 251, 251, 251, 0 }, opacity = 1, textColor = { 255, 255, 255, 0 }, borderRadius = 0, onClick = function() self:Close() end },
-            UI.Panel {
-                position = "absolute",
-                left = 16,
-                right = 26,
-                top = 170,
-                height = 890,
-                zIndex = 5,
-                flexDirection = "row",
-                gap = 12,
-                children = {
-                    self:CreateLevelList(subLevels),
-                    self:CreateDetailPanel(selected),
-                },
-            },
-            self:CreateFooter(selected),
-        },
+        children = children,
     }
 end
 

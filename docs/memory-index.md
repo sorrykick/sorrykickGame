@@ -34,7 +34,7 @@
 - 统一核心表达对象为“伙伴”。
 - 创建 720×1280 竖屏 Yoga UI 登录主界面，背景图为 `image/login_background.png`，中央按钮为“登录”。
 - 登录按钮已接入“请求存档 → 读取玩家数据 → 离线收益结算 → 请求更新存档 → 跳转主界面”流程。
-- 创建参考图风格的游戏主界面，并已从临时整屏参考图升级为分层图片资源 + Yoga UI 叠加：`main_bg_blur.png`、`stage_forest_bg.png`、资源图标、顶部功能图标、挑战徽章、收益条、秘境按钮、功能按钮、底部导航等均已接入；顶部 HUD 的 `time` 按 24 小时制显示当前时间，`coinValue`/`diamondValue`/`crystalValue` 绑定玩家金币、蓝钻、白钻并在数据变化、页面切换或页面内部刷新后同步更新；顶部“设置”按钮临时接入清档功能，点击后删除云存档所有 key 并回到登录界面重新进游戏；“秘境挑战”按钮已接入秘境挑战界面，顶部和底部背景与背包页一致：根节点使用 `image/page_background.png`，底部返回按钮使用 `image/BT-返回.png`，左侧展示当前章节关卡列表和首通掉落，右侧展示选中关卡阵型、总战力、首通奖励或已通关扫荡奖励。
+- 创建参考图风格的游戏主界面，并已从临时整屏参考图升级为分层图片资源 + Yoga UI 叠加：`main_bg_blur.png`、`stage_forest_bg.png`、资源图标、顶部功能图标、挑战徽章、收益条、秘境按钮、功能按钮、底部导航等均已接入；顶部 HUD 的 `time` 按 24 小时制显示当前时间，`coinValue`/`diamondValue`/`crystalValue` 绑定玩家金币、蓝钻、白钻并在数据变化、页面切换或页面内部刷新后同步更新；顶部“设置”按钮临时接入清档功能，点击后删除云存档所有 key 并回到登录界面重新进游戏；“秘境挑战”按钮已接入秘境挑战界面，顶部和底部背景与背包页一致：根节点使用 `image/page_background.png`，顶部复用主界面/背包页同款时间、金币、蓝钻、白钻 HUD，底部返回按钮使用 `image/BT-返回.png`，左侧展示当前章节关卡列表和首通掉落，右侧展示选中关卡阵型、总战力、首通奖励或已通关扫荡奖励。
 - 底部导航已按 Inspector 调整：隐藏文字标签，导航图标放大到 96×96，并调整底部导航项父级布局宽高与偏移。
 - 顶部功能图标和四个圆形功能图标已按 Inspector 调整：删除文字标签，仅保留图片。
 - 按 Inspector 删除主界面森林关卡下方的模式徽章横排 Panel（原位于 `scripts/main.lua` 的 `homeScreen` 第 5 个子项，视觉位置 x=5,y=514,w=712,h=110）。
@@ -61,6 +61,8 @@
 - 在 `GridBattleScene` 上继续实现寻路、技能范围、敌方 AI、攻击表现、胜负结算和战斗结果存档。
 
 ## POST 日志
+
+- 2026-07-04：修复秘境挑战顶部 HUD 缺失：`SecretRealmDialog` 增加 `createTopResourceRow` 与 `onRootChanged` 回调，复用主界面/背包页的顶部时间、金币、蓝钻、白钻资源栏；打开秘境界面和切换关卡刷新时重新 `BindTopResourceLabels()`，保证 `time/coinValue/diamondValue/crystalValue` 正常显示和刷新。LSP 0 Error，官方构建成功。
 
 - 2026-07-04：按背包页统一秘境挑战界面顶部/底部背景：`SecretRealmDialog` 根节点改为 720×1280 全屏页面，使用 `image/page_background.png` 背景；顶部标题和章节信息直接挂在背景上；底部返回按钮使用 `image/BT-返回.png` 并对齐背包页位置，底部关闭/挑战按钮对齐背包页操作区。LSP 0 Error，官方构建成功。
 
