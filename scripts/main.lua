@@ -60,11 +60,16 @@ local formationScene_ = nil
 ---@type table|nil
 local inventoryScene_ = nil
 
+local ClearCloudSaveAndRestart = nil
+local CreateLoginScreen = nil
+
 local STAGE_FOREST_WIDTH = 1024
 local STAGE_FOREST_HEIGHT = 309
 local STAGE_FOREST_SPEED = 28
 
 local isLoggingIn_ = false
+local isClearingCloudSave_ = false
+local pendingLoginStatusText_ = nil
 local stageForestOffset_ = 0
 local topResourceRefreshTimer_ = 0
 local hero1ClipDir_ = HERO1_CLIP_DIR
@@ -374,6 +379,9 @@ local function CreateTopMenuButton(label)
         backgroundColor = { 255, 255, 255, 0 },
         onClick = function()
             print("[Home] Menu clicked: " .. label)
+            if label == "设置" and ClearCloudSaveAndRestart then
+                ClearCloudSaveAndRestart()
+            end
         end,
         children = {
             UI.Panel {
@@ -956,6 +964,42 @@ EnterInventoryScreen = function()
     print("[Main] Entered inventory screen")
 end
 
+local function ReturnToLoginScreen(statusText)
+    DestroyBattleScene()
+    DestroyFormationScene()
+    DestroyInventoryScene()
+    ClearHomeRuntimeLabels()
+    stageForestLayerA_ = nil
+    stageForestLayerB_ = nil
+    hero1Sprite_ = nil
+    pendingLoginStatusText_ = statusText
+    isLoggingIn_ = false
+    ShowRoot(CreateLoginScreen())
+    if pendingLoginStatusText_ then
+        SetLoginStatus(pendingLoginStatusText_)
+        pendingLoginStatusText_ = nil
+    end
+end
+
+ClearCloudSaveAndRestart = function()
+    if isClearingCloudSave_ then
+        print("[Home] Clear cloud save ignored, already clearing")
+        return
+    end
+
+    isClearingCloudSave_ = true
+    print("[Home] Start clear cloud save")
+    SaveManager.ClearCloudSave(function()
+        isClearingCloudSave_ = false
+        ReturnToLoginScreen("云存档已清除，请重新登录开始新游戏")
+    end, function(reason)
+        isClearingCloudSave_ = false
+        print("[Home] Clear cloud save failed: " .. tostring(reason))
+    end, function(statusText)
+        print("[Home] " .. tostring(statusText))
+    end)
+end
+
 local function HandleLogin()
     if isLoggingIn_ then return end
     isLoggingIn_ = true
@@ -1007,7 +1051,7 @@ local function CreateLoginButton()
     return loginButton_
 end
 
-local function CreateLoginScreen()
+CreateLoginScreen = function()
     loginStatusLabel_ = UI.Label {
         id = "loginStatusLabel",
         text = "登录后读取存档并结算离线收益",
@@ -1067,6 +1111,8 @@ function Stop()
     uiRoot_ = nil
     loginButton_ = nil
     loginStatusLabel_ = nil
+    isClearingCloudSave_ = false
+    pendingLoginStatusText_ = nil
     coinLabel_ = nil
     diamondLabel_ = nil
     crystalLabel_ = nil

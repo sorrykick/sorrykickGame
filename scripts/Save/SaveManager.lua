@@ -9,6 +9,7 @@ local MAX_RETRY_COUNT = 3
 local runtimeSave_ = nil
 local pendingOfflineCoin_ = 0
 local lastValidationIssues_ = {}
+local isClearingSave_ = false
 
 local function now()
     return os.time()
@@ -314,10 +315,74 @@ function SaveManager.CollectIdleReward(amount, onSuccess, onError)
     SaveManager.UpdatePlayerSave("领取挂机收益", onSuccess, onError)
 end
 
+function SaveManager.ClearCloudSave(onSuccess, onError, onStatus)
+    if isClearingSave_ then
+        if onError then onError("正在清除存档，请稍候") end
+        return
+    end
+
+    isClearingSave_ = true
+
+    local function finishSuccess()
+        pendingOfflineCoin_ = 0
+        runtimeSave_ = nil
+        lastValidationIssues_ = {}
+        isClearingSave_ = false
+        notifyStatus(onStatus, "云存档已清除")
+        if onSuccess then onSuccess() end
+    end
+
+    local function finishError(message)
+        isClearingSave_ = false
+        if onError then onError(message) end
+    end
+
+    if not isCloudAvailable() then
+        notifyStatus(onStatus, "开发环境未连接云存档，已重置本次会话数据")
+        finishSuccess()
+        return
+    end
+
+    local function clear(attempt)
+        notifyStatus(onStatus, string.format("正在清除云存档（%d/%d）...", attempt, MAX_RETRY_COUNT))
+
+        local request = clientCloud:BatchSet()
+        for _, key in ipairs(SaveSchema.GetAllCloudKeys()) do
+            request:Delete(key)
+        end
+        request:Save("清除玩家存档", {
+            ok = function()
+                print("[SaveManager] Cloud save cleared")
+                finishSuccess()
+            end,
+            error = function(code, reason)
+                local message = tostring(reason or "清除存档失败")
+                print("[SaveManager] Clear cloud save failed: " .. tostring(code) .. " " .. message)
+                if attempt < MAX_RETRY_COUNT then
+                    clear(attempt + 1)
+                else
+                    finishError("清除云存档失败：" .. message)
+                end
+            end,
+            timeout = function()
+                print("[SaveManager] Clear cloud save timeout")
+                if attempt < MAX_RETRY_COUNT then
+                    clear(attempt + 1)
+                else
+                    finishError("清除云存档超时")
+                end
+            end,
+        })
+    end
+
+    clear(1)
+end
+
 function SaveManager.ResetForTests()
     runtimeSave_ = nil
     pendingOfflineCoin_ = 0
     lastValidationIssues_ = {}
+    isClearingSave_ = false
 end
 
 return SaveManager

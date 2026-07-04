@@ -34,7 +34,7 @@
 - 统一核心表达对象为“伙伴”。
 - 创建 720×1280 竖屏 Yoga UI 登录主界面，背景图为 `image/login_background.png`，中央按钮为“登录”。
 - 登录按钮已接入“请求存档 → 读取玩家数据 → 离线收益结算 → 请求更新存档 → 跳转主界面”流程。
-- 创建参考图风格的游戏主界面，并已从临时整屏参考图升级为分层图片资源 + Yoga UI 叠加：`main_bg_blur.png`、`stage_forest_bg.png`、资源图标、顶部功能图标、挑战徽章、收益条、秘境按钮、功能按钮、底部导航等均已接入；顶部 HUD 的 `time` 按 24 小时制显示当前时间，`coinValue`/`diamondValue`/`crystalValue` 绑定玩家金币、蓝钻、白钻并在数据变化、页面切换或页面内部刷新后同步更新。
+- 创建参考图风格的游戏主界面，并已从临时整屏参考图升级为分层图片资源 + Yoga UI 叠加：`main_bg_blur.png`、`stage_forest_bg.png`、资源图标、顶部功能图标、挑战徽章、收益条、秘境按钮、功能按钮、底部导航等均已接入；顶部 HUD 的 `time` 按 24 小时制显示当前时间，`coinValue`/`diamondValue`/`crystalValue` 绑定玩家金币、蓝钻、白钻并在数据变化、页面切换或页面内部刷新后同步更新；顶部“设置”按钮临时接入清档功能，点击后删除云存档所有 key 并回到登录界面重新进游戏。
 - 底部导航已按 Inspector 调整：隐藏文字标签，导航图标放大到 96×96，并调整底部导航项父级布局宽高与偏移。
 - 顶部功能图标和四个圆形功能图标已按 Inspector 调整：删除文字标签，仅保留图片。
 - 按 Inspector 删除主界面森林关卡下方的模式徽章横排 Panel（原位于 `scripts/main.lua` 的 `homeScreen` 第 5 个子项，视觉位置 x=5,y=514,w=712,h=110）。
@@ -61,6 +61,8 @@
 - 在 `GridBattleScene` 上继续实现寻路、技能范围、敌方 AI、攻击表现、胜负结算和战斗结果存档。
 
 ## POST 日志
+
+- 2026-07-04：主界面顶部“设置”按钮接入清档功能：`SaveManager.ClearCloudSave()` 使用 `clientCloud:BatchSet():Delete()` 删除 `SaveSchema.GetAllCloudKeys()` 返回的 legacy/meta/字段级全部云存档 key，成功后重置运行时存档状态并返回登录界面，重新登录会创建新存档。LSP 服务不可连接，官方构建成功。
 
 - 2026-07-03：顶部 HUD 动态显示接入：`time` 使用 `os.date("%H:%M")` 按 24 小时制显示当前时间；`coinValue`/`diamondValue`/`crystalValue` 绑定玩家金币、蓝钻、白钻；新增 `UpdateTopResourceLabels()` 和页面根节点重绑定逻辑，主界面、阵型页、背包页在数据变化或页面刷新后同步显示最新资源。LSP 0 Error，官方构建成功。
 
