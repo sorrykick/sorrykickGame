@@ -499,7 +499,6 @@ function InventoryScene:CreateBottomActions(selectedItem)
             UI.Button { text = "使用", width = 138, height = 46, position = "absolute", left = 0, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = selectedItem and { 202, 92, 44, 255 } or { 117, 79, 62, 180 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:UseSelectedItem() end },
             UI.Button { text = "整理", width = 137.65, height = 46, position = "absolute", left = 170, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:SortInventory() end },
             UI.Button { text = "扩充", width = 137.65, height = 46, position = "absolute", left = 340, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 88, 130, 72, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ExpandCapacity() end },
-            UI.Button { text = "关闭", width = 137, height = 47, position = "absolute", left = 510, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 88, 46, 45, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() if self.onExit then self.onExit() end end },
         },
     }
 end
