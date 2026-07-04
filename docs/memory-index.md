@@ -16,8 +16,9 @@
 
 ## 当前结构
 
-- `scripts/main.lua`：Yoga UI 入口，包含登录界面、读档/存档更新、离线收益结算、游戏主界面，并接入秘境战斗场景切换和勇者编队页面切换；主界面勇者序列帧默认使用 `image/npcClip/0001/`。
+- `scripts/main.lua`：Yoga UI 入口，包含登录界面、读档/存档更新、离线收益结算、游戏主界面，并接入秘境战斗场景切换、勇者编队页面、背包页面和勇者养成页面切换；主界面勇者序列帧默认使用 `image/npcClip/0001/`。
 - `scripts/Formation/FormationScene.lua`：独立勇者 NPC 上阵编队页面，包含三套阵容 TAB、实时总战力、勇者列表排序、9 格三排站位、上阵/替换/下阵、单格锁定、全阵容锁定、一键上阵、一键清空、保存阵容、推荐开关与羁绊展示。
+- `scripts/Hero/HeroGrowthScene.lua`：独立勇者养成页面，使用与背包/阵型一致的 Yoga UI 棕色/米黄风格，支持勇者列表选择、等级提升、升星、按 NPC 技能配置学习技能，并通过 `SaveManager.MarkFieldsDirty()` + `SaveGameSnapshot()` 保存资源与 `heroes` 变化。
 - `scripts/Battle/GridBattleScene.lua`：20×20 网格自动战斗原型，管理格子、单位占位、双方自动寻敌、身前 1 格攻击、战斗 HUD 和返回主界面；背景资源为 `image/BattleRes/1.png`；战斗网格逻辑保留但显示层已隐藏；寻敌优先选择同列敌方，同列无目标时再选择最近敌方；勇者和敌方都会按状态播放待机 01-04、移动 06-09、攻击 10-14 序列帧，敌方水平反转并保留红色 tint。
 - `assets/image/login_background.png`：登录背景图资源，运行时路径 `image/login_background.png`。
 - `assets/image/`：登录背景、主界面背景、森林关卡、资源图标、顶部功能图标、挑战徽章、收益条、秘境按钮、功能按钮、底部导航等 UI 图片资源。
@@ -51,6 +52,11 @@
 - NPC/勇者数据已从 `docs/setting/npcdata.json` 生成到 `assets/Config/npc.json`，共 112 条。`SaveSchema` 通过 `ConfigManager` 读取 NPC 配置生成默认勇者列表，字段包括 `npcId/configId/name/quality/star/power/job/profession/faction/role/story/clipDir/skills`；旧存档若仍是占位勇者，会在 Normalize 时切换为配置生成的 NPC 勇者并重建默认阵容；阵型页和战斗场景均使用 `hero.clipDir` 显示对应 NPC 序列帧。
 - 关卡系统已接入 `docs/setting/level_design.json`：配置复制到 `assets/Config/level_design.json`，新增 `LevelManager` 读取 67 个章节/小关/BOSS/敌人配置；存档新增 `stageProgress`，主界面标题和关卡摘要显示当前章节小关，战斗场景按当前小关生成敌方单位并使用 `sceneImage` 切换 `BattleRes` 背景，胜利后推进关卡进度并保存。
 
+- 主界面 `Hanginglist` 点击任一显示勇者会进入勇者养成页；四个圆形入口中的“勇者”入口也会进入默认第一个勇者的养成页；子控件点击使用 `event:StopPropagation()`，避免触发父级 `Hanginglist` 动作切换。
+- 新增 `scripts/Hero/HeroGrowthScene.lua`：页面使用 `image/page_background.png`、`image/BT-返回.png`、品质/星级图标与 `NormalizedSprite` 展示勇者；左侧滚动列表选择勇者，右侧展示等级/星级/战力/技能槽，支持升级、升星、学习技能；升级消耗金币并增加等级/战力，升星消耗白钻并扩展技能槽，学习技能消耗蓝钻并按 `npc.Skill` 顺序写入技能；每次变更都标记对应 dirty 字段并上传存档。
+- `SaveSchema` 已新增并规范化 `hero.level` 字段，避免升级等级在登录规范化或云存档迁移中丢失。
+- LSP 诊断 0 Error，官方构建成功。
+
 ## 下一步候选
 
 - 将主界面参考图拆分为正式 UI 资源与可交互模块。
@@ -61,6 +67,8 @@
 - 在 `GridBattleScene` 上继续实现寻路、技能范围、敌方 AI、攻击表现、胜负结算和战斗结果存档。
 
 ## POST 日志
+
+- 2026-07-05：新增勇者养成界面：`scripts/Hero/HeroGrowthScene.lua` 复用背包/阵型棕色米黄全屏风格，支持勇者列表选择、升级、升星、按配置学习技能；主界面 `Hanginglist` 勇者图与“勇者”圆形入口接入该页面，点击子勇者时阻止事件冒泡避免同时切换动作；`SaveSchema` 新增并规范化 `hero.level`，升级/升星/学习技能分别保存 `heroes` 与资源字段 dirty。LSP 0 Error，官方构建成功。
 
 - 2026-07-05：秘境挑战“关卡阵型信息”改为与阵型页一致的九宫格站位：`SecretRealmDialog` 引入 `NormalizedSprite`，复用 98×104 站位格、前/中/后三排顺序、米黄底板与品质边框，敌方槽位显示敌人名称、归一化头像和战力，空位显示站位标签。LSP 0 Error，官方构建成功。
 

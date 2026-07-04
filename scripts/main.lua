@@ -4,6 +4,7 @@ local SaveManager = require("Save.SaveManager")
 local GridBattleScene = require("Battle.GridBattleScene")
 local FormationScene = require("Formation.FormationScene")
 local InventoryScene = require("Inventory.InventoryScene")
+local HeroGrowthScene = require("Hero.HeroGrowthScene")
 local LevelManager = require("Level.LevelManager")
 local SecretRealmDialog = require("Level.SecretRealmDialog")
 
@@ -64,6 +65,8 @@ local battleScene_ = nil
 local formationScene_ = nil
 ---@type table|nil
 local inventoryScene_ = nil
+---@type table|nil
+local heroGrowthScene_ = nil
 ---@type table|nil
 local secretRealmDialog_ = nil
 
@@ -221,6 +224,17 @@ local function GetOwnedDisplayHeroes()
     return result
 end
 
+local function GetDefaultHeroGrowthHeroId()
+    local saveData = SaveManager.GetSaveData()
+    local heroes = saveData and saveData.heroes or {}
+    for _, hero in ipairs(heroes) do
+        if type(hero) == "table" and hero.id then
+            return hero.id
+        end
+    end
+    return nil
+end
+
 local function PickInitialHomeHeroes(heroes)
     local pool = {}
     for _, hero in ipairs(heroes or {}) do
@@ -376,6 +390,13 @@ local function DestroyInventoryScene()
     end
 end
 
+local function DestroyHeroGrowthScene()
+    if heroGrowthScene_ then
+        heroGrowthScene_:Destroy()
+        heroGrowthScene_ = nil
+    end
+end
+
 local function DestroySecretRealmDialog()
     if secretRealmDialog_ then
         secretRealmDialog_:Destroy()
@@ -499,6 +520,13 @@ local function CreateModeBadge(title, color)
     }
 end
 
+local EnterHomeScreen
+local EnterBattleScreen
+local EnterFormationScreen
+local EnterInventoryScreen
+local EnterHeroGrowthScreen
+local ShowSecretRealmDialog
+
 local function CreateCircleFeature(label, side)
     local left = side == "left" and 20 or nil
     local right = side == "right" and 20 or nil
@@ -513,17 +541,17 @@ local function CreateCircleFeature(label, side)
         left = left,
         right = right,
         paddingBottom = 12,
-        onClick = function()
+        onClick = function(_, event)
+            if event then
+                event:StopPropagation()
+            end
             print("[Home] Feature clicked: " .. label)
+            if label == "勇者" and EnterHeroGrowthScreen then
+                EnterHeroGrowthScreen(GetDefaultHeroGrowthHeroId())
+            end
         end,
     }
 end
-
-local EnterHomeScreen
-local EnterBattleScreen
-local EnterFormationScreen
-local EnterInventoryScreen
-local ShowSecretRealmDialog
 
 local function CreateBottomNav(label, index)
     local leftOffsets = { 0, 2, 4, 4, 2 }
@@ -569,6 +597,15 @@ local function CreateBottomNav(label, index)
     }
 end
 
+local function OpenHomeDisplayedHero(hero)
+    if hero and EnterHeroGrowthScreen then
+        print("[HomeHero] Open growth: " .. tostring(hero.name or hero.id))
+        EnterHeroGrowthScreen(hero.id)
+        return
+    end
+    PlayNextHero1Action()
+end
+
 local function CreateHero1Actor()
     homeDisplayedHeroes_ = {}
     homeHeroSprites_ = {}
@@ -593,6 +630,12 @@ local function CreateHero1Actor()
             backgroundFit = "contain",
             imageTint = { 255, 255, 255, 255 },
             transition = "scale 0.12s easeOut",
+            onClick = function(_, event)
+                if event then
+                    event:StopPropagation()
+                end
+                OpenHomeDisplayedHero(homeDisplayedHeroes_[index])
+            end,
         }
         homeHeroSprites_[index] = sprite
         children[index] = sprite
@@ -979,6 +1022,7 @@ EnterHomeScreen = function()
     DestroyBattleScene()
     DestroyFormationScene()
     DestroyInventoryScene()
+    DestroyHeroGrowthScene()
     DestroySecretRealmDialog()
     ShowRoot(CreateHomeScreen())
     UpdateHomeLabels()
@@ -986,6 +1030,7 @@ EnterHomeScreen = function()
 end
 
 ShowSecretRealmDialog = function()
+    DestroyHeroGrowthScene()
     DestroySecretRealmDialog()
     secretRealmDialog_ = SecretRealmDialog:new({
         saveDataProvider = function()
@@ -1015,6 +1060,7 @@ end
 EnterBattleScreen = function()
     DestroyFormationScene()
     DestroyInventoryScene()
+    DestroyHeroGrowthScene()
     DestroySecretRealmDialog()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
@@ -1033,6 +1079,7 @@ end
 EnterFormationScreen = function()
     DestroyBattleScene()
     DestroyInventoryScene()
+    DestroyHeroGrowthScene()
     DestroySecretRealmDialog()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
@@ -1059,6 +1106,7 @@ end
 EnterInventoryScreen = function()
     DestroyBattleScene()
     DestroyFormationScene()
+    DestroyHeroGrowthScene()
     DestroySecretRealmDialog()
     stageForestLayerA_ = nil
     stageForestLayerB_ = nil
@@ -1082,10 +1130,40 @@ EnterInventoryScreen = function()
     print("[Main] Entered inventory screen")
 end
 
+EnterHeroGrowthScreen = function(heroId)
+    DestroyBattleScene()
+    DestroyFormationScene()
+    DestroyInventoryScene()
+    DestroyHeroGrowthScene()
+    DestroySecretRealmDialog()
+    stageForestLayerA_ = nil
+    stageForestLayerB_ = nil
+    ClearHomeRuntimeLabels()
+    homeHeroSprites_ = {}
+
+    heroGrowthScene_ = HeroGrowthScene:new({
+        selectedHeroId = heroId,
+        onExit = function()
+            EnterHomeScreen()
+        end,
+        createTopResourceRow = function()
+            return CreateTopResourceRow(SaveManager.GetSaveData())
+        end,
+        onRootChanged = function(root)
+            BindTopResourceLabels(root)
+        end,
+    })
+    local root = heroGrowthScene_:CreateRoot()
+    ShowRoot(root)
+    BindTopResourceLabels(root)
+    print("[Main] Entered hero growth screen: " .. tostring(heroId))
+end
+
 local function ReturnToLoginScreen(statusText)
     DestroyBattleScene()
     DestroyFormationScene()
     DestroyInventoryScene()
+    DestroyHeroGrowthScene()
     DestroySecretRealmDialog()
     ClearHomeRuntimeLabels()
     stageForestLayerA_ = nil
@@ -1227,6 +1305,7 @@ function Stop()
     DestroyBattleScene()
     DestroyFormationScene()
     DestroyInventoryScene()
+    DestroyHeroGrowthScene()
     DestroySecretRealmDialog()
     UI.Shutdown()
     uiRoot_ = nil
