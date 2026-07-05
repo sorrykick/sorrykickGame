@@ -42,6 +42,7 @@ local QUALITY_ICON_PATHS = {
 
 local STAR_ICON_PATH = "image/品质/星级.png"
 local STAR_REWARD_STARS = { 2, 3, 4, 5, 6 }
+local HEROES_PER_PAGE = 24
 
 local ATTRIBUTE_LABELS = {
     { id = "MaxHP", label = "生命" },
@@ -209,6 +210,7 @@ function HeroCodexScene:new(options)
     o.onRootChanged = options and options.onRootChanged or nil
     o.root = nil
     o.selectedNpcId = options and options.selectedNpcId or nil
+    o.pageIndex = 1
     o.statusText = "获得英雄后可领取激活蓝钻，升星达标还可领取星级蓝钻。"
     return o
 end
@@ -260,6 +262,14 @@ function HeroCodexScene:SelectHero(npcId)
     local _, _, _, entry, hero = self:GetData()
     local name = entry and tostring(entry.config.name or ("勇者" .. tostring(npcId))) or "英雄"
     self:SetStatus(hero and ("已选择" .. name .. "，可查看图鉴和领取奖励。") or (name .. "尚未获得，获得后激活图鉴奖励。"))
+    self:Refresh()
+end
+
+function HeroCodexScene:SetPage(pageIndex)
+    local _, entries = self:GetData()
+    local totalPages = math.max(1, math.ceil(#entries / HEROES_PER_PAGE))
+    self.pageIndex = math.max(1, math.min(totalPages, math.floor(tonumber(pageIndex) or 1)))
+    self:SetStatus("图鉴第" .. tostring(self.pageIndex) .. "/" .. tostring(totalPages) .. "页，每页显示" .. tostring(HEROES_PER_PAGE) .. "个英雄。")
     self:Refresh()
 end
 
@@ -386,8 +396,13 @@ function HeroCodexScene:CreateContent(entries, heroMap, selectedEntry, selectedH
 end
 
 function HeroCodexScene:CreateHeroGridPanel(entries, heroMap, codex)
+    local totalPages = math.max(1, math.ceil(#entries / HEROES_PER_PAGE))
+    self.pageIndex = math.max(1, math.min(totalPages, math.floor(tonumber(self.pageIndex) or 1)))
+    local startIndex = (self.pageIndex - 1) * HEROES_PER_PAGE + 1
+    local endIndex = math.min(#entries, startIndex + HEROES_PER_PAGE - 1)
     local cards = {}
-    for _, entry in ipairs(entries or {}) do
+    for index = startIndex, endIndex do
+        local entry = entries[index]
         cards[#cards + 1] = self:CreateHeroIcon(entry, heroMap[entry.npcId], codex)
     end
     return UI.Panel {
@@ -400,22 +415,20 @@ function HeroCodexScene:CreateHeroGridPanel(entries, heroMap, codex)
         borderWidth = 3,
         borderRadius = 18,
         children = {
-            UI.Label { text = "全部英雄", fontSize = 24, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 200 } } },
-            UI.ScrollView {
+            UI.Panel { width = "100%", height = 34, flexDirection = "row", alignItems = "center", gap = 8, children = {
+                UI.Button { text = "<", width = 40, height = 30, fontSize = 16, backgroundColor = self.pageIndex > 1 and { 88, 46, 45, 255 } or { 117, 79, 62, 160 }, textColor = { 255, 244, 220, 255 }, borderRadius = 11, onClick = function() self:SetPage(self.pageIndex - 1) end },
+                UI.Label { text = "全部英雄 " .. tostring(self.pageIndex) .. "/" .. tostring(totalPages), flexGrow = 1, fontSize = 22, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 200 } } },
+                UI.Button { text = ">", width = 40, height = 30, fontSize = 16, backgroundColor = self.pageIndex < totalPages and { 88, 46, 45, 255 } or { 117, 79, 62, 160 }, textColor = { 255, 244, 220, 255 }, borderRadius = 11, onClick = function() self:SetPage(self.pageIndex + 1) end },
+            } },
+            UI.Panel {
                 width = "100%",
                 flexGrow = 1,
                 flexBasis = 0,
-                scrollY = true,
-                showScrollbar = true,
-                children = {
-                    UI.Panel {
-                        width = "100%",
-                        flexDirection = "row",
-                        flexWrap = "wrap",
-                        gap = 8,
-                        children = cards,
-                    },
-                },
+                flexDirection = "row",
+                flexWrap = "wrap",
+                gap = 8,
+                alignContent = "flex-start",
+                children = cards,
             },
         },
     }
@@ -441,7 +454,7 @@ function HeroCodexScene:CreateHeroIcon(entry, ownedHero, codex)
         end,
         children = {
             UI.Panel { width = 72, height = 70, position = "absolute", left = 6, top = 8, backgroundColor = { 207, 166, 119, owned and 180 or 90 }, borderRadius = 11 },
-            NormalizedSprite { width = 76, height = 72, position = "absolute", left = 4, top = 6, backgroundImage = GetHeroPreviewImage(config), imageTint = owned and { 255, 255, 255, 255 } or { 100, 100, 100, 210 } },
+            UI.Panel { width = 76, height = 72, position = "absolute", left = 4, top = 6, backgroundImage = GetHeroPreviewImage(config), backgroundFit = "contain", imageTint = owned and { 255, 255, 255, 255 } or { 100, 100, 100, 210 } },
             UI.Panel { width = 24, height = 24, position = "absolute", left = 5, top = 4, backgroundImage = QUALITY_ICON_PATHS[GetQuality(config)] or QUALITY_ICON_PATHS[1], backgroundFit = "contain" },
             UI.Label { text = tostring(config.name or entry.npcId), width = 74, height = 20, position = "absolute", left = 5, top = 82, fontSize = 13, fontWeight = "bold", fontColor = owned and { 88, 46, 45, 255 } or { 255, 244, 220, 230 }, textAlign = "center", maxLines = 1 },
             UI.Label { text = owned and "已激活" or "未获得", width = 56, height = 18, position = "absolute", left = 14, top = 62, fontSize = 11, fontColor = owned and { 202, 92, 44, 255 } or { 255, 244, 220, 230 }, textAlign = "center", backgroundColor = owned and { 255, 244, 205, 210 } or { 42, 30, 24, 190 }, borderRadius = 8, maxLines = 1 },

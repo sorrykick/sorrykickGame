@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-05 | hero-codex-webgl-resource-fix | 修复图鉴页 WebGL `glGenSamplers` 相关资源异常风险：英雄列表由一次性渲染 112 个 `NormalizedSprite` 改为分页显示（每页 24 个），列表头像改用普通 `UI.Panel backgroundImage`，仅右侧详情保留单个归一化大图，降低进入页面时的图片 pattern/sampler 瞬时创建压力；LSP 服务不可连接，官方构建成功。 |
 | 2026-07-05 | hero-codex-system | 新增英雄图鉴系统：`HeroCodexScene` 展示 `npc.json` 中 112 个英雄，底部“图鉴”入口接入；点击英雄图标可查看属性、技能、品质、职业、阵营、站位、战力；获得英雄后可领取图鉴激活蓝钻，升星达到 2/3/4/5/6 星可领取星级蓝钻；`SaveSchema` 新增 `codex` 字段并纳入 dirty 增量上传；LSP 服务不可连接，官方构建成功。 |
 | 2026-07-05 | inventory-remove-footer-close | 按 Inspector 删除背包页底部操作区的“关闭”按钮，仅保留使用、整理、扩充按钮和父级布局；LSP 0 Error，官方构建成功。 |
 | 2026-07-05 | formation-hero-status-label-top | 按 Inspector 将阵型页勇者列表卡片中的出战/待机状态 Label 下移：`top` 从 40 调整为 70，仅修改目标 Label；LSP 0 Error，官方构建成功。 |
