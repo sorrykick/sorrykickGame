@@ -337,22 +337,24 @@ end
 function HeroGrowthScene:CreateBackground()
     return UI.Panel {
         id = "background",
+        width = DESIGN_WIDTH,
+        height = DESIGN_HEIGHT,
         position = "absolute",
-        left = -1,
-        top = -1,
-        right = 1,
-        bottom = 1,
+        left = 1,
+        top = 1,
+        right = 0,
+        bottom = -252,
         zIndex = 0,
         backgroundImage = "image/page_background.png",
-        backgroundFit = "cover",
+        backgroundFit = "none",
         backgroundColor = { 0, 0, 0, 255 },
+        borderRadius = 0,
     }
 end
 
 function HeroGrowthScene:CreateHeader(saveData)
     return {
         UI.Label { text = "勇者养成", position = "absolute", left = 19, top = 66, zIndex = 10, fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
-        UI.Label { text = "金币 " .. FormatNumber(saveData.coin) .. "  蓝钻 " .. FormatNumber(saveData.diamond) .. "  白钻 " .. FormatNumber(saveData.crystal), position = "absolute", left = 256, top = 114, width = 442, zIndex = 10, fontSize = 18, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textAlign = "right", textStroke = { width = 2, color = { 0, 0, 0, 220 } }, maxLines = 1 },
         UI.Button { width = 164, height = 58, position = "absolute", left = 0, top = 1183, zIndex = 10, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, fontSize = 18, backgroundImage = "image/BT-返回.png", backgroundFit = "cover", backgroundColor = { 251, 251, 251, 0 }, opacity = 1, textColor = { 255, 255, 255, 0 }, borderRadius = 0, onClick = function() if self.onExit then self.onExit() end end },
     }
 end
