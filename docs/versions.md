@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-05 | hero-codex-quality-display-fix | 修复英雄图鉴按品质分页后的显示问题：根据 `npc.json` 实际存在品质动态生成分页，避免 L/D 空页；品质标题改为 D/C/B/A/S/SS/L；同品质英雄过多时左侧列表改为可滚动；详情默认选中当前品质页第一个英雄；LSP 0 Error，官方构建成功。 |
 | 2026-07-05 | hero-codex-quality-pages | 英雄图鉴分页改为按品质分组：使用 L、SS、S、A、B、C、D 的品质顺序翻页，每页只显示对应品质英雄，页标题显示品质名和数量；保留此前分页和普通图标渲染以降低 WebGL 资源压力；LSP 0 Error，官方构建成功。 |
 | 2026-07-05 | hero-codex-webgl-resource-fix | 修复图鉴页 WebGL `glGenSamplers` 相关资源异常风险：英雄列表由一次性渲染 112 个 `NormalizedSprite` 改为分页显示（每页 24 个），列表头像改用普通 `UI.Panel backgroundImage`，仅右侧详情保留单个归一化大图，降低进入页面时的图片 pattern/sampler 瞬时创建压力；LSP 服务不可连接，官方构建成功。 |
 | 2026-07-05 | hero-codex-system | 新增英雄图鉴系统：`HeroCodexScene` 展示 `npc.json` 中 112 个英雄，底部“图鉴”入口接入；点击英雄图标可查看属性、技能、品质、职业、阵营、站位、战力；获得英雄后可领取图鉴激活蓝钻，升星达到 2/3/4/5/6 星可领取星级蓝钻；`SaveSchema` 新增 `codex` 字段并纳入 dirty 增量上传；LSP 服务不可连接，官方构建成功。 |

@@ -21,13 +21,13 @@ local QUALITY_COLORS = {
 }
 
 local QUALITY_NAMES = {
-    [1] = "普通",
-    [2] = "优质",
-    [3] = "稀有",
-    [4] = "史诗",
-    [5] = "传说",
-    [6] = "至臻",
-    [7] = "传说",
+    [1] = "D",
+    [2] = "C",
+    [3] = "B",
+    [4] = "A",
+    [5] = "S",
+    [6] = "SS",
+    [7] = "L",
 }
 
 local QUALITY_ICON_PATHS = {
@@ -160,6 +160,25 @@ local function GetEntriesByQuality(entries, quality)
     return result
 end
 
+local function GetQualityPages(entries)
+    local hasQuality = {}
+    for _, entry in ipairs(entries or {}) do
+        hasQuality[GetQuality(entry.config)] = true
+    end
+
+    local pages = {}
+    for _, quality in ipairs(QUALITY_PAGE_ORDER) do
+        if hasQuality[quality] then
+            pages[#pages + 1] = quality
+        end
+    end
+
+    if #pages == 0 then
+        pages[#pages + 1] = 1
+    end
+    return pages
+end
+
 local function GetSkillName(skillId)
     if not skillId then return "未配置" end
     local tables = ConfigManager.GetTables()
@@ -236,12 +255,20 @@ end
 function HeroCodexScene:GetData()
     local saveData = GetSaveData()
     local entries = GetNpcEntries()
-    local heroMap = GetHeroMap(saveData.heroes)
-    local selectedEntry = FindEntry(entries, self.selectedNpcId)
+    local qualityPages = GetQualityPages(entries)
+    self.pageIndex = math.max(1, math.min(#qualityPages, math.floor(tonumber(self.pageIndex) or 1)))
+    local pageQuality = qualityPages[self.pageIndex] or 1
+    local pageEntries = GetEntriesByQuality(entries, pageQuality)
+    local selectedEntry = FindEntry(pageEntries, self.selectedNpcId)
+    if not selectedEntry and pageEntries[1] then
+        selectedEntry = pageEntries[1]
+        self.selectedNpcId = selectedEntry.npcId
+    end
     if not selectedEntry and entries[1] then
         selectedEntry = entries[1]
         self.selectedNpcId = selectedEntry.npcId
     end
+    local heroMap = GetHeroMap(saveData.heroes)
     local selectedHero = selectedEntry and heroMap[selectedEntry.npcId] or nil
     local codex = GetCodex(saveData)
     return saveData, entries, heroMap, selectedEntry, selectedHero, codex
@@ -277,11 +304,12 @@ end
 
 function HeroCodexScene:SetPage(pageIndex)
     local _, entries = self:GetData()
-    local totalPages = #QUALITY_PAGE_ORDER
+    local qualityPages = GetQualityPages(entries)
+    local totalPages = #qualityPages
     self.pageIndex = math.max(1, math.min(totalPages, math.floor(tonumber(pageIndex) or 1)))
-    local quality = QUALITY_PAGE_ORDER[self.pageIndex] or 1
+    local quality = qualityPages[self.pageIndex] or 1
     local qualityEntries = GetEntriesByQuality(entries, quality)
-    self:SetStatus("当前显示" .. (QUALITY_NAMES[quality] or "普通") .. "品质英雄，共" .. tostring(#qualityEntries) .. "个。")
+    self:SetStatus("当前显示" .. (QUALITY_NAMES[quality] or "D") .. "品质英雄，共" .. tostring(#qualityEntries) .. "个。")
     self:Refresh()
 end
 
@@ -408,9 +436,10 @@ function HeroCodexScene:CreateContent(entries, heroMap, selectedEntry, selectedH
 end
 
 function HeroCodexScene:CreateHeroGridPanel(entries, heroMap, codex)
-    local totalPages = #QUALITY_PAGE_ORDER
+    local qualityPages = GetQualityPages(entries)
+    local totalPages = #qualityPages
     self.pageIndex = math.max(1, math.min(totalPages, math.floor(tonumber(self.pageIndex) or 1)))
-    local quality = QUALITY_PAGE_ORDER[self.pageIndex] or 1
+    local quality = qualityPages[self.pageIndex] or 1
     local qualityEntries = GetEntriesByQuality(entries, quality)
     local cards = {}
     for _, entry in ipairs(qualityEntries) do
@@ -428,18 +457,25 @@ function HeroCodexScene:CreateHeroGridPanel(entries, heroMap, codex)
         children = {
             UI.Panel { width = "100%", height = 34, flexDirection = "row", alignItems = "center", gap = 8, children = {
                 UI.Button { text = "<", width = 40, height = 30, fontSize = 16, backgroundColor = self.pageIndex > 1 and { 88, 46, 45, 255 } or { 117, 79, 62, 160 }, textColor = { 255, 244, 220, 255 }, borderRadius = 11, onClick = function() self:SetPage(self.pageIndex - 1) end },
-                UI.Label { text = (QUALITY_NAMES[quality] or "普通") .. "品质 " .. tostring(#qualityEntries), flexGrow = 1, fontSize = 22, fontWeight = "bold", fontColor = GetQualityColor({ quality = quality }), textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 200 } } },
+                UI.Label { text = (QUALITY_NAMES[quality] or "D") .. "品质 " .. tostring(#qualityEntries), flexGrow = 1, fontSize = 22, fontWeight = "bold", fontColor = GetQualityColor({ quality = quality }), textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 200 } } },
                 UI.Button { text = ">", width = 40, height = 30, fontSize = 16, backgroundColor = self.pageIndex < totalPages and { 88, 46, 45, 255 } or { 117, 79, 62, 160 }, textColor = { 255, 244, 220, 255 }, borderRadius = 11, onClick = function() self:SetPage(self.pageIndex + 1) end },
             } },
-            UI.Panel {
+            UI.ScrollView {
                 width = "100%",
                 flexGrow = 1,
                 flexBasis = 0,
-                flexDirection = "row",
-                flexWrap = "wrap",
-                gap = 8,
-                alignContent = "flex-start",
-                children = cards,
+                scrollY = true,
+                showScrollbar = true,
+                children = {
+                    UI.Panel {
+                        width = "100%",
+                        flexDirection = "row",
+                        flexWrap = "wrap",
+                        gap = 8,
+                        alignContent = "flex-start",
+                        children = cards,
+                    },
+                },
             },
         },
     }
@@ -527,7 +563,7 @@ function HeroCodexScene:CreateHeroOverview(entry, hero)
             UI.Panel { width = 32, height = 32, position = "absolute", left = 14, top = 18, backgroundImage = QUALITY_ICON_PATHS[quality] or QUALITY_ICON_PATHS[1], backgroundFit = "contain" },
             UI.Label { text = hero and "已获得" or "未获得", position = "absolute", left = 20, top = 174, width = 96, height = 26, fontSize = 15, fontWeight = "bold", fontColor = hero and { 202, 92, 44, 255 } or { 88, 46, 45, 220 }, backgroundColor = { 207, 166, 119, 190 }, borderRadius = 12, textAlign = "center" },
             UI.Label { text = tostring(config.name or entry.npcId), position = "absolute", left = 138, top = 18, width = 128, fontSize = 23, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
-            UI.Label { text = (QUALITY_NAMES[quality] or "普通") .. " · " .. tostring(config.profession or "战士"), position = "absolute", left = 138, top = 54, width = 128, fontSize = 15, fontWeight = "bold", fontColor = GetQualityColor(config), textStroke = { width = 1, color = { 68, 45, 25, 150 } }, maxLines = 1 },
+            UI.Label { text = (QUALITY_NAMES[quality] or "D") .. " · " .. tostring(config.profession or "战士"), position = "absolute", left = 138, top = 54, width = 128, fontSize = 15, fontWeight = "bold", fontColor = GetQualityColor(config), textStroke = { width = 1, color = { 68, 45, 25, 150 } }, maxLines = 1 },
             self:CreateInfoRow("阵营", tostring(config.faction or "王国"), 138, 88),
             self:CreateInfoRow("站位", tostring(config.role or "前排"), 138, 120),
             self:CreateInfoRow("星级", tostring(star) .. "星", 138, 152),

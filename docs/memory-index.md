@@ -68,6 +68,8 @@
 
 ## POST 日志
 
+- 2026-07-05：修复英雄图鉴按品质分页后的显示问题：根据 `npc.json` 实际存在的品质动态生成分页，避免进入不存在的 L/D 空页；品质标题改为与资源图标一致的 D/C/B/A/S/SS/L；同品质英雄数量较多时左侧列表使用 `UI.ScrollView` 滚动展示；详情默认选中当前品质页内第一个英雄，避免左侧品质页与右侧详情不一致。LSP 0 Error，官方构建成功。
+
 - 2026-07-05：按用户要求将英雄图鉴分页改为按品质分组：分页顺序为 L、SS、S、A、B、C、D，每页只显示对应品质英雄，并在页标题显示品质名称和英雄数量；保留此前分页降低 WebGL 资源压力的实现。LSP 0 Error，官方构建成功。
 
 - 2026-07-05：修复图鉴页进入后 WebGL `glGenSamplers` 相关 `Invalid array length` 风险：图鉴列表从一次性渲染 112 个 `NormalizedSprite` 改为分页显示（每页 24 个英雄），列表头像改用普通 `UI.Panel backgroundImage`，仅详情页保留单个 `NormalizedSprite` 大图，降低图片 pattern/sampler 瞬时创建压力。LSP 服务不可连接，官方构建成功。
