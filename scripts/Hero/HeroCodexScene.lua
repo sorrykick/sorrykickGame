@@ -425,8 +425,11 @@ function HeroCodexScene:CreateHeroGridPanel(entries, heroMap, codex)
         cards[#cards + 1] = self:CreateHeroIcon(entry, heroMap[entry.npcId], codex)
     end
     return UI.Panel {
-        width = 398,
-        height = "100%",
+        position = "absolute",
+        left = 1,
+        top = -12,
+        width = 686,
+        height = "49.8%",
         padding = 10,
         gap = 8,
         backgroundColor = { 113, 74, 58, 245 },
@@ -492,9 +495,13 @@ end
 function HeroCodexScene:CreateDetailPanel(entry, hero, codex)
     if not entry then
         return UI.Panel {
+            position = "absolute",
+            left = -6,
+            top = 455,
+            width = 693,
             flexGrow = 1,
             flexShrink = 1,
-            height = "100%",
+            height = "54.1%",
             padding = 12,
             backgroundColor = { 245, 228, 200, 245 },
             borderColor = { 68, 45, 25, 255 },
@@ -505,9 +512,13 @@ function HeroCodexScene:CreateDetailPanel(entry, hero, codex)
     end
 
     return UI.Panel {
+        position = "absolute",
+        left = -6,
+        top = 455,
+        width = 693,
         flexGrow = 1,
         flexShrink = 1,
-        height = "100%",
+        height = "54.1%",
         padding = 12,
         backgroundColor = { 245, 228, 200, 245 },
         borderColor = { 68, 45, 25, 255 },
@@ -545,7 +556,7 @@ function HeroCodexScene:CreateHeroOverview(entry, hero)
     local star = hero and math.max(1, math.floor(tonumber(hero.star) or 1)) or math.max(1, math.floor(tonumber(config.BaseStarID) or 1))
     return UI.Panel {
         width = "100%",
-        height = 228,
+        height = 176,
         backgroundColor = { 255, 244, 220, 255 },
         borderColor = GetQualityColor(config),
         borderWidth = 3,
@@ -555,25 +566,26 @@ function HeroCodexScene:CreateHeroOverview(entry, hero)
             UI.Panel { width = 116, height = 150, position = "absolute", left = 10, top = 18, backgroundColor = { 207, 166, 119, 170 }, borderColor = { 68, 45, 25, 180 }, borderWidth = 1, borderRadius = 16 },
             NormalizedSprite { width = 140, height = 150, position = "absolute", left = -2, top = 18, backgroundImage = GetHeroPreviewImage(config), imageTint = hero and { 255, 255, 255, 255 } or { 120, 120, 120, 220 } },
             UI.Panel { width = 32, height = 32, position = "absolute", left = 14, top = 18, backgroundImage = QualityUtil.GetIconPath(quality), backgroundFit = "contain" },
-            UI.Label { text = hero and "已获得" or "未获得", position = "absolute", left = 20, top = 174, width = 96, height = 26, fontSize = 15, fontWeight = "bold", fontColor = hero and { 202, 92, 44, 255 } or { 88, 46, 45, 220 }, backgroundColor = { 207, 166, 119, 190 }, borderRadius = 12, textAlign = "center" },
+            UI.Label { text = hero and "已获得" or "未获得", position = "absolute", left = 536, top = 20, width = 96, height = 26, fontSize = 15, fontWeight = "bold", fontColor = hero and { 202, 92, 44, 255 } or { 88, 46, 45, 220 }, backgroundColor = { 207, 166, 119, 190 }, borderRadius = 12, textAlign = "center" },
             UI.Label { text = tostring(config.name or entry.npcId), position = "absolute", left = 138, top = 18, width = 128, fontSize = 23, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
-            UI.Label { text = QualityUtil.GetName(quality) .. " · " .. tostring(config.profession or "战士"), position = "absolute", left = 138, top = 54, width = 128, fontSize = 15, fontWeight = "bold", fontColor = GetQualityColor(config), textStroke = { width = 1, color = { 68, 45, 25, 150 } }, maxLines = 1 },
-            self:CreateInfoRow("阵营", tostring(config.faction or "王国"), 138, 88),
-            self:CreateInfoRow("站位", tostring(config.role or "前排"), 138, 120),
-            self:CreateInfoRow("星级", tostring(star) .. "星", 138, 152),
-            self:CreateInfoRow("战力", FormatNumber(hero and hero.power or config.power), 138, 184),
+            UI.Label { text = QualityUtil.GetName(quality) .. " · " .. tostring(config.profession or "战士"), position = "absolute", left = 297, top = 27, width = 128, fontSize = 15, fontWeight = "bold", fontColor = GetQualityColor(config), textStroke = { width = 1, color = { 68, 45, 25, 150 } }, maxLines = 1 },
+            self:CreateInfoRow("阵营", tostring(config.faction or "王国"), 143, 60, 237, 33, { height = 28, left = 1, top = 2 }),
+            self:CreateInfoRow("站位", tostring(config.role or "前排"), 144, 100, 228),
+            self:CreateInfoRow("星级", tostring(star) .. "星", 143, 135, 225),
+            self:CreateInfoRow("战力", FormatNumber(hero and hero.power or config.power), 401, 101),
             UI.Panel { width = 18, height = 18, position = "absolute", left = 207, top = 154, backgroundImage = STAR_ICON_PATH, backgroundFit = "contain" },
         },
     }
 end
 
-function HeroCodexScene:CreateInfoRow(label, value, left, top)
+function HeroCodexScene:CreateInfoRow(label, value, left, top, width, height, labelLayout)
+    labelLayout = type(labelLayout) == "table" and labelLayout or {}
     return UI.Panel {
         position = "absolute",
         left = left,
         top = top,
-        width = 126,
-        height = 26,
+        width = width or 126,
+        height = height or 26,
         flexDirection = "row",
         alignItems = "center",
         backgroundColor = { 207, 166, 119, 170 },
@@ -581,7 +593,7 @@ function HeroCodexScene:CreateInfoRow(label, value, left, top)
         paddingLeft = 7,
         paddingRight = 7,
         children = {
-            UI.Label { text = label, flexGrow = 1, fontSize = 14, fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
+            UI.Label { text = label, left = labelLayout.left, top = labelLayout.top, height = labelLayout.height, flexGrow = 1, fontSize = 14, fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
             UI.Label { text = value, fontSize = 14, fontWeight = "bold", fontColor = { 255, 255, 255, 255 }, textStroke = { width = 1, color = { 68, 45, 25, 220 } }, textAlign = "right", maxLines = 1 },
         },
     }
