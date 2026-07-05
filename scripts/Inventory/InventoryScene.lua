@@ -438,10 +438,10 @@ end
 function InventoryScene:CreateDetailPanel(item)
     return UI.Panel {
         position = "absolute",
-        left = -9,
-        top = 715,
+        left = -8,
+        top = 691,
         width = 693,
-        height = "30.7%",
+        height = "26.9%",
         gap = 10,
         backgroundImage = "image/IM-说明-底.png",
         backgroundFit = "none",
@@ -452,11 +452,11 @@ end
 
 function InventoryScene:CreateEmptyDetail()
     return {
-        UI.Label { text = "物品详情", fontSize = 24, fontWeight = "bold", fontColor = { 117, 79, 62, 255 }, textAlign = "center" },
+        UI.Label { text = "物品详情", left = 24, top = 23, fontSize = 24, fontWeight = "bold", fontColor = { 117, 79, 62, 255 }, textAlign = "center" },
         UI.Panel { flexGrow = 1, flexBasis = 0, alignItems = "center", justifyContent = "center", children = {
-            UI.Label { text = "请选择左侧物品", fontSize = 20, fontColor = { 88, 46, 45, 180 }, textAlign = "center" },
+            UI.Label { text = "请选择背包物品", fontSize = 20, fontColor = { 88, 46, 45, 180 }, textAlign = "center" },
         } },
-        UI.Label { text = self.statusText, minHeight = 52, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 2 },
+        UI.Label { text = self.statusText, minHeight = 52, left = 557, top = -18, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 2 },
     }
 end
 

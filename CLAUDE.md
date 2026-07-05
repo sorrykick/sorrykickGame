@@ -31,7 +31,7 @@
 - 已新增 `scripts/Formation/FormationScene.lua`，实现独立勇者 NPC 上阵编队页面：三套阵容 TAB、总战力、勇者列表排序、9 格三排站位、上阵/替换/下阵、单格锁定、全阵容锁定、一键上阵、一键清空、保存阵容、推荐开关与羁绊展示；主界面底部“阵型”入口已接入。
 - 最近一次修改已修复运行时 NPC 序列帧资源缺失：将 `assets/image/npcClip/0001/` 等 112 个被 NPC/关卡配置引用的序列帧目录纳入构建跟踪，避免 `.meta` UUID 指向的 PNG 未打包导致大量 `<game>/assets/*.png` not found。
 - 最近一次资源缺失排查确认 `resources.json` 已使用全量引用 `groups.default=["**"]`，并将 `.project/resources.json` 的 `preload_groups` 设置为 `["default"]`，避免启动阶段 UI/序列帧动态加载资源尚未下载导致 `<game>/assets/*.png` not found。
-- 已新增 `scripts/Inventory/InventoryScene.lua`，实现与阵型页一致的 Yoga UI 棕色/米黄风格背包系统：分类 TAB、物品格、详情面板、使用/整理/扩充/关闭按钮；主界面底部“背包”入口已接入；存档新增 `inventory` 字段并纳入增量 dirty 上传，小袋金币可使用并保存金币与背包变化。最近已按 Inspector 将背包内容区父级位置调整为 `left=19/top=164/right=23`，物品列表面板宽度改为 676，内部滚动网格宽度改为 94.6% 并偏移 `left=20/top=-2`，详情底板下移放大到 `left=-9/top=715/height=30.7%` 且 `backgroundFit="none"`，详情标题、图标、名称、品质、数量、状态、描述框和底部按钮组均同步为运行时预览布局。
+- 已新增 `scripts/Inventory/InventoryScene.lua`，实现与阵型页一致的 Yoga UI 棕色/米黄风格背包系统：分类 TAB、物品格、详情面板、使用/整理/扩充/关闭按钮；主界面底部“背包”入口已接入；存档新增 `inventory` 字段并纳入增量 dirty 上传，小袋金币可使用并保存金币与背包变化。最近已按 Inspector 将背包内容区父级位置调整为 `left=19/top=164/right=23`，物品列表面板宽度改为 676，内部滚动网格宽度改为 94.6% 并偏移 `left=20/top=-2`，详情底板调整为 `left=-8/top=691/height=26.9%` 且 `backgroundFit="none"`，选中详情标题、图标、名称、品质、数量、状态、描述框和底部按钮组同步为运行时预览布局；空详情标题位置为 `left=24/top=23`，提示文案为“请选择背包物品”。
 - GitHub 同步已改为手动：本地 `post-commit` 自动推送 hook 已禁用；只有用户明确要求“同步 GitHub”或“推送”时才执行 `git push`。
 - 最近一次功能修改已按 `docs/login.md` 优化登录/云存档流程：`SaveSchema` 增加增量字段 key/meta key；`RuntimeSave` 增加 dirty 字段追踪、本地版本首次变更递增、字段校验和与增量提交状态；`SaveManager.UpdatePlayerSave()` 只上传 dirty 字段，登录下载/存档上传均自动重试 3 次，上传连续失败后强制退出；登录会兼容旧整包存档并迁移为字段级存档；编队和战斗胜利保存前分别标记 `lineup`、`stageProgress` dirty；图鉴奖励新增 `codex` dirty 字段；离线收益按钮不再固定发放 12.35 万。
 - 最近一次 LSP 服务不可连接，官方构建成功。
