@@ -42,7 +42,7 @@ local QUALITY_ICON_PATHS = {
 
 local STAR_ICON_PATH = "image/品质/星级.png"
 local STAR_REWARD_STARS = { 2, 3, 4, 5, 6 }
-local HEROES_PER_PAGE = 24
+local QUALITY_PAGE_ORDER = { 7, 6, 5, 4, 3, 2, 1 }
 
 local ATTRIBUTE_LABELS = {
     { id = "MaxHP", label = "生命" },
@@ -148,6 +148,16 @@ local function FindEntry(entries, npcId)
         end
     end
     return nil
+end
+
+local function GetEntriesByQuality(entries, quality)
+    local result = {}
+    for _, entry in ipairs(entries or {}) do
+        if GetQuality(entry.config) == quality then
+            result[#result + 1] = entry
+        end
+    end
+    return result
 end
 
 local function GetSkillName(skillId)
@@ -267,9 +277,11 @@ end
 
 function HeroCodexScene:SetPage(pageIndex)
     local _, entries = self:GetData()
-    local totalPages = math.max(1, math.ceil(#entries / HEROES_PER_PAGE))
+    local totalPages = #QUALITY_PAGE_ORDER
     self.pageIndex = math.max(1, math.min(totalPages, math.floor(tonumber(pageIndex) or 1)))
-    self:SetStatus("图鉴第" .. tostring(self.pageIndex) .. "/" .. tostring(totalPages) .. "页，每页显示" .. tostring(HEROES_PER_PAGE) .. "个英雄。")
+    local quality = QUALITY_PAGE_ORDER[self.pageIndex] or 1
+    local qualityEntries = GetEntriesByQuality(entries, quality)
+    self:SetStatus("当前显示" .. (QUALITY_NAMES[quality] or "普通") .. "品质英雄，共" .. tostring(#qualityEntries) .. "个。")
     self:Refresh()
 end
 
@@ -396,13 +408,12 @@ function HeroCodexScene:CreateContent(entries, heroMap, selectedEntry, selectedH
 end
 
 function HeroCodexScene:CreateHeroGridPanel(entries, heroMap, codex)
-    local totalPages = math.max(1, math.ceil(#entries / HEROES_PER_PAGE))
+    local totalPages = #QUALITY_PAGE_ORDER
     self.pageIndex = math.max(1, math.min(totalPages, math.floor(tonumber(self.pageIndex) or 1)))
-    local startIndex = (self.pageIndex - 1) * HEROES_PER_PAGE + 1
-    local endIndex = math.min(#entries, startIndex + HEROES_PER_PAGE - 1)
+    local quality = QUALITY_PAGE_ORDER[self.pageIndex] or 1
+    local qualityEntries = GetEntriesByQuality(entries, quality)
     local cards = {}
-    for index = startIndex, endIndex do
-        local entry = entries[index]
+    for _, entry in ipairs(qualityEntries) do
         cards[#cards + 1] = self:CreateHeroIcon(entry, heroMap[entry.npcId], codex)
     end
     return UI.Panel {
@@ -417,7 +428,7 @@ function HeroCodexScene:CreateHeroGridPanel(entries, heroMap, codex)
         children = {
             UI.Panel { width = "100%", height = 34, flexDirection = "row", alignItems = "center", gap = 8, children = {
                 UI.Button { text = "<", width = 40, height = 30, fontSize = 16, backgroundColor = self.pageIndex > 1 and { 88, 46, 45, 255 } or { 117, 79, 62, 160 }, textColor = { 255, 244, 220, 255 }, borderRadius = 11, onClick = function() self:SetPage(self.pageIndex - 1) end },
-                UI.Label { text = "全部英雄 " .. tostring(self.pageIndex) .. "/" .. tostring(totalPages), flexGrow = 1, fontSize = 22, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 200 } } },
+                UI.Label { text = (QUALITY_NAMES[quality] or "普通") .. "品质 " .. tostring(#qualityEntries), flexGrow = 1, fontSize = 22, fontWeight = "bold", fontColor = GetQualityColor({ quality = quality }), textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 200 } } },
                 UI.Button { text = ">", width = 40, height = 30, fontSize = 16, backgroundColor = self.pageIndex < totalPages and { 88, 46, 45, 255 } or { 117, 79, 62, 160 }, textColor = { 255, 244, 220, 255 }, borderRadius = 11, onClick = function() self:SetPage(self.pageIndex + 1) end },
             } },
             UI.Panel {
