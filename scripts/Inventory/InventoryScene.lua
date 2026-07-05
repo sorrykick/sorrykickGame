@@ -364,15 +364,15 @@ function InventoryScene:CreateInventoryGridPanel(inventory, items)
             UI.ScrollView {
                 width = "100%",
                 flexGrow = 1,
-                flexBasis = 644,
-                top = -56,
+                flexBasis = 684,
+                top = -44,
                 scrollY = true,
                 showScrollbar = true,
                 children = {
                     UI.Panel {
                         width = "94.6%",
                         left = 20,
-                        top = -2,
+                        top = 74,
                         flexDirection = "row",
                         flexWrap = "wrap",
                         gap = SLOT_GAP,
@@ -456,7 +456,7 @@ function InventoryScene:CreateEmptyDetail()
         UI.Panel { flexGrow = 1, flexBasis = 0, alignItems = "center", justifyContent = "center", children = {
             UI.Label { text = "请选择背包物品", fontSize = 20, fontColor = { 88, 46, 45, 180 }, textAlign = "center" },
         } },
-        UI.Label { text = self.statusText, minHeight = 52, left = 557, top = -18, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 2 },
+        UI.Label { text = self.statusText, minHeight = 52, left = 292, top = -23, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 2 },
     }
 end
 

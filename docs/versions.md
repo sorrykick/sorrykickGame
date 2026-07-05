@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-05 | inventory-inspector-scroll-empty-status | 按 Inspector 运行时预览修改单同步背包页 3 个指定控件：空详情状态文本移动到 `left=292/top=-23`，物品列表 ScrollView 调整为 `top=-44/flexBasis=684`，滚动内容容器 `top=74`；LSP 服务不可连接，官方构建成功。 |
 | 2026-07-05 | inventory-inspector-full-layout-sync | 按 Inspector 运行时预览修改单同步背包页 18 个指定控件：背景改为显式 720×1280，标题改为“背包”并上移容量文本，物品列表删除标题并上移标签栏/滚动区，详情底板和选中详情各文本/图标/描述框重排，底部操作按钮组移回下方中部；LSP 0 Error，官方构建成功。 |
 | 2026-07-05 | inventory-inspector-empty-detail-layout | 按 Inspector 运行时预览修改单同步背包空详情区 4 个指定控件：详情底板调整为 `left=-8/top=691/height=26.9%`，空详情标题增加 `left=24/top=23`，空状态文本移到 `left=557/top=-18`，空提示文案改为“请选择背包物品”；LSP 0 Error，官方构建成功。 |
 | 2026-07-05 | inventory-inspector-detail-layout | 按 Inspector 运行时预览修改单同步背包页 13 个指定控件：内容父级位置微调，物品列表面板宽度与内部滚动网格偏移同步，详情底板下移并放大，详情标题/图标/名称/品质/数量/状态/描述框改为 Inspector 试调绝对布局，底部按钮组移动到右下；LSP 服务不可连接，官方构建成功。 |
