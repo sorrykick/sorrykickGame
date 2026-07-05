@@ -306,12 +306,13 @@ end
 
 function InventoryScene:CreateContent(saveData, inventory, items, selectedItem)
     return UI.Panel {
+        id = "backBag",
         position = "absolute",
         width = 696,
-        left = 19,
-        right = 23,
+        left = 13,
+        right = 29,
         top = 164,
-        height = 890,
+        height = 951,
         children = {
             self:CreateInventoryGridPanel(inventory, items),
             self:CreateDetailPanel(selectedItem),
@@ -496,8 +497,8 @@ function InventoryScene:CreateBottomActions(selectedItem)
         position = "absolute",
         width = "87.1%",
         height = 51,
-        left = 50,
-        top = 1109,
+        left = 49,
+        top = 1120,
         flexDirection = "row",
         gap = 12,
         children = {

@@ -68,6 +68,8 @@
 
 ## POST 日志
 
+- 2026-07-06：按 Inspector 运行时预览修改单同步背包页 2 个指定控件：内容父级 Panel 增加 `id="backBag"`，并从 `left=19/right=23/height=890` 调整为 `left=13/right=29/height=951`；底部操作按钮组从 `left=50/top=1109` 调整为 `left=49/top=1120`。LSP 服务不可连接，官方构建成功。
+
 - 2026-07-05：按 Inspector 运行时预览修改单同步背包页 3 个指定控件：空详情状态文本位置从 `left=557/top=-18` 改为 `left=292/top=-23`；物品列表 ScrollView 从 `top=-56/flexBasis=644` 改为 `top=-44/flexBasis=684`；滚动内容容器 top 从 -2 改为 74。LSP 服务不可连接，官方构建成功。
 
 - 2026-07-05：按 Inspector 运行时预览修改单同步背包页 18 个指定控件：背景改为显式 720×1280 且 right=0；标题从“伙伴背包”改为“背包”，容量文本 top 改为 69；物品列表面板 top 改为 -37、圆角清零，删除“物品列表”标题，分类 TAB 设置 `left=0/top=-53`，ScrollView 设置 `top=-56/flexBasis=644`；详情底板改为 `left=-5/top=657/height=31%/borderRadius=0`，选中详情标题、图标、名称、品质、数量、状态和描述框按 Inspector 位置重排；底部操作按钮组改为 `left=50/top=1109/width=87.1%`，整理/扩充按钮同步位置。LSP 0 Error，官方构建成功。
