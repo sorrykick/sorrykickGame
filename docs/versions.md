@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-05 | hero-growth-inspector-star-skill-layout | 按 Inspector 运行时预览修改单同步勇者养成页 4 个指定控件：技能面板高度改为 285，升星面板高度改为 129 且 padding=2，升星说明文本支持 normal 换行并最多 3 行，升星消耗 Label 下移到 top=99；LSP 0 Error，官方构建成功。 |
 | 2026-07-05 | hero-codex-inspector-layout-sync | 按 Inspector 运行时预览修改单同步英雄图鉴页 10 个指定控件布局：左侧品质列表切到顶部绝对布局，右侧详情面板切到下方绝对布局，英雄概览高度压缩，并同步阵营/站位/星级/战力信息行、品质职业 Label 和“已获得”状态 Label 的试调坐标；LSP 0 Error，官方构建成功。 |
 | 2026-07-05 | npcdata-full-sync | 按 `docs/setting/npcdata.json` 全量更新游戏 NPC 信息：`assets/Config/npc.json` 保留 112 个 NPC 的 stats/activeSkill/passiveSkills/ai/故事/职业/阵营/字母品质等源数据，并生成 `assets/Config/skill.json` 的 560 个真实技能条目；新增 `Config.QualityUtil` 统一品质映射；图鉴页展示源属性、真实技能、背景与 AI；存档规范化刷新旧英雄静态信息；LSP 0 Error，官方构建成功。 |
 | 2026-07-05 | hero-codex-quality-display-fix | 修复英雄图鉴按品质分页后的显示问题：根据 `npc.json` 实际存在品质动态生成分页，避免 L/D 空页；品质标题改为 D/C/B/A/S/SS/L；同品质英雄过多时左侧列表改为可滚动；详情默认选中当前品质页第一个英雄；LSP 0 Error，官方构建成功。 |

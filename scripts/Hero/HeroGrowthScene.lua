@@ -509,7 +509,15 @@ function HeroGrowthScene:CreateStarPanel(hero)
     local star = GetHeroStar(hero)
     return self:CreateActionPanel("勇者升星", "提升星级，增加大量战力并开放更多技能槽。", "升星", "消耗白钻 " .. FormatNumber(cost), star < MAX_STAR, function()
         self:StarUpHero()
-    end)
+    end, {
+        height = 129,
+        padding = 2,
+        descHeight = 60,
+        descMaxLines = 3,
+        descWhiteSpace = "normal",
+        descWordBreak = "normal",
+        costTop = 99,
+    })
 end
 
 function HeroGrowthScene:CreateSkillPanel(hero)
@@ -517,7 +525,7 @@ function HeroGrowthScene:CreateSkillPanel(hero)
     local canLearn = #GetHeroSkills(hero) < GetOpenSkillNum(hero) and GetSkillCandidates(hero)[#GetHeroSkills(hero) + 1] ~= nil
     return UI.Panel {
         width = "100%",
-        height = 218,
+        height = 285,
         padding = 10,
         gap = 8,
         backgroundColor = { 113, 74, 58, 230 },
@@ -563,19 +571,21 @@ function HeroGrowthScene:CreateSkillSlots(hero)
     return children
 end
 
-function HeroGrowthScene:CreateActionPanel(title, desc, buttonText, costText, enabled, onClick)
+function HeroGrowthScene:CreateActionPanel(title, desc, buttonText, costText, enabled, onClick, layout)
+    layout = type(layout) == "table" and layout or {}
+    local padding = layout.padding or 10
     return UI.Panel {
         width = "100%",
-        height = 102,
-        padding = 10,
+        height = layout.height or 102,
+        padding = padding,
         backgroundColor = { 113, 74, 58, 230 },
         borderColor = { 68, 45, 25, 255 },
         borderWidth = 2,
         borderRadius = 16,
         children = {
             UI.Label { text = title, position = "absolute", left = 12, top = 8, width = 160, fontSize = 20, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 180 } } },
-            UI.Label { text = desc, position = "absolute", left = 12, top = 40, width = 230, fontSize = 14, fontColor = { 255, 244, 220, 230 }, maxLines = 2 },
-            UI.Label { text = costText, position = "absolute", left = 12, top = 76, width = 220, fontSize = 15, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textStroke = { width = 1, color = { 0, 0, 0, 200 } }, maxLines = 1 },
+            UI.Label { text = desc, position = "absolute", left = 12, top = 40, width = 230, height = layout.descHeight, fontSize = 14, fontColor = { 255, 244, 220, 230 }, whiteSpace = layout.descWhiteSpace, wordBreak = layout.descWordBreak, maxLines = layout.descMaxLines or 2 },
+            UI.Label { text = costText, position = "absolute", left = 12, top = layout.costTop or 76, width = 220, fontSize = 15, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textStroke = { width = 1, color = { 0, 0, 0, 200 } }, maxLines = 1 },
             UI.Button { text = buttonText, position = "absolute", right = 12, top = 31, width = 90, height = 42, fontSize = 18, fontWeight = "bold", backgroundColor = enabled and { 202, 92, 44, 255 } or { 117, 79, 62, 180 }, pressedBackgroundColor = { 155, 62, 36, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 16, onClick = onClick },
         },
     }
