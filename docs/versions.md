@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-06 | inventory-inspector-backbag-grid-detail | 按 Inspector 运行时预览修改单同步背包页 3 个指定控件：`backBag` 上移并增高到 `top=122/height=994`，物品列表面板调整为 `left=2/top=5` 且 tabs 下移到 `top=147`，详情底板调整为 `top=771/height=19.5%`；LSP 0 Error，官方构建成功。 |
 | 2026-07-06 | inventory-inspector-backbag-actions | 按 Inspector 运行时预览修改单同步背包页 2 个指定控件：内容父级 Panel 增加 `id="backBag"` 并调整为 `left=13/right=29/height=951`，底部操作按钮组调整为 `left=49/top=1120`；LSP 服务不可连接，官方构建成功。 |
 | 2026-07-05 | inventory-inspector-scroll-empty-status | 按 Inspector 运行时预览修改单同步背包页 3 个指定控件：空详情状态文本移动到 `left=292/top=-23`，物品列表 ScrollView 调整为 `top=-44/flexBasis=684`，滚动内容容器 `top=74`；LSP 服务不可连接，官方构建成功。 |
 | 2026-07-05 | inventory-inspector-full-layout-sync | 按 Inspector 运行时预览修改单同步背包页 18 个指定控件：背景改为显式 720×1280，标题改为“背包”并上移容量文本，物品列表删除标题并上移标签栏/滚动区，详情底板和选中详情各文本/图标/描述框重排，底部操作按钮组移回下方中部；LSP 0 Error，官方构建成功。 |

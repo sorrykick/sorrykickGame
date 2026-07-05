@@ -46,7 +46,7 @@
 - 森林关卡背景 `stage_forest_bg.png` 确认为 1024×309，并改为两个图层横向无缝滚动。
 - 主界面上半区已按 Inspector 调整：顶部功能区图标 96×96，资源条移除“金/蓝/晶”短标签，右上角数字移除，标题条、章节文字、模式行和挑战徽章位置尺寸更新。
 - 存档系统已模块化：`scripts/Save/SaveSchema.lua`、`SaveValidator.lua`、`RuntimeSave.lua`、`SaveManager.lua`；`main.lua` 通过 `SaveManager.LoginSyncPlayerSave()` 登录读档，通过 `SaveManager.GetSaveData()` 读取运行时副本，通过 `SaveManager.CollectIdleReward()` 领取收益；登录/上传流程已按 `docs/login.md` 优化为字段级 dirty、版本递增、字段校验和、增量上传、下载/上传 3 次重试和旧整包存档兼容迁移。
-- 已新增 `scripts/Inventory/InventoryScene.lua`，实现与阵型页一致的 Yoga UI 棕色/米黄风格背包系统：分类 TAB、5 列物品格、详情面板、使用/整理/扩充/关闭按钮；主界面底部“背包”入口已接入；存档新增 `inventory` 字段并纳入增量 dirty 上传，默认 36 格和 6 个示例物品；小袋金币可使用并同时保存 `coin` 与 `inventory`。最近按 Inspector 同步背包布局：背景显式 720×1280，页面标题改为“背包”且容量文本上移；物品列表删除“物品列表”标题，列表面板上移到 `top=-37` 且圆角清零，分类 TAB 上移，ScrollView 为 `top=-44/flexBasis=684`，滚动内容容器为 `top=74`；详情底板调整为 `left=-5/top=657/height=31%` 且圆角清零，空详情状态文本为 `left=292/top=-23`，选中详情标题、图标、名称、品质、数量、状态、描述框重新排布；底部操作按钮组调整为 `left=50/top=1109/width=87.1%`，整理/扩充按钮分别定位到 `left=240/top=3` 与 `left=478/top=2`。
+- 已新增 `scripts/Inventory/InventoryScene.lua`，实现与阵型页一致的 Yoga UI 棕色/米黄风格背包系统：分类 TAB、5 列物品格、详情面板、使用/整理/扩充/关闭按钮；主界面底部“背包”入口已接入；存档新增 `inventory` 字段并纳入增量 dirty 上传，默认 36 格和 6 个示例物品；小袋金币可使用并同时保存 `coin` 与 `inventory`。最近按 Inspector 同步背包布局：背景显式 720×1280，页面标题改为“背包”且容量文本上移；物品列表删除“物品列表”标题，内容父级 `backBag` 调整为 `left=13/top=122/right=29/height=994`，列表面板调整到 `left=2/top=5` 且圆角清零，分类 TAB 下移到 `top=147`，ScrollView 为 `top=-44/flexBasis=684`，滚动内容容器为 `top=74`；详情底板调整为 `left=-5/top=771/height=19.5%` 且圆角清零，空详情状态文本为 `left=292/top=-23`，选中详情标题、图标、名称、品质、数量、状态、描述框重新排布；底部操作按钮组调整为 `left=49/top=1120/width=87.1%`，整理/扩充按钮分别定位到 `left=240/top=3` 与 `left=478/top=2`。
 - 勇者序列帧已接入主界面森林关卡区，默认使用 `assets/image/npcClip/0001/` 做 UI 序列帧动画：主界面 `Hanginglist` 最多显示 5 个玩家已拥有勇者，拥有不足 5 个时只显示实际拥有数量；每个显示位使用对应勇者 `clipDir` 的 06-09 移动帧做原地移动动作，每 3-5 秒在候选充足时替换其中一个当前显示位；左侧挑战徽章仍可触发攻击，右侧成长徽章触发移动。
 - 已新增 `scripts/UI/NormalizedSprite.lua`，按每张 `npcClip` 帧图的透明像素包围盒做归一化缩放/居中，已接入主界面 `Hanginglist`、阵型页勇者卡/站位预览、战斗页单位精灵，解决同界面不同勇者或不同动作因画布留白不同导致视觉大小不一致；当前已增加缺失 NPC 序列帧兜底，主界面、编队页、战斗页和 `NormalizedSprite` 在 `image/npcClip/0171/01.png` 等帧资源不存在时会回退到 `image/npcClip/0001/`，并使用 `cache:Exists()` 做无报错存在性检查。
 - NPC/勇者数据已从 `docs/setting/npcdata.json` 全量同步到运行配置：`assets/Config/npc.json` 保留 112 个 NPC 的 `stats`、`activeSkill`、`passiveSkills`、`ai`、字母品质、阵营、职业、故事等完整信息，并补充运行字段 `qualityRank/power/role/clipDir/Skill`；`assets/Config/skill.json` 生成 560 个技能条目（每个 NPC 1 个主动 + 4 个被动）。`SaveSchema` 登录规范化会按新 NPC 配置刷新旧存档英雄的静态信息，保留等级/星级/战力等成长数据；阵型、图鉴、养成页通过 `Config.QualityUtil` 统一处理 D/C/B/A/S/SS/L 品质。
@@ -67,6 +67,8 @@
 - 在 `GridBattleScene` 上继续实现寻路、技能范围、敌方 AI、攻击表现、胜负结算和战斗结果存档。
 
 ## POST 日志
+
+- 2026-07-06：按 Inspector 运行时预览修改单同步背包页 3 个指定控件：`backBag` 从 `top=164/height=951` 调整为 `top=122/height=994`；详情底板从 `top=657/height=31%` 调整为 `top=771/height=19.5%`；物品列表面板从 `left=4/top=-37` 调整为 `left=2/top=5`，并按说明将 tabs 子节点从 `top=-53` 下移 200 像素到 `top=147`。LSP 0 Error，官方构建成功。
 
 - 2026-07-06：按 Inspector 运行时预览修改单同步背包页 2 个指定控件：内容父级 Panel 增加 `id="backBag"`，并从 `left=19/right=23/height=890` 调整为 `left=13/right=29/height=951`；底部操作按钮组从 `left=50/top=1109` 调整为 `left=49/top=1120`。LSP 服务不可连接，官方构建成功。
 

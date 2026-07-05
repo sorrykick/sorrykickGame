@@ -311,8 +311,8 @@ function InventoryScene:CreateContent(saveData, inventory, items, selectedItem)
         width = 696,
         left = 13,
         right = 29,
-        top = 164,
-        height = 951,
+        top = 122,
+        height = 994,
         children = {
             self:CreateInventoryGridPanel(inventory, items),
             self:CreateDetailPanel(selectedItem),
@@ -351,8 +351,8 @@ function InventoryScene:CreateInventoryGridPanel(inventory, items)
 
     return UI.Panel {
         position = "absolute",
-        left = 4,
-        top = -37,
+        left = 2,
+        top = 5,
         width = 676,
         height = "76.8%",
         gap = 8,
@@ -361,7 +361,7 @@ function InventoryScene:CreateInventoryGridPanel(inventory, items)
         borderWidth = 3,
         borderRadius = 0,
         children = {
-            UI.Panel { width = "100%", height = 36, left = 0, top = -53, flexDirection = "row", gap = 6, children = tabs },
+            UI.Panel { width = "100%", height = 36, left = 0, top = 147, flexDirection = "row", gap = 6, children = tabs },
             UI.ScrollView {
                 width = "100%",
                 flexGrow = 1,
@@ -439,9 +439,9 @@ function InventoryScene:CreateDetailPanel(item)
     return UI.Panel {
         position = "absolute",
         left = -5,
-        top = 657,
+        top = 771,
         width = 693,
-        height = "31%",
+        height = "19.5%",
         gap = 10,
         backgroundImage = "image/IM-说明-底.png",
         backgroundFit = "none",
