@@ -489,7 +489,7 @@ function InventoryScene:CreateSelectedDetail(item)
             UI.Label { text = item.description, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "left", whiteSpace = "normal", maxLines = 4 },
         } },
         UI.Label { text = "数量：" .. tostring(item.count or 1) .. "    价值：" .. FormatNumber(item.value or 0), position = "absolute", left = 312, top = 80, fontSize = 16, fontColor = { 117, 79, 62, 255 }, textAlign = "center" },
-        UI.Label { text = self.statusText, minHeight = 52, position = "absolute", left = 496, top = 25, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 2 },
+        UI.Label { text = self.statusText, minHeight = 52, position = "absolute", left = 415, top = 23, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 2 },
     }
 end
 
