@@ -1,3 +1,5 @@
+local QualityUtil = require("Config.QualityUtil")
+
 local FALLBACK_HEROES = {
     { id = "hero_001", name = "勇者1", quality = 3, star = 1, power = 1280, job = "战士", faction = "森林", role = "前排", npcId = "0001", clipDir = "image/npcClip/0001" },
     { id = "hero_002", name = "守护者", quality = 2, star = 1, power = 960, job = "骑士", faction = "森林", role = "前排", npcId = "0004", clipDir = "image/npcClip/0004" },
@@ -67,18 +69,56 @@ local function getNpcInitialSkills(npcConfig)
     return {}
 end
 
+local function getNpcConfig(npcId)
+    local ok, ConfigManager = pcall(require, "Config.ConfigManager")
+    if not ok or not ConfigManager then return nil end
+    local okConfig, config = pcall(ConfigManager.GetNpcConfig, npcId)
+    if okConfig and type(config) == "table" then
+        return config
+    end
+    return nil
+end
+
+local function cloneStaticNpcInfo(npcConfig)
+    return {
+        stats = cloneValue(npcConfig.stats or {}),
+        activeSkill = cloneValue(npcConfig.activeSkill or {}),
+        passiveSkills = cloneValue(npcConfig.passiveSkills or {}),
+        ai = cloneValue(npcConfig.ai or {}),
+    }
+end
+
+local function normalizeLearnedSkills(npcConfig, rawSkills)
+    if type(npcConfig) ~= "table" or type(npcConfig.Skill) ~= "table" then
+        return type(rawSkills) == "table" and cloneValue(rawSkills) or {}
+    end
+
+    local learnedCount = type(rawSkills) == "table" and #rawSkills or 0
+    if learnedCount <= 0 then
+        return getNpcInitialSkills(npcConfig)
+    end
+
+    local result = {}
+    for i = 1, math.min(learnedCount, #npcConfig.Skill) do
+        result[#result + 1] = npcConfig.Skill[i]
+    end
+    return result
+end
+
 local function createHeroFromNpcConfig(npcId, npcConfig, index)
     local job = tostring(npcConfig.profession or npcConfig.job or "战士")
-    local quality = clampInt(npcConfig.quality, 1, 7)
-    return {
+    local quality = tostring(npcConfig.quality or QualityUtil.GetName(npcConfig.qualityRank))
+    local qualityRank = QualityUtil.GetRank(npcConfig)
+    local hero = {
         id = "npc_" .. tostring(npcId),
         npcId = tostring(npcId),
         configId = tostring(npcId),
         name = tostring(npcConfig.name or ("勇者" .. tostring(index))),
         quality = quality,
+        qualityRank = qualityRank,
         star = clampInt(npcConfig.BaseStarID or npcConfig.star, 1, 6),
         level = math.max(1, math.floor(tonumber(npcConfig.level) or 1)),
-        power = math.max(1, math.floor(tonumber(npcConfig.power) or (900 + index * 17 + quality * 220))),
+        power = math.max(1, math.floor(tonumber(npcConfig.power) or (900 + index * 17 + qualityRank * 220))),
         job = job,
         profession = job,
         faction = tostring(npcConfig.faction or "王国"),
@@ -87,6 +127,11 @@ local function createHeroFromNpcConfig(npcId, npcConfig, index)
         clipDir = tostring(npcConfig.clipDir or ("image/npcClip/" .. tostring(npcId))),
         skills = getNpcInitialSkills(npcConfig),
     }
+    local staticInfo = cloneStaticNpcInfo(npcConfig)
+    for key, value in pairs(staticInfo) do
+        hero[key] = value
+    end
+    return hero
 end
 
 local function createDefaultHeroes()
@@ -126,24 +171,38 @@ end
 local function normalizeHero(rawHero, index)
     rawHero = type(rawHero) == "table" and rawHero or {}
     local npcId = tostring(rawHero.npcId or rawHero.configId or rawHero.id or index)
-    local job = tostring(rawHero.job or rawHero.profession or "战士")
-    return {
-        id = tostring(rawHero.id or ("hero_" .. string.format("%03d", index))),
+    if string.sub(npcId, 1, 4) == "npc_" then
+        npcId = string.sub(npcId, 5)
+    end
+
+    local npcConfig = getNpcConfig(npcId)
+    local source = type(npcConfig) == "table" and npcConfig or rawHero
+    local job = tostring(source.profession or source.job or rawHero.job or rawHero.profession or "战士")
+    local quality = tostring(source.quality or QualityUtil.GetName(source.qualityRank or rawHero.qualityRank or rawHero.quality))
+    local qualityRank = QualityUtil.GetRank(source)
+    local hero = {
+        id = tostring(rawHero.id or ("npc_" .. tostring(npcId))),
         npcId = npcId,
         configId = tostring(rawHero.configId or npcId),
-        name = tostring(rawHero.name or ("勇者" .. tostring(index))),
-        quality = clampInt(rawHero.quality, 1, 7),
-        star = clampInt(rawHero.star or rawHero.BaseStarID, 1, 6),
+        name = tostring(source.name or rawHero.name or ("勇者" .. tostring(index))),
+        quality = quality,
+        qualityRank = qualityRank,
+        star = clampInt(rawHero.star or source.BaseStarID or source.star, 1, 6),
         level = math.max(1, math.floor(tonumber(rawHero.level) or 1)),
-        power = math.max(1, math.floor(tonumber(rawHero.power) or 1)),
+        power = math.max(1, math.floor(tonumber(rawHero.power) or tonumber(source.power) or 1)),
         job = job,
-        profession = tostring(rawHero.profession or job),
-        faction = tostring(rawHero.faction or "王国"),
-        role = tostring(rawHero.role or ROLE_BY_JOB[job] or "前排"),
-        story = tostring(rawHero.story or ""),
-        clipDir = tostring(rawHero.clipDir or ("image/npcClip/" .. npcId)),
-        skills = type(rawHero.skills) == "table" and cloneValue(rawHero.skills) or {},
+        profession = tostring(source.profession or job),
+        faction = tostring(source.faction or rawHero.faction or "王国"),
+        role = tostring(source.role or rawHero.role or ROLE_BY_JOB[job] or "前排"),
+        story = tostring(source.story or rawHero.story or ""),
+        clipDir = tostring(source.clipDir or rawHero.clipDir or ("image/npcClip/" .. npcId)),
+        skills = normalizeLearnedSkills(npcConfig, rawHero.skills),
     }
+    local staticInfo = cloneStaticNpcInfo(source)
+    for key, value in pairs(staticInfo) do
+        hero[key] = value
+    end
+    return hero
 end
 
 local function hasHero(heroMap, heroId)
@@ -402,16 +461,20 @@ function SaveSchema.Normalize(rawSave, now)
         sourceHeroes = defaultHeroes
     end
     local existingHeroIds = {}
+    local existingNpcIds = {}
     for i, rawHero in ipairs(sourceHeroes) do
         local hero = normalizeHero(rawHero, i)
         heroes[#heroes + 1] = hero
         existingHeroIds[hero.id] = true
+        existingNpcIds[tostring(hero.npcId or hero.configId or hero.id)] = true
     end
     for _, defaultHero in ipairs(defaultHeroes) do
-        if not existingHeroIds[defaultHero.id] then
+        local defaultNpcId = tostring(defaultHero.npcId or defaultHero.configId or defaultHero.id)
+        if not existingHeroIds[defaultHero.id] and not existingNpcIds[defaultNpcId] then
             local hero = normalizeHero(defaultHero, #heroes + 1)
             heroes[#heroes + 1] = hero
             existingHeroIds[hero.id] = true
+            existingNpcIds[tostring(hero.npcId or hero.configId or hero.id)] = true
         end
     end
     save.heroes = heroes

@@ -2,6 +2,7 @@ local UI = require("urhox-libs/UI")
 local NormalizedSprite = require("UI.NormalizedSprite")
 local SaveManager = require("Save.SaveManager")
 local ConfigManager = require("Config.ConfigManager")
+local QualityUtil = require("Config.QualityUtil")
 
 local HeroCodexScene = {}
 HeroCodexScene.__index = HeroCodexScene
@@ -10,47 +11,14 @@ local DESIGN_WIDTH = 720
 local DESIGN_HEIGHT = 1280
 local HERO_IMAGE = "image/npcClip/0001/01.png"
 
-local QUALITY_COLORS = {
-    [1] = { 181, 181, 181, 255 },
-    [2] = { 162, 255, 148, 255 },
-    [3] = { 114, 242, 245, 255 },
-    [4] = { 239, 121, 255, 255 },
-    [5] = { 255, 237, 0, 255 },
-    [6] = { 255, 0, 0, 255 },
-    [7] = { 255, 237, 0, 255 },
-}
-
-local QUALITY_NAMES = {
-    [1] = "D",
-    [2] = "C",
-    [3] = "B",
-    [4] = "A",
-    [5] = "S",
-    [6] = "SS",
-    [7] = "L",
-}
-
-local QUALITY_ICON_PATHS = {
-    [1] = "image/品质/_D.png",
-    [2] = "image/品质/_C.png",
-    [3] = "image/品质/_B.png",
-    [4] = "image/品质/_A.png",
-    [5] = "image/品质/_S.png",
-    [6] = "image/品质/_SS.png",
-    [7] = "image/品质/_L.png",
-}
-
 local STAR_ICON_PATH = "image/品质/星级.png"
 local STAR_REWARD_STARS = { 2, 3, 4, 5, 6 }
-local QUALITY_PAGE_ORDER = { 7, 6, 5, 4, 3, 2, 1 }
 
 local ATTRIBUTE_LABELS = {
-    { id = "MaxHP", label = "生命" },
-    { id = "Att", label = "攻击" },
-    { id = "Def", label = "防御" },
-    { id = "Speed", label = "速度" },
-    { id = "Crit", label = "暴击" },
-    { id = "CritDamage", label = "暴伤" },
+    { id = "hp", label = "生命" },
+    { id = "atk", label = "攻击" },
+    { id = "def", label = "防御" },
+    { id = "moveSpeed", label = "移动" },
 }
 
 local function FormatNumber(value)
@@ -76,11 +44,11 @@ local function IsCommentKey(key)
 end
 
 local function GetQuality(config)
-    return ClampInt(config and config.quality or 1, 1, 7)
+    return QualityUtil.GetRank(config)
 end
 
 local function GetQualityColor(config)
-    return QUALITY_COLORS[GetQuality(config)] or QUALITY_COLORS[1]
+    return QualityUtil.GetColor(config)
 end
 
 local function GetHeroPreviewImage(config)
@@ -167,7 +135,7 @@ local function GetQualityPages(entries)
     end
 
     local pages = {}
-    for _, quality in ipairs(QUALITY_PAGE_ORDER) do
+    for _, quality in ipairs(QualityUtil.GetPageOrder()) do
         if hasQuality[quality] then
             pages[#pages + 1] = quality
         end
@@ -179,21 +147,32 @@ local function GetQualityPages(entries)
     return pages
 end
 
+local function GetSkillConfig(skillId)
+    if not skillId then return nil end
+    local tables = ConfigManager.GetTables()
+    return tables.skill and tables.skill[tostring(skillId)] or nil
+end
+
 local function GetSkillName(skillId)
     if not skillId then return "未配置" end
-    local tables = ConfigManager.GetTables()
-    local skill = tables.skill and tables.skill[tostring(skillId)] or nil
+    local skill = GetSkillConfig(skillId)
     if skill and skill.name then
         return tostring(skill.name)
     end
     return "技能" .. tostring(skillId)
 end
 
-local function GetAttributeValue(attributeConfig, attrId)
-    if type(attributeConfig) ~= "table" then return 0 end
-    local attr = attributeConfig[attrId]
-    if type(attr) ~= "table" then return 0 end
-    return math.floor(tonumber(attr.Value) or 0)
+local function GetSkillSubtitle(skill)
+    if type(skill) ~= "table" then return "未配置" end
+    if skill.kind == "active" then
+        return "主动 · " .. tostring(skill.type or "技能") .. " · CD" .. tostring(skill.cooldown or "-")
+    end
+    return "被动 · " .. tostring(skill.trigger or "条件触发")
+end
+
+local function GetAttributeValue(stats, attrId)
+    if type(stats) ~= "table" then return 0 end
+    return math.floor(tonumber(stats[attrId]) or 0)
 end
 
 local function GetOwnedRewardAmount(config)
@@ -309,7 +288,7 @@ function HeroCodexScene:SetPage(pageIndex)
     self.pageIndex = math.max(1, math.min(totalPages, math.floor(tonumber(pageIndex) or 1)))
     local quality = qualityPages[self.pageIndex] or 1
     local qualityEntries = GetEntriesByQuality(entries, quality)
-    self:SetStatus("当前显示" .. (QUALITY_NAMES[quality] or "D") .. "品质英雄，共" .. tostring(#qualityEntries) .. "个。")
+    self:SetStatus("当前显示" .. QualityUtil.GetName(quality) .. "品质英雄，共" .. tostring(#qualityEntries) .. "个。")
     self:Refresh()
 end
 
@@ -457,7 +436,7 @@ function HeroCodexScene:CreateHeroGridPanel(entries, heroMap, codex)
         children = {
             UI.Panel { width = "100%", height = 34, flexDirection = "row", alignItems = "center", gap = 8, children = {
                 UI.Button { text = "<", width = 40, height = 30, fontSize = 16, backgroundColor = self.pageIndex > 1 and { 88, 46, 45, 255 } or { 117, 79, 62, 160 }, textColor = { 255, 244, 220, 255 }, borderRadius = 11, onClick = function() self:SetPage(self.pageIndex - 1) end },
-                UI.Label { text = (QUALITY_NAMES[quality] or "D") .. "品质 " .. tostring(#qualityEntries), flexGrow = 1, fontSize = 22, fontWeight = "bold", fontColor = GetQualityColor({ quality = quality }), textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 200 } } },
+                UI.Label { text = QualityUtil.GetName(quality) .. "品质 " .. tostring(#qualityEntries), flexGrow = 1, fontSize = 22, fontWeight = "bold", fontColor = GetQualityColor({ quality = quality }), textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 200 } } },
                 UI.Button { text = ">", width = 40, height = 30, fontSize = 16, backgroundColor = self.pageIndex < totalPages and { 88, 46, 45, 255 } or { 117, 79, 62, 160 }, textColor = { 255, 244, 220, 255 }, borderRadius = 11, onClick = function() self:SetPage(self.pageIndex + 1) end },
             } },
             UI.ScrollView {
@@ -502,7 +481,7 @@ function HeroCodexScene:CreateHeroIcon(entry, ownedHero, codex)
         children = {
             UI.Panel { width = 72, height = 70, position = "absolute", left = 6, top = 8, backgroundColor = { 207, 166, 119, owned and 180 or 90 }, borderRadius = 11 },
             UI.Panel { width = 76, height = 72, position = "absolute", left = 4, top = 6, backgroundImage = GetHeroPreviewImage(config), backgroundFit = "contain", imageTint = owned and { 255, 255, 255, 255 } or { 100, 100, 100, 210 } },
-            UI.Panel { width = 24, height = 24, position = "absolute", left = 5, top = 4, backgroundImage = QUALITY_ICON_PATHS[GetQuality(config)] or QUALITY_ICON_PATHS[1], backgroundFit = "contain" },
+            UI.Panel { width = 24, height = 24, position = "absolute", left = 5, top = 4, backgroundImage = QualityUtil.GetIconPath(config), backgroundFit = "contain" },
             UI.Label { text = tostring(config.name or entry.npcId), width = 74, height = 20, position = "absolute", left = 5, top = 82, fontSize = 13, fontWeight = "bold", fontColor = owned and { 88, 46, 45, 255 } or { 255, 244, 220, 230 }, textAlign = "center", maxLines = 1 },
             UI.Label { text = owned and "已激活" or "未获得", width = 56, height = 18, position = "absolute", left = 14, top = 62, fontSize = 11, fontColor = owned and { 202, 92, 44, 255 } or { 255, 244, 220, 230 }, textAlign = "center", backgroundColor = owned and { 255, 244, 205, 210 } or { 42, 30, 24, 190 }, borderRadius = 8, maxLines = 1 },
             UI.Panel { visible = claimable, width = 18, height = 18, position = "absolute", right = 4, top = 4, backgroundColor = { 255, 80, 48, 255 }, borderRadius = 9, borderWidth = 2, borderColor = { 255, 234, 0, 255 } },
@@ -530,17 +509,32 @@ function HeroCodexScene:CreateDetailPanel(entry, hero, codex)
         flexShrink = 1,
         height = "100%",
         padding = 12,
-        gap = 8,
         backgroundColor = { 245, 228, 200, 245 },
         borderColor = { 68, 45, 25, 255 },
         borderWidth = 3,
         borderRadius = 18,
         children = {
-            self:CreateHeroOverview(entry, hero),
-            self:CreateAttributePanel(entry),
-            self:CreateSkillPanel(entry),
-            self:CreateRewardPanel(entry, hero, codex),
-            UI.Label { text = self.statusText, flexGrow = 1, flexBasis = 0, fontSize = 15, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 3 },
+            UI.ScrollView {
+                width = "100%",
+                flexGrow = 1,
+                flexBasis = 0,
+                scrollY = true,
+                showScrollbar = true,
+                children = {
+                    UI.Panel {
+                        width = "100%",
+                        gap = 8,
+                        children = {
+                            self:CreateHeroOverview(entry, hero),
+                            self:CreateAttributePanel(entry),
+                            self:CreateSkillPanel(entry),
+                            self:CreateStoryPanel(entry),
+                            self:CreateRewardPanel(entry, hero, codex),
+                            UI.Label { text = self.statusText, width = "100%", fontSize = 15, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 4 },
+                        },
+                    },
+                },
+            },
         },
     }
 end
@@ -560,10 +554,10 @@ function HeroCodexScene:CreateHeroOverview(entry, hero)
         children = {
             UI.Panel { width = 116, height = 150, position = "absolute", left = 10, top = 18, backgroundColor = { 207, 166, 119, 170 }, borderColor = { 68, 45, 25, 180 }, borderWidth = 1, borderRadius = 16 },
             NormalizedSprite { width = 140, height = 150, position = "absolute", left = -2, top = 18, backgroundImage = GetHeroPreviewImage(config), imageTint = hero and { 255, 255, 255, 255 } or { 120, 120, 120, 220 } },
-            UI.Panel { width = 32, height = 32, position = "absolute", left = 14, top = 18, backgroundImage = QUALITY_ICON_PATHS[quality] or QUALITY_ICON_PATHS[1], backgroundFit = "contain" },
+            UI.Panel { width = 32, height = 32, position = "absolute", left = 14, top = 18, backgroundImage = QualityUtil.GetIconPath(quality), backgroundFit = "contain" },
             UI.Label { text = hero and "已获得" or "未获得", position = "absolute", left = 20, top = 174, width = 96, height = 26, fontSize = 15, fontWeight = "bold", fontColor = hero and { 202, 92, 44, 255 } or { 88, 46, 45, 220 }, backgroundColor = { 207, 166, 119, 190 }, borderRadius = 12, textAlign = "center" },
             UI.Label { text = tostring(config.name or entry.npcId), position = "absolute", left = 138, top = 18, width = 128, fontSize = 23, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
-            UI.Label { text = (QUALITY_NAMES[quality] or "D") .. " · " .. tostring(config.profession or "战士"), position = "absolute", left = 138, top = 54, width = 128, fontSize = 15, fontWeight = "bold", fontColor = GetQualityColor(config), textStroke = { width = 1, color = { 68, 45, 25, 150 } }, maxLines = 1 },
+            UI.Label { text = QualityUtil.GetName(quality) .. " · " .. tostring(config.profession or "战士"), position = "absolute", left = 138, top = 54, width = 128, fontSize = 15, fontWeight = "bold", fontColor = GetQualityColor(config), textStroke = { width = 1, color = { 68, 45, 25, 150 } }, maxLines = 1 },
             self:CreateInfoRow("阵营", tostring(config.faction or "王国"), 138, 88),
             self:CreateInfoRow("站位", tostring(config.role or "前排"), 138, 120),
             self:CreateInfoRow("星级", tostring(star) .. "星", 138, 152),
@@ -594,16 +588,15 @@ function HeroCodexScene:CreateInfoRow(label, value, left, top)
 end
 
 function HeroCodexScene:CreateAttributePanel(entry)
-    local tables = ConfigManager.GetTables()
     local config = entry.config
-    local attributeConfig = tables.attributes and tables.attributes[tostring(config.BaseAttributeID or 1)] or {}
+    local stats = type(config.stats) == "table" and config.stats or {}
     local rows = {}
     for _, attr in ipairs(ATTRIBUTE_LABELS) do
-        rows[#rows + 1] = self:CreateAttributeRow(attr.label, GetAttributeValue(attributeConfig, attr.id))
+        rows[#rows + 1] = self:CreateAttributeRow(attr.label, GetAttributeValue(stats, attr.id))
     end
     return UI.Panel {
         width = "100%",
-        height = 160,
+        height = 136,
         padding = 9,
         gap = 6,
         backgroundColor = { 113, 74, 58, 230 },
@@ -639,24 +632,25 @@ function HeroCodexScene:CreateSkillPanel(entry)
     local skills = type(entry.config.Skill) == "table" and entry.config.Skill or {}
     for index = 1, 5 do
         local skillId = skills[index]
+        local skill = GetSkillConfig(skillId)
         skillChildren[#skillChildren + 1] = UI.Panel {
-            width = 76,
-            height = 54,
+            width = "100%",
+            height = 44,
             padding = 5,
             backgroundColor = skillId and { 245, 228, 200, 255 } or { 117, 79, 62, 170 },
             borderColor = skillId and { 68, 45, 25, 220 } or { 68, 45, 25, 120 },
             borderWidth = 2,
             borderRadius = 12,
             children = {
-                UI.Label { text = skillId and GetSkillName(skillId) or "技能槽", fontSize = 13, fontWeight = "bold", fontColor = skillId and { 88, 46, 45, 255 } or { 255, 244, 220, 220 }, textAlign = "center", maxLines = 1 },
-                UI.Label { text = skillId and ("ID " .. tostring(skillId)) or "未配置", fontSize = 11, fontColor = skillId and { 202, 92, 44, 255 } or { 255, 244, 220, 180 }, textAlign = "center", maxLines = 1 },
+                UI.Label { text = skillId and GetSkillName(skillId) or "技能槽", fontSize = 13, fontWeight = "bold", fontColor = skillId and { 88, 46, 45, 255 } or { 255, 244, 220, 220 }, maxLines = 1 },
+                UI.Label { text = GetSkillSubtitle(skill), fontSize = 11, fontColor = skillId and { 202, 92, 44, 255 } or { 255, 244, 220, 180 }, maxLines = 1 },
             },
         }
     end
 
     return UI.Panel {
         width = "100%",
-        height = 126,
+        height = 268,
         padding = 9,
         gap = 6,
         backgroundColor = { 113, 74, 58, 230 },
@@ -665,7 +659,35 @@ function HeroCodexScene:CreateSkillPanel(entry)
         borderRadius = 16,
         children = {
             UI.Label { text = "技能配置", fontSize = 19, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 180 } } },
-            UI.Panel { width = "100%", flexDirection = "row", flexWrap = "wrap", gap = 5, children = skillChildren },
+            UI.Panel { width = "100%", flexGrow = 1, flexBasis = 0, gap = 5, children = skillChildren },
+        },
+    }
+end
+
+function HeroCodexScene:CreateStoryPanel(entry)
+    local config = entry.config
+    local ai = type(config.ai) == "table" and config.ai or {}
+    local lowHP = type(ai.lowHP) == "table" and ai.lowHP or {}
+    local lines = {
+        tostring(config.story or "暂无背景故事。"),
+        "AI：" .. tostring(ai.behaviorType or "未知") .. " · " .. tostring(ai.priorityTarget or "默认目标") .. " · " .. tostring(ai.moveStrategy or "默认移动"),
+        "技能策略：" .. tostring(ai.skillUsage or "默认释放"),
+    }
+    if lowHP.name then
+        lines[#lines + 1] = "濒危：" .. tostring(lowHP.name) .. " - " .. tostring(lowHP.description or lowHP.logic or "")
+    end
+    return UI.Panel {
+        width = "100%",
+        height = 144,
+        padding = 9,
+        gap = 5,
+        backgroundColor = { 113, 74, 58, 230 },
+        borderColor = { 68, 45, 25, 255 },
+        borderWidth = 2,
+        borderRadius = 16,
+        children = {
+            UI.Label { text = "背景与AI", fontSize = 19, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 180 } } },
+            UI.Label { text = table.concat(lines, "\n"), width = "100%", flexGrow = 1, flexBasis = 0, fontSize = 12, fontColor = { 255, 244, 220, 235 }, maxLines = 5 },
         },
     }
 end

@@ -49,7 +49,7 @@
 - 已新增 `scripts/Inventory/InventoryScene.lua`，实现与阵型页一致的 Yoga UI 棕色/米黄风格背包系统：分类 TAB、5 列物品格、详情面板、使用/整理/扩充/关闭按钮；主界面底部“背包”入口已接入；存档新增 `inventory` 字段并纳入增量 dirty 上传，默认 36 格和 6 个示例物品；小袋金币可使用并同时保存 `coin` 与 `inventory`。最近按 Inspector 同步背包布局：内容父级宽度 696，物品列表绝对定位为上方 693×76.8%，详情面板绝对定位到底部并使用 `image/IM-说明-底.png`，删除顶部 Header 包装节点并把标题、容量、返回按钮上提到根节点。
 - 勇者序列帧已接入主界面森林关卡区，默认使用 `assets/image/npcClip/0001/` 做 UI 序列帧动画：主界面 `Hanginglist` 最多显示 5 个玩家已拥有勇者，拥有不足 5 个时只显示实际拥有数量；每个显示位使用对应勇者 `clipDir` 的 06-09 移动帧做原地移动动作，每 3-5 秒在候选充足时替换其中一个当前显示位；左侧挑战徽章仍可触发攻击，右侧成长徽章触发移动。
 - 已新增 `scripts/UI/NormalizedSprite.lua`，按每张 `npcClip` 帧图的透明像素包围盒做归一化缩放/居中，已接入主界面 `Hanginglist`、阵型页勇者卡/站位预览、战斗页单位精灵，解决同界面不同勇者或不同动作因画布留白不同导致视觉大小不一致；当前已增加缺失 NPC 序列帧兜底，主界面、编队页、战斗页和 `NormalizedSprite` 在 `image/npcClip/0171/01.png` 等帧资源不存在时会回退到 `image/npcClip/0001/`，并使用 `cache:Exists()` 做无报错存在性检查。
-- NPC/勇者数据已从 `docs/setting/npcdata.json` 生成到 `assets/Config/npc.json`，共 112 条。`SaveSchema` 通过 `ConfigManager` 读取 NPC 配置生成默认勇者列表，字段包括 `npcId/configId/name/quality/star/power/job/profession/faction/role/story/clipDir/skills`；旧存档若仍是占位勇者，会在 Normalize 时切换为配置生成的 NPC 勇者并重建默认阵容；阵型页和战斗场景均使用 `hero.clipDir` 显示对应 NPC 序列帧。
+- NPC/勇者数据已从 `docs/setting/npcdata.json` 全量同步到运行配置：`assets/Config/npc.json` 保留 112 个 NPC 的 `stats`、`activeSkill`、`passiveSkills`、`ai`、字母品质、阵营、职业、故事等完整信息，并补充运行字段 `qualityRank/power/role/clipDir/Skill`；`assets/Config/skill.json` 生成 560 个技能条目（每个 NPC 1 个主动 + 4 个被动）。`SaveSchema` 登录规范化会按新 NPC 配置刷新旧存档英雄的静态信息，保留等级/星级/战力等成长数据；阵型、图鉴、养成页通过 `Config.QualityUtil` 统一处理 D/C/B/A/S/SS/L 品质。
 - 关卡系统已接入 `docs/setting/level_design.json`：配置复制到 `assets/Config/level_design.json`，新增 `LevelManager` 读取 67 个章节/小关/BOSS/敌人配置；存档新增 `stageProgress`，主界面标题和关卡摘要显示当前章节小关，战斗场景按当前小关生成敌方单位并使用 `sceneImage` 切换 `BattleRes` 背景，胜利后推进关卡进度并保存。
 
 - 主界面 `Hanginglist` 点击任一显示勇者会进入勇者养成页；四个圆形入口中的“勇者”入口也会进入默认第一个勇者的养成页；子控件点击使用 `event:StopPropagation()`，避免触发父级 `Hanginglist` 动作切换。
@@ -67,6 +67,8 @@
 - 在 `GridBattleScene` 上继续实现寻路、技能范围、敌方 AI、攻击表现、胜负结算和战斗结果存档。
 
 ## POST 日志
+
+- 2026-07-05：按 `docs/setting/npcdata.json` 全量更新游戏 NPC 信息：重新生成 `assets/Config/npc.json`，保留 112 个 NPC 的基础属性、主动技能、4 个被动技能、AI 行为、低血量逻辑、字母品质、故事、职业、阵营等源数据，并生成 `assets/Config/skill.json` 的 560 个技能条目；新增 `Config.QualityUtil` 统一 D/C/B/A/S/SS/L 品质映射；图鉴页改为展示源属性、真实主动/被动技能、背景与 AI 信息；存档规范化会按新配置刷新旧英雄静态信息并避免同 NPC 重复补齐。LSP 0 Error，官方构建成功。
 
 - 2026-07-05：修复英雄图鉴按品质分页后的显示问题：根据 `npc.json` 实际存在的品质动态生成分页，避免进入不存在的 L/D 空页；品质标题改为与资源图标一致的 D/C/B/A/S/SS/L；同品质英雄数量较多时左侧列表使用 `UI.ScrollView` 滚动展示；详情默认选中当前品质页内第一个英雄，避免左侧品质页与右侧详情不一致。LSP 0 Error，官方构建成功。
 

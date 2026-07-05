@@ -2,6 +2,7 @@ local UI = require("urhox-libs/UI")
 local NormalizedSprite = require("UI.NormalizedSprite")
 local SaveManager = require("Save.SaveManager")
 local ConfigManager = require("Config.ConfigManager")
+local QualityUtil = require("Config.QualityUtil")
 
 local HeroGrowthScene = {}
 HeroGrowthScene.__index = HeroGrowthScene
@@ -10,36 +11,6 @@ local DESIGN_WIDTH = 720
 local DESIGN_HEIGHT = 1280
 local HERO_IMAGE = "image/npcClip/0001/01.png"
 local MAX_STAR = 6
-
-local QUALITY_COLORS = {
-    [1] = { 181, 181, 181, 255 },
-    [2] = { 162, 255, 148, 255 },
-    [3] = { 114, 242, 245, 255 },
-    [4] = { 239, 121, 255, 255 },
-    [5] = { 255, 237, 0, 255 },
-    [6] = { 255, 0, 0, 255 },
-    [7] = { 255, 237, 0, 255 },
-}
-
-local QUALITY_NAMES = {
-    [1] = "普通",
-    [2] = "优质",
-    [3] = "稀有",
-    [4] = "史诗",
-    [5] = "传说",
-    [6] = "至臻",
-    [7] = "传说",
-}
-
-local QUALITY_ICON_PATHS = {
-    [1] = "image/品质/_D.png",
-    [2] = "image/品质/_C.png",
-    [3] = "image/品质/_B.png",
-    [4] = "image/品质/_A.png",
-    [5] = "image/品质/_S.png",
-    [6] = "image/品质/_SS.png",
-    [7] = "image/品质/_L.png",
-}
 
 local STAR_ICON_PATH = "image/品质/星级.png"
 
@@ -66,11 +37,11 @@ local function GetSaveData()
 end
 
 local function GetQuality(hero)
-    return ClampInt(hero and hero.quality or 1, 1, 7)
+    return QualityUtil.GetRank(hero)
 end
 
 local function GetQualityColor(hero)
-    return QUALITY_COLORS[GetQuality(hero)] or QUALITY_COLORS[1]
+    return QualityUtil.GetColor(hero)
 end
 
 local function GetHeroPreviewImage(hero)
@@ -448,7 +419,7 @@ function HeroGrowthScene:CreateHeroCard(hero)
         children = {
             UI.Panel { width = 78, height = 92, position = "absolute", left = 6, top = 7, backgroundColor = { 207, 166, 119, 170 }, borderColor = { 68, 45, 25, 180 }, borderWidth = 1, borderRadius = 12 },
             NormalizedSprite { width = 96, height = 96, position = "absolute", left = -3, top = 4, backgroundImage = GetHeroPreviewImage(hero), imageTint = { 255, 255, 255, 255 } },
-            UI.Panel { width = 28, height = 28, position = "absolute", left = 9, top = 4, backgroundImage = QUALITY_ICON_PATHS[GetQuality(hero)] or QUALITY_ICON_PATHS[1], backgroundFit = "contain" },
+            UI.Panel { width = 28, height = 28, position = "absolute", left = 9, top = 4, backgroundImage = QualityUtil.GetIconPath(hero), backgroundFit = "contain" },
             UI.Label { text = hero.name, width = 150, position = "absolute", left = 91, top = 10, fontSize = 17, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
             UI.Label { text = "Lv." .. tostring(GetHeroLevel(hero)) .. " · " .. tostring(hero.job or hero.profession or "战士"), width = 150, position = "absolute", left = 91, top = 39, fontSize = 14, fontColor = { 74, 56, 42, 220 }, maxLines = 1 },
             UI.Label { text = "战力 " .. FormatNumber(hero.power), width = 150, position = "absolute", left = 91, top = 68, fontSize = 14, fontWeight = "bold", fontColor = { 202, 92, 44, 255 }, maxLines = 1 },
@@ -493,9 +464,9 @@ function HeroGrowthScene:CreateHeroOverview(hero)
         children = {
             UI.Panel { width = 156, height = 188, position = "absolute", left = 12, top = 18, backgroundColor = { 207, 166, 119, 170 }, borderColor = { 68, 45, 25, 180 }, borderWidth = 1, borderRadius = 16 },
             NormalizedSprite { width = 188, height = 188, position = "absolute", left = -3, top = 18, backgroundImage = GetHeroPreviewImage(hero) },
-            UI.Panel { width = 34, height = 34, position = "absolute", left = 17, top = 20, backgroundImage = QUALITY_ICON_PATHS[quality] or QUALITY_ICON_PATHS[1], backgroundFit = "contain" },
+            UI.Panel { width = 34, height = 34, position = "absolute", left = 17, top = 20, backgroundImage = QualityUtil.GetIconPath(quality), backgroundFit = "contain" },
             UI.Label { text = hero.name, position = "absolute", left = 182, top = 18, width = 190, fontSize = 25, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
-            UI.Label { text = (QUALITY_NAMES[quality] or "普通") .. " · " .. tostring(hero.job or hero.profession or "战士") .. " · " .. tostring(hero.faction or "王国"), position = "absolute", left = 182, top = 56, width = 190, fontSize = 16, fontWeight = "bold", fontColor = GetQualityColor(hero), textStroke = { width = 1, color = { 68, 45, 25, 160 } }, maxLines = 1 },
+            UI.Label { text = QualityUtil.GetName(quality) .. " · " .. tostring(hero.job or hero.profession or "战士") .. " · " .. tostring(hero.faction or "王国"), position = "absolute", left = 182, top = 56, width = 190, fontSize = 16, fontWeight = "bold", fontColor = GetQualityColor(hero), textStroke = { width = 1, color = { 68, 45, 25, 160 } }, maxLines = 1 },
             UI.Panel { position = "absolute", left = 182, top = 88, children = { CreateStarBadge(hero.star) } },
             self:CreateStatRow("等级", "Lv." .. tostring(GetHeroLevel(hero)) .. "/" .. tostring(GetLevelLimit(hero)), 182, 128),
             self:CreateStatRow("战力", FormatNumber(hero.power), 182, 162),

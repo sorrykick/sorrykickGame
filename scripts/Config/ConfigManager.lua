@@ -70,7 +70,11 @@ end
 
 function ConfigManager.GetNpcConfig(npcId)
     local tables = ConfigManager.LoadAll()
-    return tables.npc[tostring(npcId)]
+    local key = tostring(npcId or "")
+    if string.sub(key, 1, 4) == "npc_" then
+        key = string.sub(key, 5)
+    end
+    return tables.npc[key]
 end
 
 function ConfigManager.GetInitialNpcId()
@@ -94,7 +98,7 @@ function ConfigManager.GetNpcInitialSkills(npcConfig)
     local openSkillNum = math.max(0, math.floor(tonumber(starConfig.OpenSkillNum) or 0))
     local result = {}
     for i = 1, math.min(openSkillNum, #npcConfig.Skill) do
-        result[#result + 1] = tonumber(npcConfig.Skill[i]) or npcConfig.Skill[i]
+        result[#result + 1] = npcConfig.Skill[i]
     end
     return result
 end

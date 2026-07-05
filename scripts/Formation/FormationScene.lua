@@ -1,6 +1,7 @@
 local UI = require("urhox-libs/UI")
 local NormalizedSprite = require("UI.NormalizedSprite")
 local SaveManager = require("Save.SaveManager")
+local QualityUtil = require("Config.QualityUtil")
 
 local FormationScene = {}
 FormationScene.__index = FormationScene
@@ -42,24 +43,6 @@ local SLOT_UNLOCK_LEVEL = {
     back3 = 1,
 }
 
-local QUALITY_COLORS = {
-    [1] = { 181, 181, 181, 255 },
-    [2] = { 162, 255, 148, 255 },
-    [3] = { 114, 242, 245, 255 },
-    [4] = { 239, 121, 255, 255 },
-    [5] = { 255, 237, 0, 255 },
-    [6] = { 255, 0, 0, 255 },
-}
-
-local QUALITY_ICON_PATHS = {
-    [1] = "image/品质/_D.png",
-    [2] = "image/品质/_C.png",
-    [3] = "image/品质/_B.png",
-    [4] = "image/品质/_A.png",
-    [5] = "image/品质/_S.png",
-    [6] = "image/品质/_SS.png",
-    [7] = "image/品质/_L.png",
-}
 local STAR_ICON_PATH = "image/品质/星级.png"
 
 local SORT_LABELS = {
@@ -348,7 +331,7 @@ function FormationScene:AutoFillFormation()
 
     local sortedHeroes = CopyArray(heroes)
     table.sort(sortedHeroes, function(a, b)
-        if a.quality ~= b.quality then return a.quality > b.quality end
+        if QualityUtil.GetRank(a) ~= QualityUtil.GetRank(b) then return QualityUtil.GetRank(a) > QualityUtil.GetRank(b) end
         if a.star ~= b.star then return a.star > b.star end
         return a.power > b.power
     end)
@@ -510,7 +493,7 @@ function FormationScene:CreateHeroList(heroes, formation)
     local sortedHeroes = CopyArray(heroes)
     table.sort(sortedHeroes, function(a, b)
         if self.sortMode == "quality" then
-            if a.quality ~= b.quality then return a.quality > b.quality end
+            if QualityUtil.GetRank(a) ~= QualityUtil.GetRank(b) then return QualityUtil.GetRank(a) > QualityUtil.GetRank(b) end
             if a.star ~= b.star then return a.star > b.star end
             return a.power > b.power
         end
@@ -617,7 +600,7 @@ end
 function FormationScene:CreateHeroCard(hero, formation)
     local assigned = IsHeroAssigned(formation, hero.id)
     local selected = self.selectedHeroId == hero.id
-    local qualityColor = QUALITY_COLORS[hero.quality] or QUALITY_COLORS[1]
+    local qualityColor = QualityUtil.GetColor(hero)
     return UI.Panel {
         width = "95%",
         height = 104,
@@ -652,7 +635,7 @@ function FormationScene:CreateHeroCard(hero, formation)
                 borderRadius = 12,
             },
             NormalizedSprite { width = 106, height = 97, position = "absolute", left = -1, top = 0, borderRadius = 0, flexShrink = 0, backgroundImage = GetHeroPreviewImage(hero), imageTint = assigned and { 210, 235, 255, 255 } or { 255, 255, 255, 255 } },
-            UI.Panel { width = 30, height = 30, position = "absolute", left = 11, top = 2, backgroundImage = QUALITY_ICON_PATHS[hero.quality] or QUALITY_ICON_PATHS[1], backgroundFit = "contain" },
+            UI.Panel { width = 30, height = 30, position = "absolute", left = 11, top = 2, backgroundImage = QualityUtil.GetIconPath(hero), backgroundFit = "contain" },
             CreateStarBadge(hero.star),
             UI.Label { id = "hero_1", text = hero.name, width = 142, height = 26, position = "absolute", left = 100, top = 5, fontSize = 17, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
             UI.Label { id = "hero_1", text = hero.job .. " · " .. hero.faction, width = 126, height = 22, position = "absolute", left = 100, top = 40, fontSize = 13, fontColor = { 74, 56, 42, 220 }, maxLines = 1 },
