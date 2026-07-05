@@ -309,9 +309,9 @@ function InventoryScene:CreateContent(saveData, inventory, items, selectedItem)
     return UI.Panel {
         position = "absolute",
         width = 696,
-        left = 16,
-        right = 26,
-        top = 170,
+        left = 19,
+        right = 23,
+        top = 164,
         height = 890,
         children = {
             self:CreateInventoryGridPanel(inventory, items),
@@ -353,7 +353,7 @@ function InventoryScene:CreateInventoryGridPanel(inventory, items)
         position = "absolute",
         left = 4,
         top = 4,
-        width = 693,
+        width = 676,
         height = "76.8%",
         gap = 8,
         backgroundColor = { 113, 74, 58, 245 },
@@ -371,7 +371,9 @@ function InventoryScene:CreateInventoryGridPanel(inventory, items)
                 showScrollbar = true,
                 children = {
                     UI.Panel {
-                        width = "100%",
+                        width = "94.6%",
+                        left = 20,
+                        top = -2,
                         flexDirection = "row",
                         flexWrap = "wrap",
                         gap = SLOT_GAP,
@@ -436,13 +438,13 @@ end
 function InventoryScene:CreateDetailPanel(item)
     return UI.Panel {
         position = "absolute",
-        left = 0,
-        top = 699,
+        left = -9,
+        top = 715,
         width = 693,
-        height = "21.4%",
+        height = "30.7%",
         gap = 10,
         backgroundImage = "image/IM-说明-底.png",
-        backgroundFit = "fill",
+        backgroundFit = "none",
         backgroundColor = { 245, 228, 200, 245 },
         children = item and self:CreateSelectedDetail(item) or self:CreateEmptyDetail(),
     }
@@ -462,10 +464,13 @@ function InventoryScene:CreateSelectedDetail(item)
     local quality = math.max(1, math.min(6, math.floor(tonumber(item.quality) or 1)))
     local qualityColor = GetQualityColor(quality)
     return {
-        UI.Label { text = "物品详情", fontSize = 24, fontWeight = "bold", fontColor = { 117, 79, 62, 255 }, textAlign = "center" },
+        UI.Label { text = "物品详情", position = "absolute", left = 30, top = 23, fontSize = 24, fontWeight = "bold", fontColor = { 117, 79, 62, 255 }, textAlign = "center" },
         UI.Panel {
-            width = "100%",
-            height = 132,
+            width = 96,
+            height = 96,
+            position = "absolute",
+            left = 176,
+            top = 28,
             alignItems = "center",
             justifyContent = "center",
             backgroundColor = { 255, 244, 220, 255 },
@@ -473,26 +478,26 @@ function InventoryScene:CreateSelectedDetail(item)
             borderWidth = 3,
             borderRadius = 18,
             children = {
-                UI.Label { text = tostring(item.icon or "物"), fontSize = 58, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center", textStroke = { width = 2, color = { 255, 244, 220, 255 } } },
+                UI.Label { text = tostring(item.icon or "物"), width = 66, height = 63, minHeight = 60, fontSize = 32, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center", textStroke = { width = 2, color = { 255, 244, 220, 255 } } },
             },
         },
-        UI.Label { text = item.name, fontSize = 22, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 1 },
-        UI.Label { text = (QUALITY_NAMES[quality] or "普通") .. " · " .. (TYPE_LABELS[item.type] or item.type), fontSize = 17, fontWeight = "bold", fontColor = qualityColor, textAlign = "center", textStroke = { width = 1, color = { 68, 45, 25, 180 } }, maxLines = 1 },
-        UI.Panel { width = "100%", minHeight = 120, padding = 10, backgroundColor = { 255, 244, 220, 255 }, borderColor = { 207, 166, 119, 255 }, borderWidth = 2, borderRadius = 14, children = {
+        UI.Label { text = item.name, position = "absolute", left = 54, top = 71, fontSize = 22, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 1 },
+        UI.Label { text = (QUALITY_NAMES[quality] or "普通") .. " · " .. (TYPE_LABELS[item.type] or item.type), position = "absolute", left = 278, top = 36, fontSize = 17, fontWeight = "bold", fontColor = qualityColor, textAlign = "center", textStroke = { width = 1, color = { 68, 45, 25, 180 } }, maxLines = 1 },
+        UI.Panel { width = "93.1%", height = 121, minHeight = 120, position = "absolute", left = 21, top = 124, paddingTop = 2, paddingRight = 2, paddingBottom = 2, paddingLeft = 2, backgroundColor = { 255, 244, 220, 255 }, borderColor = { 207, 166, 119, 255 }, borderWidth = 1, borderRadius = 0, children = {
             UI.Label { text = item.description, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "left", whiteSpace = "normal", maxLines = 4 },
         } },
-        UI.Label { text = "数量：" .. tostring(item.count or 1) .. "    价值：" .. FormatNumber(item.value or 0), fontSize = 16, fontColor = { 117, 79, 62, 255 }, textAlign = "center" },
-        UI.Label { text = self.statusText, minHeight = 52, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 2 },
+        UI.Label { text = "数量：" .. tostring(item.count or 1) .. "    价值：" .. FormatNumber(item.value or 0), position = "absolute", left = 437, top = 41, fontSize = 16, fontColor = { 117, 79, 62, 255 }, textAlign = "center" },
+        UI.Label { text = self.statusText, minHeight = 52, position = "absolute", left = 288, top = 68, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 2 },
     }
 end
 
 function InventoryScene:CreateBottomActions(selectedItem)
     return UI.Panel {
         position = "absolute",
-        width = "95.2%",
+        width = "68.9%",
         height = 51,
-        left = 25,
-        top = 1113,
+        left = 212,
+        top = 1195,
         flexDirection = "row",
         gap = 12,
         children = {
