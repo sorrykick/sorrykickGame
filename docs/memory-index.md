@@ -18,7 +18,7 @@
 
 - `scripts/main.lua`：Yoga UI 入口，包含登录界面、读档/存档更新、离线收益结算、游戏主界面，并接入秘境战斗场景切换、勇者编队页面、背包页面和勇者养成页面切换；主界面勇者序列帧默认使用 `image/npcClip/0001/`。
 - `scripts/Formation/FormationScene.lua`：独立勇者 NPC 上阵编队页面，包含三套阵容 TAB、实时总战力、勇者列表排序、9 格三排站位、上阵/替换/下阵、单格锁定、全阵容锁定、一键上阵、一键清空、保存阵容、推荐开关与羁绊展示。
-- `scripts/Hero/HeroGrowthScene.lua`：独立勇者养成页面，使用与背包/阵型一致的 Yoga UI 棕色/米黄风格，支持勇者列表选择、等级提升、升星、按 NPC 技能配置学习技能，并通过 `SaveManager.MarkFieldsDirty()` + `SaveGameSnapshot()` 保存资源与 `heroes` 变化。
+- `scripts/Hero/HeroGrowthScene.lua`：独立勇者养成页面，使用与背包/阵型一致的 Yoga UI 棕色/米黄风格，支持勇者列表选择、等级提升、升星、按 NPC 技能配置学习技能，并通过 `SaveManager.MarkFieldsDirty()` + `SaveGameSnapshot()` 保存资源与 `heroes` 变化；勇者列表只在页面打开时创建/重置，选择勇者和养成操作只局部替换右侧详情区并更新左侧卡片选中态/等级/战力/星级文本，避免滚动列表焦点被刷新。
 - `scripts/Battle/GridBattleScene.lua`：20×20 网格自动战斗原型，管理格子、单位占位、双方自动寻敌、身前 1 格攻击、战斗 HUD 和返回主界面；背景资源为 `image/BattleRes/1.png`；战斗网格逻辑保留但显示层已隐藏；寻敌优先选择同列敌方，同列无目标时再选择最近敌方；勇者和敌方都会按状态播放待机 01-04、移动 06-09、攻击 10-14 序列帧，敌方水平反转并保留红色 tint。
 - `assets/image/login_background.png`：登录背景图资源，运行时路径 `image/login_background.png`。
 - `assets/image/`：登录背景、主界面背景、森林关卡、资源图标、顶部功能图标、挑战徽章、收益条、秘境按钮、功能按钮、底部导航等 UI 图片资源。
@@ -67,6 +67,8 @@
 - 在 `GridBattleScene` 上继续实现寻路、技能范围、敌方 AI、攻击表现、胜负结算和战斗结果存档。
 
 ## POST 日志
+
+- 2026-07-05：修复勇者养成页选择勇者或执行升级/升星/学习技能后左侧勇者列表被整页刷新导致焦点丢失的问题：`HeroGrowthScene` 现在只在打开页面或 fallback 时重建根节点，平时通过 `RefreshDetail()` 销毁并重建右侧详情养成区；左侧列表在创建时缓存卡片、等级、战力、星级 Label 引用，局部更新选中态与数值文本；保存成功/失败回调和校验失败状态也只刷新详情区并重绑定顶部资源栏。LSP 0 Error，官方构建成功。
 
 - 2026-07-05：按 Inspector 运行时预览修改单同步勇者养成页 12 个指定控件：内容区调整为 left=22/top=174/right=20/height=975；英雄概览姓名、职业阵营、星级徽章和等级/战力/技能信息行同步试调宽度与位置；状态文案改为左对齐顶部显示；底部操作父级 Panel 及“升级”“关闭”按钮删除，并将“当前培养”标签保留为根节点独立 Label，位置对齐到 x=25/y=124。LSP 0 Error，官方构建成功。
 

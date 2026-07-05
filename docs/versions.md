@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-05 | hero-growth-detail-only-refresh | 勇者养成页改为列表只在打开界面时创建/重置：选择勇者、升级、升星、学习技能和保存回调只替换右侧详情养成区，并通过缓存卡片引用更新选中态、等级、战力和星级文本，避免左侧滚动列表焦点被刷新；LSP 0 Error，官方构建成功。 |
 | 2026-07-05 | hero-growth-inspector-overview-actions | 按 Inspector 运行时预览修改单同步勇者养成页 12 个指定控件：内容区扩大并调整位置，英雄概览姓名/职业阵营/星级徽章/等级战力技能信息行同步试调布局，状态文案左对齐顶部显示，删除底部操作父级 Panel 及“升级”“关闭”按钮，并保留“当前培养”独立 Label；LSP 0 Error，官方构建成功。 |
 | 2026-07-05 | hero-growth-inspector-background-header | 按 Inspector 运行时预览修改单同步勇者养成页 2 个指定控件：背景 Panel 显式设置 720×1280、left=1/top=1/right=0/bottom=-252、backgroundFit=none、borderRadius=0；删除顶部金币/蓝钻/白钻资源汇总 Label；LSP 0 Error，官方构建成功。 |
 | 2026-07-05 | hero-growth-inspector-upgrade-layout | 按 Inspector 运行时预览修改单同步勇者养成页升级面板 3 个指定控件：升级面板高度改为 125 且 padding=2，升级说明文本高度改为 50、normal 换行并顶部对齐，升级消耗金币 Label 下移到 top=91；LSP 0 Error，官方构建成功。 |

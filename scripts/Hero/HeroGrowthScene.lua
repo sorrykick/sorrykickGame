@@ -132,6 +132,10 @@ end
 local function CreateStarBadge(star, layout)
     layout = type(layout) == "table" and layout or {}
     local starCount = GetHeroStar({ star = star })
+    local starLabel = UI.Label { text = tostring(starCount), fontSize = 15, fontWeight = "bold", fontColor = { 255, 255, 255, 255 }, textStroke = { width = 1, color = { 68, 45, 25, 220 } }, textAlign = "center" }
+    if layout.starLabelRef then
+        layout.starLabelRef.label = starLabel
+    end
     return UI.Panel {
         width = 86,
         height = 26,
@@ -146,7 +150,7 @@ local function CreateStarBadge(star, layout)
         borderRadius = 13,
         children = {
             UI.Panel { width = 21, height = 21, backgroundImage = STAR_ICON_PATH, backgroundFit = "contain" },
-            UI.Label { text = tostring(starCount), fontSize = 15, fontWeight = "bold", fontColor = { 255, 255, 255, 255 }, textStroke = { width = 1, color = { 68, 45, 25, 220 } }, textAlign = "center" },
+            starLabel,
         },
     }
 end
@@ -157,6 +161,10 @@ function HeroGrowthScene:new(options)
     o.createTopResourceRow = options and options.createTopResourceRow or nil
     o.onRootChanged = options and options.onRootChanged or nil
     o.root = nil
+    o.contentPanel = nil
+    o.growthPanel = nil
+    o.currentHeroLabel = nil
+    o.heroCardRefs = nil
     o.selectedHeroId = options and options.selectedHeroId or nil
     o.statusText = "选择勇者后可进行升级、升星和学习技能。"
     return o
@@ -164,6 +172,10 @@ end
 
 function HeroGrowthScene:Destroy()
     self.root = nil
+    self.contentPanel = nil
+    self.growthPanel = nil
+    self.currentHeroLabel = nil
+    self.heroCardRefs = nil
 end
 
 function HeroGrowthScene:GetData()
@@ -189,15 +201,57 @@ function HeroGrowthScene:Refresh()
     end
 end
 
+function HeroGrowthScene:RefreshHeroListState()
+    if not self.heroCardRefs then return end
+    local _, heroes = self:GetData()
+    for _, hero in ipairs(heroes or {}) do
+        local ref = self.heroCardRefs[tostring(hero.id)]
+        if ref and ref.card then
+            local selected = tostring(hero.id) == tostring(self.selectedHeroId)
+            ref.card:SetStyle({
+                backgroundColor = selected and { 255, 244, 205, 255 } or { 245, 228, 200, 255 },
+                borderColor = selected and { 255, 234, 0, 255 } or GetQualityColor(hero),
+                borderWidth = selected and 4 or 2,
+            })
+            if ref.levelLabel then
+                ref.levelLabel:SetText("Lv." .. tostring(GetHeroLevel(hero)) .. " · " .. tostring(hero.job or hero.profession or "战士"))
+            end
+            if ref.powerLabel then
+                ref.powerLabel:SetText("战力 " .. FormatNumber(hero.power))
+            end
+            if ref.starLabel then
+                ref.starLabel:SetText(tostring(GetHeroStar(hero)))
+            end
+        end
+    end
+end
+
+function HeroGrowthScene:RefreshDetail()
+    if not self.root or not self.contentPanel or not self.growthPanel or not self.currentHeroLabel then
+        self:Refresh()
+        return
+    end
+
+    local _, _, selectedHero = self:GetData()
+    self.growthPanel:Destroy()
+    self.growthPanel = self:CreateGrowthPanel(selectedHero)
+    self.contentPanel:AddChild(self.growthPanel)
+    self.currentHeroLabel:SetText(selectedHero and ("当前培养：" .. tostring(selectedHero.name)) or "请选择一个勇者")
+    self:RefreshHeroListState()
+    if self.onRootChanged then
+        self.onRootChanged(self.root)
+    end
+end
+
 function HeroGrowthScene:SaveAndRefresh(reason, fields)
     SaveManager.MarkFieldsDirty(fields or { "heroes" })
     SaveManager.SaveGameSnapshot(reason, function()
         print("[HeroGrowth] Saved: " .. tostring(reason))
-        self:Refresh()
+        self:RefreshDetail()
     end, function(errorMessage)
         print("[HeroGrowth] Save failed: " .. tostring(errorMessage))
         self:SetStatus("保存失败，请稍后重试。")
-        self:Refresh()
+        self:RefreshDetail()
     end)
 end
 
@@ -205,14 +259,14 @@ function HeroGrowthScene:SelectHero(heroId)
     self.selectedHeroId = heroId
     local _, _, hero = self:GetData()
     self:SetStatus(hero and ("已选择" .. tostring(hero.name) .. "。") or "请选择勇者。")
-    self:Refresh()
+    self:RefreshDetail()
 end
 
 function HeroGrowthScene:UpgradeHero()
     local saveData, _, hero = self:GetData()
     if not hero then
         self:SetStatus("请先选择一个勇者。")
-        self:Refresh()
+        self:RefreshDetail()
         return
     end
 
@@ -220,14 +274,14 @@ function HeroGrowthScene:UpgradeHero()
     local limit = GetLevelLimit(hero)
     if level >= limit then
         self:SetStatus("当前星级等级上限为" .. tostring(limit) .. "，请先升星。")
-        self:Refresh()
+        self:RefreshDetail()
         return
     end
 
     local cost = GetUpgradeCost(hero)
     if math.floor(tonumber(saveData.coin) or 0) < cost then
         self:SetStatus("金币不足，升级需要" .. FormatNumber(cost) .. "金币。")
-        self:Refresh()
+        self:RefreshDetail()
         return
     end
 
@@ -242,21 +296,21 @@ function HeroGrowthScene:StarUpHero()
     local saveData, _, hero = self:GetData()
     if not hero then
         self:SetStatus("请先选择一个勇者。")
-        self:Refresh()
+        self:RefreshDetail()
         return
     end
 
     local star = GetHeroStar(hero)
     if star >= MAX_STAR then
         self:SetStatus("该勇者已经达到最高星级。")
-        self:Refresh()
+        self:RefreshDetail()
         return
     end
 
     local cost = GetStarCost(hero)
     if math.floor(tonumber(saveData.crystal) or 0) < cost then
         self:SetStatus("白钻不足，升星需要" .. FormatNumber(cost) .. "白钻。")
-        self:Refresh()
+        self:RefreshDetail()
         return
     end
 
@@ -271,7 +325,7 @@ function HeroGrowthScene:LearnSkill()
     local saveData, _, hero = self:GetData()
     if not hero then
         self:SetStatus("请先选择一个勇者。")
-        self:Refresh()
+        self:RefreshDetail()
         return
     end
 
@@ -279,7 +333,7 @@ function HeroGrowthScene:LearnSkill()
     local openSkillNum = GetOpenSkillNum(hero)
     if #skills >= openSkillNum then
         self:SetStatus("当前星级可学习技能槽已满，请先升星。")
-        self:Refresh()
+        self:RefreshDetail()
         return
     end
 
@@ -287,14 +341,14 @@ function HeroGrowthScene:LearnSkill()
     local nextSkill = candidates[#skills + 1]
     if not nextSkill then
         self:SetStatus("该勇者暂无可学习技能。")
-        self:Refresh()
+        self:RefreshDetail()
         return
     end
 
     local cost = GetSkillCost(hero)
     if math.floor(tonumber(saveData.diamond) or 0) < cost then
         self:SetStatus("蓝钻不足，学习技能需要" .. FormatNumber(cost) .. "蓝钻。")
-        self:Refresh()
+        self:RefreshDetail()
         return
     end
 
@@ -326,7 +380,7 @@ function HeroGrowthScene:CreateRoot()
     children[#children + 1] = self:CreateContent(heroes, selectedHero)
     children[#children + 1] = self:CreateCurrentHeroLabel(selectedHero)
 
-    return UI.Panel {
+    self.root = UI.Panel {
         id = "heroGrowthScreen",
         width = DESIGN_WIDTH,
         height = DESIGN_HEIGHT,
@@ -334,6 +388,7 @@ function HeroGrowthScene:CreateRoot()
         overflow = "hidden",
         children = children,
     }
+    return self.root
 end
 
 function HeroGrowthScene:CreateBackground()
@@ -362,7 +417,8 @@ function HeroGrowthScene:CreateHeader(saveData)
 end
 
 function HeroGrowthScene:CreateContent(heroes, selectedHero)
-    return UI.Panel {
+    self.growthPanel = self:CreateGrowthPanel(selectedHero)
+    self.contentPanel = UI.Panel {
         position = "absolute",
         width = 678,
         left = 22,
@@ -373,13 +429,14 @@ function HeroGrowthScene:CreateContent(heroes, selectedHero)
         gap = 12,
         children = {
             self:CreateHeroList(heroes),
-            self:CreateGrowthPanel(selectedHero),
+            self.growthPanel,
         },
     }
+    return self.contentPanel
 end
 
 function HeroGrowthScene:CreateCurrentHeroLabel(selectedHero)
-    return UI.Label {
+    self.currentHeroLabel = UI.Label {
         text = selectedHero and ("当前培养：" .. tostring(selectedHero.name)) or "请选择一个勇者",
         width = 330,
         height = 46,
@@ -392,9 +449,11 @@ function HeroGrowthScene:CreateCurrentHeroLabel(selectedHero)
         textStroke = { width = 2, color = { 0, 0, 0, 180 } },
         maxLines = 2,
     }
+    return self.currentHeroLabel
 end
 
 function HeroGrowthScene:CreateHeroList(heroes)
+    self.heroCardRefs = {}
     local cards = {}
     for _, hero in ipairs(heroes or {}) do
         cards[#cards + 1] = self:CreateHeroCard(hero)
@@ -424,7 +483,10 @@ end
 
 function HeroGrowthScene:CreateHeroCard(hero)
     local selected = hero and tostring(hero.id) == tostring(self.selectedHeroId)
-    return UI.Panel {
+    local levelLabel = UI.Label { text = "Lv." .. tostring(GetHeroLevel(hero)) .. " · " .. tostring(hero.job or hero.profession or "战士"), width = 150, position = "absolute", left = 91, top = 39, fontSize = 14, fontColor = { 74, 56, 42, 220 }, maxLines = 1 }
+    local powerLabel = UI.Label { text = "战力 " .. FormatNumber(hero.power), width = 150, position = "absolute", left = 91, top = 68, fontSize = 14, fontWeight = "bold", fontColor = { 202, 92, 44, 255 }, maxLines = 1 }
+    local starLabelRef = {}
+    local card = UI.Panel {
         width = "100%",
         height = 108,
         padding = 8,
@@ -441,11 +503,20 @@ function HeroGrowthScene:CreateHeroCard(hero)
             NormalizedSprite { width = 96, height = 96, position = "absolute", left = -3, top = 4, backgroundImage = GetHeroPreviewImage(hero), imageTint = { 255, 255, 255, 255 } },
             UI.Panel { width = 28, height = 28, position = "absolute", left = 9, top = 4, backgroundImage = QualityUtil.GetIconPath(hero), backgroundFit = "contain" },
             UI.Label { text = hero.name, width = 150, position = "absolute", left = 91, top = 10, fontSize = 17, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
-            UI.Label { text = "Lv." .. tostring(GetHeroLevel(hero)) .. " · " .. tostring(hero.job or hero.profession or "战士"), width = 150, position = "absolute", left = 91, top = 39, fontSize = 14, fontColor = { 74, 56, 42, 220 }, maxLines = 1 },
-            UI.Label { text = "战力 " .. FormatNumber(hero.power), width = 150, position = "absolute", left = 91, top = 68, fontSize = 14, fontWeight = "bold", fontColor = { 202, 92, 44, 255 }, maxLines = 1 },
-            UI.Panel { position = "absolute", left = 10, top = 78, children = { CreateStarBadge(hero.star) } },
+            levelLabel,
+            powerLabel,
+            UI.Panel { position = "absolute", left = 10, top = 78, children = { CreateStarBadge(hero.star, { starLabelRef = starLabelRef }) } },
         },
     }
+    if self.heroCardRefs and hero then
+        self.heroCardRefs[tostring(hero.id)] = {
+            card = card,
+            levelLabel = levelLabel,
+            powerLabel = powerLabel,
+            starLabel = starLabelRef.label,
+        }
+    end
+    return card
 end
 
 function HeroGrowthScene:CreateGrowthPanel(hero)
