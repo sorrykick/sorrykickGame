@@ -501,7 +501,14 @@ function HeroGrowthScene:CreateUpgradePanel(hero)
     local limit = GetLevelLimit(hero)
     return self:CreateActionPanel("勇者升级", "提升等级并增加基础战力。当前上限 Lv." .. tostring(limit), "升级", "消耗金币 " .. FormatNumber(cost), level < limit, function()
         self:UpgradeHero()
-    end)
+    end, {
+        height = 125,
+        padding = 2,
+        descHeight = 50,
+        descWhiteSpace = "normal",
+        descVerticalAlign = "top",
+        costTop = 91,
+    })
 end
 
 function HeroGrowthScene:CreateStarPanel(hero)
@@ -584,7 +591,7 @@ function HeroGrowthScene:CreateActionPanel(title, desc, buttonText, costText, en
         borderRadius = 16,
         children = {
             UI.Label { text = title, position = "absolute", left = 12, top = 8, width = 160, fontSize = 20, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 180 } } },
-            UI.Label { text = desc, position = "absolute", left = 12, top = 40, width = 230, height = layout.descHeight, fontSize = 14, fontColor = { 255, 244, 220, 230 }, whiteSpace = layout.descWhiteSpace, wordBreak = layout.descWordBreak, maxLines = layout.descMaxLines or 2 },
+            UI.Label { text = desc, position = "absolute", left = 12, top = 40, width = 230, height = layout.descHeight, fontSize = 14, fontColor = { 255, 244, 220, 230 }, verticalAlign = layout.descVerticalAlign, whiteSpace = layout.descWhiteSpace, wordBreak = layout.descWordBreak, maxLines = layout.descMaxLines or 2 },
             UI.Label { text = costText, position = "absolute", left = 12, top = layout.costTop or 76, width = 220, fontSize = 15, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textStroke = { width = 1, color = { 0, 0, 0, 200 } }, maxLines = 1 },
             UI.Button { text = buttonText, position = "absolute", right = 12, top = 31, width = 90, height = 42, fontSize = 18, fontWeight = "bold", backgroundColor = enabled and { 202, 92, 44, 255 } or { 117, 79, 62, 180 }, pressedBackgroundColor = { 155, 62, 36, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 16, onClick = onClick },
         },
