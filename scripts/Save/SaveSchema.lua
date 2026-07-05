@@ -239,6 +239,43 @@ local function normalizeInventory(rawInventory)
     }
 end
 
+local function createDefaultCodex()
+    return {
+        claimedOwned = {},
+        claimedStars = {},
+    }
+end
+
+local function normalizeCodex(rawCodex)
+    rawCodex = type(rawCodex) == "table" and rawCodex or {}
+    local claimedOwned = {}
+    local sourceOwned = type(rawCodex.claimedOwned) == "table" and rawCodex.claimedOwned or {}
+    for npcId, claimed in pairs(sourceOwned) do
+        if claimed == true then
+            claimedOwned[tostring(npcId)] = true
+        end
+    end
+
+    local claimedStars = {}
+    local sourceStars = type(rawCodex.claimedStars) == "table" and rawCodex.claimedStars or {}
+    for npcId, stars in pairs(sourceStars) do
+        if type(stars) == "table" then
+            local normalizedStars = {}
+            for star, claimed in pairs(stars) do
+                if claimed == true then
+                    normalizedStars[tostring(star)] = true
+                end
+            end
+            claimedStars[tostring(npcId)] = normalizedStars
+        end
+    end
+
+    return {
+        claimedOwned = claimedOwned,
+        claimedStars = claimedStars,
+    }
+end
+
 local function hasNpcBackedHeroes(heroes)
     for _, hero in ipairs(heroes or {}) do
         if type(hero) == "table" and (hero.npcId or hero.configId or (type(hero.id) == "string" and string.sub(hero.id, 1, 4) == "npc_")) then
@@ -262,6 +299,7 @@ SaveSchema.DELTA_FIELDS = {
     "partner",
     "heroes",
     "inventory",
+    "codex",
     "lineup",
     "stageProgress",
     "initialHeroGranted",
@@ -308,6 +346,7 @@ function SaveSchema.CreateDefaultSave(now)
         },
         heroes = SaveSchema.DeepClone(defaultHeroes),
         inventory = createDefaultInventory(),
+        codex = createDefaultCodex(),
         lineup = normalizeLineup(nil, defaultHeroes),
         stageProgress = {
             currentStageId = 1,
@@ -377,6 +416,7 @@ function SaveSchema.Normalize(rawSave, now)
     end
     save.heroes = heroes
     save.inventory = normalizeInventory(save.inventory)
+    save.codex = normalizeCodex(save.codex)
     save.lineup = normalizeLineup(save.lineup, save.heroes)
     save.stageProgress = type(save.stageProgress) == "table" and save.stageProgress or {}
     save.stageProgress.currentStageId = math.max(1, math.floor(tonumber(save.stageProgress.currentStageId) or 1))

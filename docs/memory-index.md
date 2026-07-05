@@ -68,6 +68,8 @@
 
 ## POST 日志
 
+- 2026-07-05：新增英雄图鉴系统：`scripts/Hero/HeroCodexScene.lua` 展示 `npc.json` 中 112 个英雄，主界面底部“图鉴”入口接入；点击英雄图标查看属性、技能、品质、职业、阵营、站位和战力；获得英雄后图鉴激活，可领取激活蓝钻，升星达到 2/3/4/5/6 星可领取星级蓝钻；`SaveSchema` 新增 `codex` 字段并纳入 dirty 增量上传。LSP 服务不可连接，官方构建成功。
+
 - 2026-07-05：按 Inspector 删除背包页底部操作区“关闭”按钮：仅修改 `InventoryScene:CreateBottomActions()` 中目标按钮，保留使用、整理、扩充按钮和父级布局不变。LSP 0 Error，官方构建成功。
 
 - 2026-07-05：按 Inspector 同步阵型页勇者列表卡片状态 Label：`FormationScene:CreateHeroCard()` 中“出战/待机”状态文本 `top` 从 40 调整为 70，仅修改目标 Label。LSP 0 Error，官方构建成功。
