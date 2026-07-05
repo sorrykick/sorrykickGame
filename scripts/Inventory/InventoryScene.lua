@@ -286,10 +286,9 @@ function InventoryScene:CreateBackground()
     return UI.Panel {
         id = "background",
         position = "absolute",
-        left = -1,
-        top = -1,
-        right = 1,
-        bottom = 1,
+        width = DESIGN_WIDTH,
+        height = DESIGN_HEIGHT,
+        right = 0,
         zIndex = 0,
         backgroundImage = "image/page_background.png",
         backgroundFit = "cover",
@@ -299,8 +298,8 @@ end
 
 function InventoryScene:CreateHeader(inventory, items)
     return {
-        UI.Label { text = "伙伴背包", position = "absolute", left = 19, top = 66, zIndex = 10, fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
-        UI.Label { text = "容量 " .. tostring(#items) .. "/" .. tostring(inventory.capacity) .. " · 总数量 " .. FormatNumber(CountItems(items)), position = "absolute", left = 378, top = 114, width = 320, zIndex = 10, fontSize = 20, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textAlign = "right", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
+        UI.Label { text = "背包", position = "absolute", left = 19, top = 66, zIndex = 10, fontSize = 30, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
+        UI.Label { text = "容量 " .. tostring(#items) .. "/" .. tostring(inventory.capacity) .. " · 总数量 " .. FormatNumber(CountItems(items)), position = "absolute", left = 378, top = 69, width = 320, zIndex = 10, fontSize = 20, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textAlign = "right", textStroke = { width = 2, color = { 0, 0, 0, 220 } } },
         UI.Button { width = 164, height = 58, position = "absolute", left = 0, top = 1183, zIndex = 10, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, fontSize = 18, backgroundImage = "image/BT-返回.png", backgroundFit = "cover", backgroundColor = { 251, 251, 251, 0 }, opacity = 1, textColor = { 255, 255, 255, 0 }, borderRadius = 0, onClick = function() if self.onExit then self.onExit() end end },
     }
 end
@@ -352,21 +351,21 @@ function InventoryScene:CreateInventoryGridPanel(inventory, items)
     return UI.Panel {
         position = "absolute",
         left = 4,
-        top = 4,
+        top = -37,
         width = 676,
         height = "76.8%",
         gap = 8,
         backgroundColor = { 113, 74, 58, 245 },
         borderColor = { 68, 45, 25, 255 },
         borderWidth = 3,
-        borderRadius = 18,
+        borderRadius = 0,
         children = {
-            UI.Label { text = "物品列表", fontSize = 24, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textAlign = "center", textStroke = { width = 2, color = { 0, 0, 0, 200 } } },
-            UI.Panel { width = "100%", height = 36, flexDirection = "row", gap = 6, children = tabs },
+            UI.Panel { width = "100%", height = 36, left = 0, top = -53, flexDirection = "row", gap = 6, children = tabs },
             UI.ScrollView {
                 width = "100%",
                 flexGrow = 1,
-                flexBasis = 0,
+                flexBasis = 644,
+                top = -56,
                 scrollY = true,
                 showScrollbar = true,
                 children = {
@@ -438,14 +437,15 @@ end
 function InventoryScene:CreateDetailPanel(item)
     return UI.Panel {
         position = "absolute",
-        left = -8,
-        top = 691,
+        left = -5,
+        top = 657,
         width = 693,
-        height = "26.9%",
+        height = "31%",
         gap = 10,
         backgroundImage = "image/IM-说明-底.png",
         backgroundFit = "none",
         backgroundColor = { 245, 228, 200, 245 },
+        borderRadius = 0,
         children = item and self:CreateSelectedDetail(item) or self:CreateEmptyDetail(),
     }
 end
@@ -464,13 +464,13 @@ function InventoryScene:CreateSelectedDetail(item)
     local quality = math.max(1, math.min(6, math.floor(tonumber(item.quality) or 1)))
     local qualityColor = GetQualityColor(quality)
     return {
-        UI.Label { text = "物品详情", position = "absolute", left = 30, top = 23, fontSize = 24, fontWeight = "bold", fontColor = { 117, 79, 62, 255 }, textAlign = "center" },
+        UI.Label { text = "物品详情", position = "absolute", left = 270, top = 28, fontSize = 24, fontWeight = "bold", fontColor = { 117, 79, 62, 255 }, textAlign = "center" },
         UI.Panel {
-            width = 96,
+            width = 95,
             height = 96,
             position = "absolute",
-            left = 176,
-            top = 28,
+            left = 34,
+            top = 32,
             alignItems = "center",
             justifyContent = "center",
             backgroundColor = { 255, 244, 220, 255 },
@@ -481,29 +481,29 @@ function InventoryScene:CreateSelectedDetail(item)
                 UI.Label { text = tostring(item.icon or "物"), width = 66, height = 63, minHeight = 60, fontSize = 32, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center", textStroke = { width = 2, color = { 255, 244, 220, 255 } } },
             },
         },
-        UI.Label { text = item.name, position = "absolute", left = 54, top = 71, fontSize = 22, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 1 },
-        UI.Label { text = (QUALITY_NAMES[quality] or "普通") .. " · " .. (TYPE_LABELS[item.type] or item.type), position = "absolute", left = 278, top = 36, fontSize = 17, fontWeight = "bold", fontColor = qualityColor, textAlign = "center", textStroke = { width = 1, color = { 68, 45, 25, 180 } }, maxLines = 1 },
-        UI.Panel { width = "93.1%", height = 121, minHeight = 120, position = "absolute", left = 21, top = 124, paddingTop = 2, paddingRight = 2, paddingBottom = 2, paddingLeft = 2, backgroundColor = { 255, 244, 220, 255 }, borderColor = { 207, 166, 119, 255 }, borderWidth = 1, borderRadius = 0, children = {
+        UI.Label { text = item.name, position = "absolute", left = 147, top = 71, fontSize = 22, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 1 },
+        UI.Label { text = (QUALITY_NAMES[quality] or "普通") .. " · " .. (TYPE_LABELS[item.type] or item.type), position = "absolute", left = 528, top = 77, fontSize = 17, fontWeight = "bold", fontColor = qualityColor, textAlign = "center", textStroke = { width = 1, color = { 68, 45, 25, 180 } }, maxLines = 1 },
+        UI.Panel { width = "93.1%", height = 94, minHeight = 70, position = "absolute", left = 25, top = 136, paddingTop = 2, paddingRight = 2, paddingBottom = 2, paddingLeft = 2, backgroundColor = { 255, 244, 220, 255 }, borderColor = { 207, 166, 119, 255 }, borderWidth = 1, borderRadius = 0, children = {
             UI.Label { text = item.description, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "left", whiteSpace = "normal", maxLines = 4 },
         } },
-        UI.Label { text = "数量：" .. tostring(item.count or 1) .. "    价值：" .. FormatNumber(item.value or 0), position = "absolute", left = 437, top = 41, fontSize = 16, fontColor = { 117, 79, 62, 255 }, textAlign = "center" },
-        UI.Label { text = self.statusText, minHeight = 52, position = "absolute", left = 288, top = 68, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 2 },
+        UI.Label { text = "数量：" .. tostring(item.count or 1) .. "    价值：" .. FormatNumber(item.value or 0), position = "absolute", left = 312, top = 80, fontSize = 16, fontColor = { 117, 79, 62, 255 }, textAlign = "center" },
+        UI.Label { text = self.statusText, minHeight = 52, position = "absolute", left = 496, top = 25, fontSize = 16, fontColor = { 88, 46, 45, 255 }, textAlign = "center", maxLines = 2 },
     }
 end
 
 function InventoryScene:CreateBottomActions(selectedItem)
     return UI.Panel {
         position = "absolute",
-        width = "68.9%",
+        width = "87.1%",
         height = 51,
-        left = 212,
-        top = 1195,
+        left = 50,
+        top = 1109,
         flexDirection = "row",
         gap = 12,
         children = {
             UI.Button { text = "使用", width = 138, height = 46, position = "absolute", left = 0, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = selectedItem and { 202, 92, 44, 255 } or { 117, 79, 62, 180 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:UseSelectedItem() end },
-            UI.Button { text = "整理", width = 137.65, height = 46, position = "absolute", left = 170, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:SortInventory() end },
-            UI.Button { text = "扩充", width = 137.65, height = 46, position = "absolute", left = 340, top = 0, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 88, 130, 72, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ExpandCapacity() end },
+            UI.Button { text = "整理", width = 137.65, height = 46, position = "absolute", left = 240, top = 3, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 117, 79, 62, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:SortInventory() end },
+            UI.Button { text = "扩充", width = 137.65, height = 46, position = "absolute", left = 478, top = 2, paddingTop = 0, paddingRight = 16, paddingBottom = 4, paddingLeft = 16, fontSize = 20, backgroundColor = { 88, 130, 72, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 18, onClick = function() self:ExpandCapacity() end },
         },
     }
 end
