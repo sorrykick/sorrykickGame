@@ -18,8 +18,8 @@
 
 - `scripts/main.lua`：Yoga UI 入口，包含登录界面、读档/存档更新、离线收益结算、游戏主界面，并接入秘境战斗场景切换、勇者编队页面、背包页面、勇者养成页面、勇者技能培养页面和英雄图鉴页面切换；主界面勇者序列帧默认使用 `image/npcClip/0001/`。
 - `scripts/Formation/FormationScene.lua`：独立勇者 NPC 上阵编队页面，包含三套阵容 TAB、实时总战力、勇者列表排序、9 格三排站位、上阵/替换/下阵、单格锁定、全阵容锁定、一键上阵、一键清空、保存阵容、推荐开关与羁绊展示。
-- `scripts/Hero/HeroGrowthScene.lua`：独立勇者养成页面，使用与背包/阵型一致的 Yoga UI 棕色/米黄风格，聚焦勇者列表选择、等级提升、升星和属性展示；右侧详情区展示勇者概览、具体属性（生命/攻击/防御/移动）、升级、升星和“技能培养”入口，不再直接展示技能学习/升级明细；勇者列表只在页面打开时创建/重置，选择勇者和养成操作只局部替换右侧详情区并更新左侧卡片选中态/等级/战力/星级文本，避免滚动列表焦点被刷新。
-- `scripts/Hero/HeroSkillScene.lua`：独立勇者技能培养页面，复用顶部 HUD 与项目棕色/米黄风格，支持选择勇者、查看技能槽、按 NPC 配置顺序学习技能、查看技能详情并升级已学习技能；学习消耗蓝钻，升级消耗金币，变更后通过 `SaveManager.MarkFieldsDirty()` + `SaveGameSnapshot()` 保存 `heroes` 与资源字段；技能等级存储在 `hero.skillLevels`。
+- `scripts/Hero/HeroGrowthScene.lua`：独立勇者养成页面，使用与背包/阵型一致的 Yoga UI 棕色/米黄风格，聚焦勇者列表选择、等级提升、升星和属性展示；右侧详情区展示勇者概览、具体属性（生命/攻击/防御/移动）、升级和升星，不再放置技能培养入口或技能学习/升级明细；勇者列表只在页面打开时创建/重置，选择勇者和养成操作只局部替换右侧详情区并更新左侧卡片选中态/等级/战力/星级文本，避免滚动列表焦点被刷新。
+- `scripts/Hero/HeroSkillScene.lua`：独立勇者技能培养页面，复用顶部 HUD 与项目棕色/米黄风格，由主界面底部“技能”导航入口进入，支持选择勇者、查看技能槽、按 NPC 配置顺序学习技能、查看技能详情并升级已学习技能；学习消耗蓝钻，升级消耗金币，变更后通过 `SaveManager.MarkFieldsDirty()` + `SaveGameSnapshot()` 保存 `heroes` 与资源字段；技能等级存储在 `hero.skillLevels`。
 - `scripts/Battle/GridBattleScene.lua`：20×20 网格自动战斗原型，管理格子、单位占位、双方自动寻敌、身前 1 格攻击、战斗 HUD 和返回主界面；背景资源为 `image/BattleRes/1.png`；战斗网格逻辑保留但显示层已隐藏；寻敌优先选择同列敌方，同列无目标时再选择最近敌方；勇者和敌方都会按状态播放待机 01-04、移动 06-09、攻击 10-14 序列帧，敌方水平反转并保留红色 tint。
 - `assets/image/login_background.png`：登录背景图资源，运行时路径 `image/login_background.png`。
 - `assets/image/`：登录背景、主界面背景、森林关卡、资源图标、顶部功能图标、挑战徽章、收益条、秘境按钮、功能按钮、底部导航等 UI 图片资源。
@@ -53,10 +53,10 @@
 - NPC/勇者数据已从 `docs/setting/npcdata.json` 全量同步到运行配置：`assets/Config/npc.json` 保留 112 个 NPC 的 `stats`、`activeSkill`、`passiveSkills`、`ai`、字母品质、阵营、职业、故事等完整信息，并补充运行字段 `qualityRank/power/role/clipDir/Skill`；`assets/Config/skill.json` 生成 560 个技能条目（每个 NPC 1 个主动 + 4 个被动）。`SaveSchema` 登录规范化会按新 NPC 配置刷新旧存档英雄的静态信息，保留等级/星级/战力等成长数据；阵型、图鉴、养成页通过 `Config.QualityUtil` 统一处理 D/C/B/A/S/SS/L 品质。
 - 关卡系统已接入 `docs/setting/level_design.json`：配置复制到 `assets/Config/level_design.json`，新增 `LevelManager` 读取 67 个章节/小关/BOSS/敌人配置；存档新增 `stageProgress`，主界面标题和关卡摘要显示当前章节小关，战斗场景按当前小关生成敌方单位并使用 `sceneImage` 切换 `BattleRes` 背景，胜利后推进关卡进度并保存。
 
-- 主界面 `Hanginglist` 点击任一显示勇者会进入勇者养成页；四个圆形入口中的“勇者”入口也会进入默认第一个勇者的养成页；子控件点击使用 `event:StopPropagation()`，避免触发父级 `Hanginglist` 动作切换。
-- `scripts/Hero/HeroGrowthScene.lua` 页面使用 `image/page_background.png`、`image/BT-返回.png`、品质/星级图标与 `NormalizedSprite` 展示勇者；左侧滚动列表选择勇者，右侧聚焦等级、星级、战力、具体属性、升级和升星，并提供“技能培养”入口；升级消耗金币并增加等级/战力，升星消耗白钻并扩展开放技能槽数量；每次变更都标记对应 dirty 字段并上传存档。
-- `scripts/Hero/HeroSkillScene.lua` 承接独立技能学习和升级：从养成页进入并返回同一勇者，支持按 `npc.Skill` 顺序学习技能、展示已学/未学/未开放技能槽、查看技能类型/触发/目标/效果说明，并将已学技能升级到最高 10 级；学习消耗蓝钻，升级消耗金币，技能等级保存到 `hero.skillLevels`，`SaveSchema` 登录规范化会补齐并裁剪技能等级。
-- 勇者养成页右侧详情已补充“具体属性”面板：点击左侧任意勇者后会显示配置/存档中的生命、攻击、防御、移动属性；为容纳新面板，概览、升级、升星和技能入口区域高度已压缩，保持右侧详情完整显示。
+- 主界面 `Hanginglist` 点击任一显示勇者会进入勇者养成页；四个圆形入口中的“勇者”入口也会进入默认第一个勇者的养成页；子控件点击使用 `event:StopPropagation()`，避免触发父级 `Hanginglist` 动作切换；主界面底部第 3 个导航已改为“技能”，点击进入独立勇者技能培养页面。
+- `scripts/Hero/HeroGrowthScene.lua` 页面使用 `image/page_background.png`、`image/BT-返回.png`、品质/星级图标与 `NormalizedSprite` 展示勇者；左侧滚动列表选择勇者，右侧聚焦等级、星级、战力、具体属性、升级和升星，不再提供技能培养入口；升级消耗金币并增加等级/战力，升星消耗白钻并提升战力和成长上限；每次变更都标记对应 dirty 字段并上传存档。
+- `scripts/Hero/HeroSkillScene.lua` 承接独立技能学习和升级：从主界面底部“技能”导航进入，返回时回主界面，支持按 `npc.Skill` 顺序学习技能、展示已学/未学/未开放技能槽、查看技能类型/触发/目标/效果说明，并将已学技能升级到最高 10 级；学习消耗蓝钻，升级消耗金币，技能等级保存到 `hero.skillLevels`，`SaveSchema` 登录规范化会补齐并裁剪技能等级。
+- 勇者养成页右侧详情已补充“具体属性”面板：点击左侧任意勇者后会显示配置/存档中的生命、攻击、防御、移动属性；为容纳新面板，概览、升级和升星区域高度已压缩，保持右侧详情完整显示。
 - `SaveSchema` 已新增并规范化 `hero.level` 与 `hero.skillLevels` 字段，避免升级等级和技能等级在登录规范化或云存档迁移中丢失。
 - LSP 诊断 0 Error，官方构建成功。
 
@@ -70,6 +70,8 @@
 - 在 `GridBattleScene` 上继续实现寻路、技能范围、敌方 AI、攻击表现、胜负结算和战斗结果存档。
 
 ## POST 日志
+
+- 2026-07-06：按需求迁移技能培养入口到主界面：`HeroGrowthScene` 移除“技能培养”面板、`onOpenSkill` 回调和相关技能入口文案，养成页只保留升级、升星和属性展示；主界面底部第 3 个导航改为“技能”，点击调用 `EnterHeroSkillScreen(GetDefaultHeroGrowthHeroId())` 进入独立技能页；`HeroSkillScene` 关闭后返回主界面。LSP 0 Error，官方构建成功。
 
 - 2026-07-06：按 Inspector 运行时预览修改单同步主界面底部导航第 3 个图标：`main.lua` 中底部导航“冒险”图标从 `image/nav_adventure.png` 替换为新生成的 `image/edited_nav_skill_20260706082834.png`，用于显示“技能”文字图标；仅同步目标 Panel 的 `backgroundImage`，未调整父级和无关同级布局。LSP 0 Error，官方构建成功。
 

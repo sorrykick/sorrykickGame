@@ -121,7 +121,7 @@ local FEATURE_ICONS = {
 local BOTTOM_NAV_ICONS = {
     ["背包"] = "image/nav_bag.png",
     ["阵型"] = "image/nav_formation.png",
-    ["冒险"] = "image/edited_nav_skill_20260706082834.png",
+    ["技能"] = "image/edited_nav_skill_20260706082834.png",
     ["任务"] = "image/nav_adventure.png",
     ["图鉴"] = "image/nav_codex.png",
 }
@@ -595,6 +595,8 @@ local function CreateBottomNav(label, index)
                 EnterInventoryScreen()
             elseif label == "阵型" then
                 EnterFormationScreen()
+            elseif label == "技能" and EnterHeroSkillScreen then
+                EnterHeroSkillScreen(GetDefaultHeroGrowthHeroId())
             elseif label == "图鉴" and EnterHeroCodexScreen then
                 EnterHeroCodexScreen()
             end
@@ -1027,7 +1029,7 @@ local function CreateHomeScreen()
                 children = {
                     CreateBottomNav("背包", 1),
                     CreateBottomNav("阵型", 2),
-                    CreateBottomNav("冒险", 3),
+                    CreateBottomNav("技能", 3),
                     CreateBottomNav("任务", 4),
                     CreateBottomNav("图鉴", 5),
                 },
@@ -1182,9 +1184,6 @@ EnterHeroGrowthScreen = function(heroId)
         onExit = function()
             EnterHomeScreen()
         end,
-        onOpenSkill = function(selectedHeroId)
-            EnterHeroSkillScreen(selectedHeroId)
-        end,
         createTopResourceRow = function()
             return CreateTopResourceRow(SaveManager.GetSaveData())
         end,
@@ -1213,8 +1212,8 @@ EnterHeroSkillScreen = function(heroId)
 
     heroSkillScene_ = HeroSkillScene:new({
         selectedHeroId = heroId,
-        onExit = function(selectedHeroId)
-            EnterHeroGrowthScreen(selectedHeroId or heroId)
+        onExit = function()
+            EnterHomeScreen()
         end,
         createTopResourceRow = function()
             return CreateTopResourceRow(SaveManager.GetSaveData())

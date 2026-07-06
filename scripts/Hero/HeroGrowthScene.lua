@@ -69,12 +69,6 @@ local function GetHeroStar(hero)
     return ClampInt(hero and hero.star or 1, 1, MAX_STAR)
 end
 
-local function GetHeroSkills(hero)
-    if not hero then return {} end
-    hero.skills = type(hero.skills) == "table" and hero.skills or {}
-    return hero.skills
-end
-
 local function FindHeroById(heroes, heroId)
     if not heroId then return nil end
     for _, hero in ipairs(heroes or {}) do
@@ -99,11 +93,6 @@ local function GetLevelLimit(hero)
     local star = GetHeroStar(hero)
     local starConfig = GetStarConfig(star)
     return math.max(1, math.floor(tonumber(starConfig.LevelLimit) or (star * 60)))
-end
-
-local function GetOpenSkillNum(hero)
-    local starConfig = GetStarConfig(GetHeroStar(hero))
-    return math.max(0, math.floor(tonumber(starConfig.OpenSkillNum) or 0))
 end
 
 local function GetHeroStats(hero)
@@ -167,7 +156,6 @@ end
 function HeroGrowthScene:new(options)
     local o = setmetatable({}, self)
     o.onExit = options and options.onExit or nil
-    o.onOpenSkill = options and options.onOpenSkill or nil
     o.createTopResourceRow = options and options.createTopResourceRow or nil
     o.onRootChanged = options and options.onRootChanged or nil
     o.root = nil
@@ -176,7 +164,7 @@ function HeroGrowthScene:new(options)
     o.currentHeroLabel = nil
     o.heroCardRefs = nil
     o.selectedHeroId = options and options.selectedHeroId or nil
-    o.statusText = "选择勇者后可进行升级、升星；技能学习与升级请进入技能培养界面。"
+    o.statusText = "选择勇者后可进行升级、升星。"
     return o
 end
 
@@ -327,7 +315,7 @@ function HeroGrowthScene:StarUpHero()
     saveData.crystal = math.max(0, math.floor(tonumber(saveData.crystal) or 0) - cost)
     hero.star = star + 1
     hero.power = math.max(1, math.floor(tonumber(hero.power) or 1) + 240 + GetQuality(hero) * 45 + GetHeroLevel(hero) * 4)
-    self:SetStatus(hero.name .. "升到" .. tostring(hero.star) .. "星，技能槽同步扩展。")
+    self:SetStatus(hero.name .. "升到" .. tostring(hero.star) .. "星，战力已提升。")
     self:SaveAndRefresh("勇者升星", { "heroes", "crystal" })
 end
 
@@ -507,7 +495,6 @@ function HeroGrowthScene:CreateGrowthPanel(hero)
             self:CreateAttributePanel(hero),
             self:CreateUpgradePanel(hero),
             self:CreateStarPanel(hero),
-            self:CreateSkillEntryPanel(hero),
             UI.Label { text = self.statusText, flexGrow = 1, flexBasis = 0, top = 4, fontSize = 17, fontColor = { 88, 46, 45, 255 }, textAlign = "left", verticalAlign = "top", maxLines = 3 },
         } or {
             UI.Label { text = "暂无勇者", fontSize = 24, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center" },
@@ -619,7 +606,7 @@ end
 function HeroGrowthScene:CreateStarPanel(hero)
     local cost = GetStarCost(hero)
     local star = GetHeroStar(hero)
-    return self:CreateActionPanel("勇者升星", "提升星级，增加大量战力并开放更多技能槽。", "升星", "消耗白钻 " .. FormatNumber(cost), star < MAX_STAR, function()
+    return self:CreateActionPanel("勇者升星", "提升星级，增加大量战力并提高成长上限。", "升星", "消耗白钻 " .. FormatNumber(cost), star < MAX_STAR, function()
         self:StarUpHero()
     end, {
         height = 100,
@@ -631,24 +618,6 @@ function HeroGrowthScene:CreateStarPanel(hero)
         costTop = 73,
         buttonTop = 28,
     })
-end
-
-function HeroGrowthScene:CreateSkillEntryPanel(hero)
-    return UI.Panel {
-        width = "100%",
-        height = 118,
-        padding = 10,
-        backgroundColor = { 113, 74, 58, 230 },
-        borderColor = { 68, 45, 25, 255 },
-        borderWidth = 2,
-        borderRadius = 16,
-        children = {
-            UI.Label { text = "技能培养", position = "absolute", left = 12, top = 8, width = 160, fontSize = 20, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 180 } } },
-            UI.Label { text = "学习与升级技能已拆分为独立界面，点击右侧按钮进入。", position = "absolute", left = 12, top = 40, width = 230, height = 45, fontSize = 14, fontColor = { 255, 244, 220, 230 }, verticalAlign = "top", whiteSpace = "normal", maxLines = 2 },
-            UI.Label { text = "技能战力随学习和升级提升", position = "absolute", left = 12, top = 87, width = 220, fontSize = 15, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textStroke = { width = 1, color = { 0, 0, 0, 200 } }, maxLines = 1 },
-            UI.Button { text = "技能", position = "absolute", right = 12, top = 38, width = 90, height = 42, fontSize = 18, fontWeight = "bold", backgroundColor = { 202, 92, 44, 255 }, pressedBackgroundColor = { 155, 62, 36, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 16, onClick = function() if self.onOpenSkill then self.onOpenSkill(hero.id) end end },
-        },
-    }
 end
 
 function HeroGrowthScene:CreateActionPanel(title, desc, buttonText, costText, enabled, onClick, layout)
