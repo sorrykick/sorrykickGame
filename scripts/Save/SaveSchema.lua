@@ -105,10 +105,24 @@ local function normalizeLearnedSkills(npcConfig, rawSkills)
     return result
 end
 
+local function normalizeSkillLevels(skills, rawLevels)
+    local levels = {}
+    rawLevels = type(rawLevels) == "table" and rawLevels or {}
+    for _, skillId in ipairs(skills or {}) do
+        local key = tostring(skillId)
+        local level = math.floor(tonumber(rawLevels[key]) or 1)
+        if level < 1 then level = 1 end
+        if level > 10 then level = 10 end
+        levels[key] = level
+    end
+    return levels
+end
+
 local function createHeroFromNpcConfig(npcId, npcConfig, index)
     local job = tostring(npcConfig.profession or npcConfig.job or "战士")
     local quality = tostring(npcConfig.quality or QualityUtil.GetName(npcConfig.qualityRank))
     local qualityRank = QualityUtil.GetRank(npcConfig)
+    local skills = getNpcInitialSkills(npcConfig)
     local hero = {
         id = "npc_" .. tostring(npcId),
         npcId = tostring(npcId),
@@ -125,7 +139,8 @@ local function createHeroFromNpcConfig(npcId, npcConfig, index)
         role = tostring(npcConfig.role or ROLE_BY_JOB[job] or "前排"),
         story = tostring(npcConfig.story or ""),
         clipDir = tostring(npcConfig.clipDir or ("image/npcClip/" .. tostring(npcId))),
-        skills = getNpcInitialSkills(npcConfig),
+        skills = skills,
+        skillLevels = normalizeSkillLevels(skills, nil),
     }
     local staticInfo = cloneStaticNpcInfo(npcConfig)
     for key, value in pairs(staticInfo) do
@@ -177,6 +192,7 @@ local function normalizeHero(rawHero, index)
 
     local npcConfig = getNpcConfig(npcId)
     local source = type(npcConfig) == "table" and npcConfig or rawHero
+    local learnedSkills = normalizeLearnedSkills(npcConfig, rawHero.skills)
     local job = tostring(source.profession or source.job or rawHero.job or rawHero.profession or "战士")
     local quality = tostring(source.quality or QualityUtil.GetName(source.qualityRank or rawHero.qualityRank or rawHero.quality))
     local qualityRank = QualityUtil.GetRank(source)
@@ -196,7 +212,8 @@ local function normalizeHero(rawHero, index)
         role = tostring(source.role or rawHero.role or ROLE_BY_JOB[job] or "前排"),
         story = tostring(source.story or rawHero.story or ""),
         clipDir = tostring(source.clipDir or rawHero.clipDir or ("image/npcClip/" .. npcId)),
-        skills = normalizeLearnedSkills(npcConfig, rawHero.skills),
+        skills = learnedSkills,
+        skillLevels = normalizeSkillLevels(learnedSkills, rawHero.skillLevels),
     }
     local staticInfo = cloneStaticNpcInfo(source)
     for key, value in pairs(staticInfo) do

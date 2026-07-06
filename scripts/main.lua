@@ -5,6 +5,7 @@ local GridBattleScene = require("Battle.GridBattleScene")
 local FormationScene = require("Formation.FormationScene")
 local InventoryScene = require("Inventory.InventoryScene")
 local HeroGrowthScene = require("Hero.HeroGrowthScene")
+local HeroSkillScene = require("Hero.HeroSkillScene")
 local HeroCodexScene = require("Hero.HeroCodexScene")
 local LevelManager = require("Level.LevelManager")
 local SecretRealmDialog = require("Level.SecretRealmDialog")
@@ -68,6 +69,8 @@ local formationScene_ = nil
 local inventoryScene_ = nil
 ---@type table|nil
 local heroGrowthScene_ = nil
+---@type table|nil
+local heroSkillScene_ = nil
 ---@type table|nil
 local heroCodexScene_ = nil
 ---@type table|nil
@@ -400,6 +403,13 @@ local function DestroyHeroGrowthScene()
     end
 end
 
+local function DestroyHeroSkillScene()
+    if heroSkillScene_ then
+        heroSkillScene_:Destroy()
+        heroSkillScene_ = nil
+    end
+end
+
 local function DestroyHeroCodexScene()
     if heroCodexScene_ then
         heroCodexScene_:Destroy()
@@ -535,6 +545,7 @@ local EnterBattleScreen
 local EnterFormationScreen
 local EnterInventoryScreen
 local EnterHeroGrowthScreen
+local EnterHeroSkillScreen
 local EnterHeroCodexScreen
 local ShowSecretRealmDialog
 
@@ -1036,6 +1047,7 @@ EnterHomeScreen = function()
     DestroyFormationScene()
     DestroyInventoryScene()
     DestroyHeroGrowthScene()
+    DestroyHeroSkillScene()
     DestroyHeroCodexScene()
     DestroySecretRealmDialog()
     ShowRoot(CreateHomeScreen())
@@ -1045,6 +1057,7 @@ end
 
 ShowSecretRealmDialog = function()
     DestroyHeroGrowthScene()
+    DestroyHeroSkillScene()
     DestroyHeroCodexScene()
     DestroySecretRealmDialog()
     secretRealmDialog_ = SecretRealmDialog:new({
@@ -1076,6 +1089,7 @@ EnterBattleScreen = function()
     DestroyFormationScene()
     DestroyInventoryScene()
     DestroyHeroGrowthScene()
+    DestroyHeroSkillScene()
     DestroyHeroCodexScene()
     DestroySecretRealmDialog()
     stageForestLayerA_ = nil
@@ -1096,6 +1110,7 @@ EnterFormationScreen = function()
     DestroyBattleScene()
     DestroyInventoryScene()
     DestroyHeroGrowthScene()
+    DestroyHeroSkillScene()
     DestroyHeroCodexScene()
     DestroySecretRealmDialog()
     stageForestLayerA_ = nil
@@ -1124,6 +1139,7 @@ EnterInventoryScreen = function()
     DestroyBattleScene()
     DestroyFormationScene()
     DestroyHeroGrowthScene()
+    DestroyHeroSkillScene()
     DestroyHeroCodexScene()
     DestroySecretRealmDialog()
     stageForestLayerA_ = nil
@@ -1153,6 +1169,7 @@ EnterHeroGrowthScreen = function(heroId)
     DestroyFormationScene()
     DestroyInventoryScene()
     DestroyHeroGrowthScene()
+    DestroyHeroSkillScene()
     DestroyHeroCodexScene()
     DestroySecretRealmDialog()
     stageForestLayerA_ = nil
@@ -1164,6 +1181,9 @@ EnterHeroGrowthScreen = function(heroId)
         selectedHeroId = heroId,
         onExit = function()
             EnterHomeScreen()
+        end,
+        onOpenSkill = function(selectedHeroId)
+            EnterHeroSkillScreen(selectedHeroId)
         end,
         createTopResourceRow = function()
             return CreateTopResourceRow(SaveManager.GetSaveData())
@@ -1178,11 +1198,43 @@ EnterHeroGrowthScreen = function(heroId)
     print("[Main] Entered hero growth screen: " .. tostring(heroId))
 end
 
+EnterHeroSkillScreen = function(heroId)
+    DestroyBattleScene()
+    DestroyFormationScene()
+    DestroyInventoryScene()
+    DestroyHeroGrowthScene()
+    DestroyHeroSkillScene()
+    DestroyHeroCodexScene()
+    DestroySecretRealmDialog()
+    stageForestLayerA_ = nil
+    stageForestLayerB_ = nil
+    ClearHomeRuntimeLabels()
+    homeHeroSprites_ = {}
+
+    heroSkillScene_ = HeroSkillScene:new({
+        selectedHeroId = heroId,
+        onExit = function(selectedHeroId)
+            EnterHeroGrowthScreen(selectedHeroId or heroId)
+        end,
+        createTopResourceRow = function()
+            return CreateTopResourceRow(SaveManager.GetSaveData())
+        end,
+        onRootChanged = function(root)
+            BindTopResourceLabels(root)
+        end,
+    })
+    local root = heroSkillScene_:CreateRoot()
+    ShowRoot(root)
+    BindTopResourceLabels(root)
+    print("[Main] Entered hero skill screen: " .. tostring(heroId))
+end
+
 EnterHeroCodexScreen = function()
     DestroyBattleScene()
     DestroyFormationScene()
     DestroyInventoryScene()
     DestroyHeroGrowthScene()
+    DestroyHeroSkillScene()
     DestroyHeroCodexScene()
     DestroySecretRealmDialog()
     stageForestLayerA_ = nil
@@ -1212,6 +1264,7 @@ local function ReturnToLoginScreen(statusText)
     DestroyFormationScene()
     DestroyInventoryScene()
     DestroyHeroGrowthScene()
+    DestroyHeroSkillScene()
     DestroyHeroCodexScene()
     DestroySecretRealmDialog()
     ClearHomeRuntimeLabels()
@@ -1355,6 +1408,7 @@ function Stop()
     DestroyFormationScene()
     DestroyInventoryScene()
     DestroyHeroGrowthScene()
+    DestroyHeroSkillScene()
     DestroyHeroCodexScene()
     DestroySecretRealmDialog()
     UI.Shutdown()

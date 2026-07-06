@@ -106,24 +106,6 @@ local function GetOpenSkillNum(hero)
     return math.max(0, math.floor(tonumber(starConfig.OpenSkillNum) or 0))
 end
 
-local function GetSkillCandidates(hero)
-    local npcConfig = GetNpcConfig(hero)
-    if npcConfig and type(npcConfig.Skill) == "table" then
-        return npcConfig.Skill
-    end
-    return {}
-end
-
-local function GetSkillName(skillId)
-    if not skillId then return "未学习" end
-    local tables = ConfigManager.GetTables()
-    local skill = tables.skill and tables.skill[tostring(skillId)] or nil
-    if skill and skill.name then
-        return tostring(skill.name)
-    end
-    return "技能" .. tostring(skillId)
-end
-
 local function GetHeroStats(hero)
     if hero and type(hero.stats) == "table" then
         return hero.stats
@@ -156,10 +138,6 @@ local function GetStarCost(hero)
     return GetHeroStar(hero) * 180 + GetQuality(hero) * 80
 end
 
-local function GetSkillCost(hero)
-    return (#GetHeroSkills(hero) + 1) * 80
-end
-
 local function CreateStarBadge(star, layout)
     layout = type(layout) == "table" and layout or {}
     local starCount = GetHeroStar({ star = star })
@@ -189,6 +167,7 @@ end
 function HeroGrowthScene:new(options)
     local o = setmetatable({}, self)
     o.onExit = options and options.onExit or nil
+    o.onOpenSkill = options and options.onOpenSkill or nil
     o.createTopResourceRow = options and options.createTopResourceRow or nil
     o.onRootChanged = options and options.onRootChanged or nil
     o.root = nil
@@ -197,7 +176,7 @@ function HeroGrowthScene:new(options)
     o.currentHeroLabel = nil
     o.heroCardRefs = nil
     o.selectedHeroId = options and options.selectedHeroId or nil
-    o.statusText = "选择勇者后可进行升级、升星和学习技能。"
+    o.statusText = "选择勇者后可进行升级、升星；技能学习与升级请进入技能培养界面。"
     return o
 end
 
@@ -350,44 +329,6 @@ function HeroGrowthScene:StarUpHero()
     hero.power = math.max(1, math.floor(tonumber(hero.power) or 1) + 240 + GetQuality(hero) * 45 + GetHeroLevel(hero) * 4)
     self:SetStatus(hero.name .. "升到" .. tostring(hero.star) .. "星，技能槽同步扩展。")
     self:SaveAndRefresh("勇者升星", { "heroes", "crystal" })
-end
-
-function HeroGrowthScene:LearnSkill()
-    local saveData, _, hero = self:GetData()
-    if not hero then
-        self:SetStatus("请先选择一个勇者。")
-        self:RefreshDetail()
-        return
-    end
-
-    local skills = GetHeroSkills(hero)
-    local openSkillNum = GetOpenSkillNum(hero)
-    if #skills >= openSkillNum then
-        self:SetStatus("当前星级可学习技能槽已满，请先升星。")
-        self:RefreshDetail()
-        return
-    end
-
-    local candidates = GetSkillCandidates(hero)
-    local nextSkill = candidates[#skills + 1]
-    if not nextSkill then
-        self:SetStatus("该勇者暂无可学习技能。")
-        self:RefreshDetail()
-        return
-    end
-
-    local cost = GetSkillCost(hero)
-    if math.floor(tonumber(saveData.diamond) or 0) < cost then
-        self:SetStatus("蓝钻不足，学习技能需要" .. FormatNumber(cost) .. "蓝钻。")
-        self:RefreshDetail()
-        return
-    end
-
-    saveData.diamond = math.max(0, math.floor(tonumber(saveData.diamond) or 0) - cost)
-    skills[#skills + 1] = nextSkill
-    hero.power = math.max(1, math.floor(tonumber(hero.power) or 1) + 120 + GetQuality(hero) * 20)
-    self:SetStatus(hero.name .. "学会" .. GetSkillName(nextSkill) .. "。")
-    self:SaveAndRefresh("勇者学习技能", { "heroes", "diamond" })
 end
 
 function HeroGrowthScene:CreateRoot()
@@ -566,7 +507,7 @@ function HeroGrowthScene:CreateGrowthPanel(hero)
             self:CreateAttributePanel(hero),
             self:CreateUpgradePanel(hero),
             self:CreateStarPanel(hero),
-            self:CreateSkillPanel(hero),
+            self:CreateSkillEntryPanel(hero),
             UI.Label { text = self.statusText, flexGrow = 1, flexBasis = 0, top = 4, fontSize = 17, fontColor = { 88, 46, 45, 255 }, textAlign = "left", verticalAlign = "top", maxLines = 3 },
         } or {
             UI.Label { text = "暂无勇者", fontSize = 24, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, textAlign = "center" },
@@ -593,7 +534,7 @@ function HeroGrowthScene:CreateHeroOverview(hero)
             UI.Panel { position = "absolute", left = 182, top = 88, children = { CreateStarBadge(hero.star, { top = 4 }) } },
             self:CreateStatRow("等级", "Lv." .. tostring(GetHeroLevel(hero)) .. "/" .. tostring(GetLevelLimit(hero)), 182, 122, 181),
             self:CreateStatRow("战力", FormatNumber(hero.power), 182, 152, 182),
-            self:CreateStatRow("技能", tostring(#GetHeroSkills(hero)) .. "/" .. tostring(GetOpenSkillNum(hero)), 182, 180, 183),
+            self:CreateStatRow("定位", tostring(hero.role or "前排"), 182, 180, 183),
         },
     }
 end
@@ -692,55 +633,22 @@ function HeroGrowthScene:CreateStarPanel(hero)
     })
 end
 
-function HeroGrowthScene:CreateSkillPanel(hero)
-    local skillSlots = self:CreateSkillSlots(hero)
-    local canLearn = #GetHeroSkills(hero) < GetOpenSkillNum(hero) and GetSkillCandidates(hero)[#GetHeroSkills(hero) + 1] ~= nil
+function HeroGrowthScene:CreateSkillEntryPanel(hero)
     return UI.Panel {
         width = "100%",
-        height = 210,
+        height = 118,
         padding = 10,
-        gap = 8,
         backgroundColor = { 113, 74, 58, 230 },
         borderColor = { 68, 45, 25, 255 },
         borderWidth = 2,
         borderRadius = 16,
         children = {
-            UI.Panel { width = "100%", height = 34, flexDirection = "row", alignItems = "center", children = {
-                UI.Label { text = "学习技能", flexGrow = 1, fontSize = 20, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 180 } } },
-                UI.Button { text = "学习", width = 86, height = 32, fontSize = 16, backgroundColor = canLearn and { 202, 92, 44, 255 } or { 117, 79, 62, 180 }, textColor = { 255, 244, 220, 255 }, borderRadius = 13, onClick = function() self:LearnSkill() end },
-            } },
-            UI.Label { text = "消耗蓝钻 " .. FormatNumber(GetSkillCost(hero)) .. "，按配置顺序学习下一个技能。", fontSize = 15, fontColor = { 255, 244, 220, 230 }, maxLines = 1 },
-            UI.Panel { width = "100%", flexGrow = 1, flexBasis = 0, flexDirection = "row", flexWrap = "wrap", gap = 6, children = skillSlots },
+            UI.Label { text = "技能培养", position = "absolute", left = 12, top = 8, width = 160, fontSize = 20, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 180 } } },
+            UI.Label { text = "学习与升级技能已拆分为独立界面，点击右侧按钮进入。", position = "absolute", left = 12, top = 40, width = 230, height = 45, fontSize = 14, fontColor = { 255, 244, 220, 230 }, verticalAlign = "top", whiteSpace = "normal", maxLines = 2 },
+            UI.Label { text = "技能战力随学习和升级提升", position = "absolute", left = 12, top = 87, width = 220, fontSize = 15, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textStroke = { width = 1, color = { 0, 0, 0, 200 } }, maxLines = 1 },
+            UI.Button { text = "技能", position = "absolute", right = 12, top = 38, width = 90, height = 42, fontSize = 18, fontWeight = "bold", backgroundColor = { 202, 92, 44, 255 }, pressedBackgroundColor = { 155, 62, 36, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 16, onClick = function() if self.onOpenSkill then self.onOpenSkill(hero.id) end end },
         },
     }
-end
-
-function HeroGrowthScene:CreateSkillSlots(hero)
-    local learnedSkills = GetHeroSkills(hero)
-    local candidates = GetSkillCandidates(hero)
-    local openSkillNum = GetOpenSkillNum(hero)
-    local children = {}
-    for index = 1, 5 do
-        local learnedSkill = learnedSkills[index]
-        local candidate = candidates[index]
-        local opened = index <= openSkillNum
-        local title = learnedSkill and GetSkillName(learnedSkill) or (opened and candidate and GetSkillName(candidate) or "技能槽" .. tostring(index))
-        local status = learnedSkill and "已学习" or (opened and "可学习" or "升星解锁")
-        children[#children + 1] = UI.Panel {
-            width = 105,
-            height = 50,
-            padding = 6,
-            backgroundColor = learnedSkill and { 245, 228, 200, 255 } or (opened and { 207, 166, 119, 255 } or { 117, 79, 62, 180 }),
-            borderColor = learnedSkill and { 255, 234, 0, 255 } or { 68, 45, 25, 220 },
-            borderWidth = 2,
-            borderRadius = 12,
-            children = {
-                UI.Label { text = title, fontSize = 14, fontWeight = "bold", fontColor = learnedSkill and { 88, 46, 45, 255 } or { 255, 244, 220, 255 }, textAlign = "center", maxLines = 1 },
-                UI.Label { text = status, fontSize = 12, fontColor = learnedSkill and { 202, 92, 44, 255 } or { 88, 46, 45, 230 }, textAlign = "center", maxLines = 1 },
-            },
-        }
-    end
-    return children
 end
 
 function HeroGrowthScene:CreateActionPanel(title, desc, buttonText, costText, enabled, onClick, layout)
