@@ -121,7 +121,7 @@ local FEATURE_ICONS = {
 local BOTTOM_NAV_ICONS = {
     ["背包"] = "image/nav_bag.png",
     ["阵型"] = "image/nav_formation.png",
-    ["冒险"] = "image/nav_adventure.png",
+    ["冒险"] = "image/edited_nav_skill_20260706082834.png",
     ["任务"] = "image/nav_adventure.png",
     ["图鉴"] = "image/nav_codex.png",
 }

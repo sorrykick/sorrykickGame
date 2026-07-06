@@ -34,7 +34,7 @@
 - 已新增 `scripts/Inventory/InventoryScene.lua`，实现与阵型页一致的 Yoga UI 棕色/米黄风格背包系统：分类 TAB、物品格、详情面板、使用/整理/扩充/关闭按钮；主界面底部“背包”入口已接入；存档新增 `inventory` 字段并纳入增量 dirty 上传，小袋金币可使用并保存金币与背包变化。最近已按 Inspector 将背包背景显式设置为 720×1280，页面标题改为“背包”并上移容量文本；物品列表删除“物品列表”标题，列表面板调整到 `left=2/top=5/height=69.6%` 且圆角清零，分类 TAB 调整到 `left=-3/top=2`，ScrollView 调整为 `left=2/top=-44/flexBasis=684`，滚动内容容器调整为 `top=74`；详情底板调整为 `left=-5/top=710/height=25.6%/backgroundColor={255,255,255,0}` 且圆角清零，空详情状态文本为 `left=292/top=-23`，选中详情标题、图标、名称、品质、数量、状态、描述框重新排布，选中详情状态文本调整为 `left=415/top=23`；内容父级标记为 `id="backBag"` 并调整为 `left=13/top=122/right=29/height=994`；底部操作按钮组调整为 `left=49/top=1120/width=87.1%`，整理/扩充按钮分别定位到 `left=240/top=3` 与 `left=478/top=2`。
 - GitHub 同步已改为手动：本地 `post-commit` 自动推送 hook 已禁用；只有用户明确要求“同步 GitHub”或“推送”时才执行 `git push`。
 - 最近一次功能修改已将技能学习/升级从勇者养成页拆出：新增 `scripts/Hero/HeroSkillScene.lua` 独立技能培养界面；`scripts/main.lua` 新增 `EnterHeroSkillScreen(heroId)` 并从养成页的“技能培养”入口跳转，返回时回到同一勇者的养成页；`HeroGrowthScene` 不再直接展示技能学习/升级明细；`SaveSchema` 新增并规范化 `hero.skillLevels`，技能学习/升级沿用 dirty 字段保存 `heroes` 与资源变化。
-- 最近一次 LSP 诊断 0 Error，官方构建成功。
+- 最近一次小调整按 Inspector 同步主界面底部导航第 3 个图标：`scripts/main.lua` 的 `BOTTOM_NAV_ICONS["冒险"]` 已从 `image/nav_adventure.png` 替换为 `image/edited_nav_skill_20260706082834.png`，显示“技能”文字图标；LSP 0 Error，官方构建成功。
 - 后续开发需先按 UrhoX 文档流程阅读 Lua 指南、相关示例和脚手架，再实现。
 
 ## likely_next_task

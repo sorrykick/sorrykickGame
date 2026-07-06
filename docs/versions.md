@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-06 | home-bottom-nav-skill-icon | 按 Inspector 同步主界面底部导航第 3 个图标：将“冒险”导航图标资源替换为新生成的 `image/edited_nav_skill_20260706082834.png`，显示“技能”文字图标；仅修改目标 `backgroundImage`，LSP 0 Error，官方构建成功。 |
 | 2026-07-06 | hero-skill-scene-split | 将技能学习/升级从勇者养成页拆出：`HeroGrowthScene` 保留升级、升星、属性展示和“技能培养”入口；新增 `HeroSkillScene` 独立页面，支持按 `npc.Skill` 学习技能、查看技能详情和升级已学技能；`main.lua` 新增技能页跳转并返回同一勇者；`SaveSchema` 新增并规范化 `hero.skillLevels`；LSP 0 Error，官方构建成功。 |
 | 2026-07-06 | hero-growth-attribute-panel | 修复勇者养成页点击勇者后属性展示不完整：右侧详情新增“具体属性”面板，读取英雄/配置中的生命、攻击、防御、移动并显示；同步压缩概览、升级、升星和技能区域高度，保证新增属性区后仍能完整显示；LSP 0 Error，官方构建成功。 |
 | 2026-07-06 | inventory-inspector-selected-status-label | 按 Inspector 运行时预览修改单同步背包选中详情状态 Label：`self.statusText` 从 `left=496/top=25` 调整为 `left=415/top=23`；LSP 0 Error，官方构建成功。 |

@@ -71,6 +71,8 @@
 
 ## POST 日志
 
+- 2026-07-06：按 Inspector 运行时预览修改单同步主界面底部导航第 3 个图标：`main.lua` 中底部导航“冒险”图标从 `image/nav_adventure.png` 替换为新生成的 `image/edited_nav_skill_20260706082834.png`，用于显示“技能”文字图标；仅同步目标 Panel 的 `backgroundImage`，未调整父级和无关同级布局。LSP 0 Error，官方构建成功。
+
 - 2026-07-06：按需求将技能学习/升级从勇者养成页拆出：`HeroGrowthScene` 删除直接学习技能与技能槽明细，保留升级、升星、属性展示和“技能培养”入口；新增 `HeroSkillScene` 独立页面，支持选择勇者、按 `npc.Skill` 顺序学习技能、查看技能详情和升级已学技能；`main.lua` 新增 `EnterHeroSkillScreen()` 并从养成页跳转/返回同一勇者；`SaveSchema` 新增并规范化 `hero.skillLevels`，技能学习/升级沿用 dirty 字段保存 `heroes` 与资源变化。LSP 0 Error，官方构建成功。
 
 - 2026-07-06：修复勇者养成页点击勇者后属性展示不完整：`HeroGrowthScene` 新增 `ATTRIBUTE_DEFS`、`GetHeroStats()`、`GetRawStatValue()` 和“具体属性”面板，右侧详情现在显示生命、攻击、防御、移动；同步压缩概览、升级、升星和技能区域高度，确保新增属性面板后仍完整显示。LSP 0 Error，官方构建成功。
