@@ -8,7 +8,12 @@
       "moveSpeed": 3,
       "hp": 630,
       "atk": 70,
-      "def": 35
+      "def": 35,
+      "critRate": 11,
+      "critResist": 7,
+      "dmgBonus": 8,
+      "dmgReduce": 4,
+      "critDmgBonus": 21
     },
     "activeSkill": {
       "name": "风行剑舞",
@@ -59,12 +64,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 1,
-    "power": 1800,
-    "clipDir": "image/npcClip/0001",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0001_active",
       "0001_passive_1",
@@ -72,7 +72,9 @@
       "0001_passive_3",
       "0001_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "棕发棕眼的少年战士，身穿白色衬衣搭配深色背心，手持刻有龙脉纹章的圆盾。龙脉学院的新生，眼神坚定却略带稚嫩，在风刃训练中不断磨练剑技。",
+    "clipDir": "image/npcClip/0001",
+    "power": 1800
   },
   "0002": {
     "id": "0002",
@@ -83,7 +85,12 @@
       "moveSpeed": 4,
       "hp": 455,
       "atk": 74,
-      "def": 22
+      "def": 22,
+      "critRate": 20,
+      "critResist": 2,
+      "dmgBonus": 13,
+      "dmgReduce": 0,
+      "critDmgBonus": 46
     },
     "activeSkill": {
       "name": "暗影水月斩",
@@ -134,12 +141,7 @@
     "type": 1,
     "role": "中排",
     "qualityRank": 1,
-    "power": 1639,
-    "clipDir": "image/npcClip/0002",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0002_active",
       "0002_passive_1",
@@ -147,7 +149,9 @@
       "0002_passive_3",
       "0002_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "青色短发配矩形黑框眼镜，金瞳透出冷冽杀意。身穿深色战术甲胄，肩甲棱角分明，暗影guild的王牌刺客，无声无息地收割猎物。",
+    "clipDir": "image/npcClip/0002",
+    "power": 1639
   },
   "0004": {
     "id": "0004",
@@ -158,7 +162,12 @@
       "moveSpeed": 2,
       "hp": 770,
       "atk": 53,
-      "def": 49
+      "def": 49,
+      "critRate": 4,
+      "critResist": 16,
+      "dmgBonus": 4,
+      "dmgReduce": 13,
+      "critDmgBonus": 11
     },
     "activeSkill": {
       "name": "银盾圣光守护",
@@ -209,12 +218,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 1,
-    "power": 1828,
-    "clipDir": "image/npcClip/0004",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0004_active",
       "0004_passive_1",
@@ -222,7 +226,9 @@
       "0004_passive_3",
       "0004_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银灰短发、蓝瞳明亮，面带红晕的少年骑士。身披银灰铠甲，左手持圆盾、右手握剑，圣光骑士团最年轻的后勤守卫，忠诚可靠。",
+    "clipDir": "image/npcClip/0004",
+    "power": 1828
   },
   "0009": {
     "id": "0009",
@@ -233,7 +239,12 @@
       "moveSpeed": 2,
       "hp": 385,
       "atk": 88,
-      "def": 15
+      "def": 15,
+      "critRate": 8,
+      "critResist": 6,
+      "dmgBonus": 14,
+      "dmgReduce": 0,
+      "critDmgBonus": 25
     },
     "activeSkill": {
       "name": "灵鸣紫瀑",
@@ -284,12 +295,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 1,
-    "power": 1519,
-    "clipDir": "image/npcClip/0009",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0009_active",
       "0009_passive_1",
@@ -297,7 +303,9 @@
       "0009_passive_3",
       "0009_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "棕红长发扎成高马尾，头顶卷曲呆毛，棕色瞳孔沉稳如渊。身着暗色高领军礼服，胸前银饰闪耀，森罗万象的神秘法师，紫瀑咒语令草木俯首。",
+    "clipDir": "image/npcClip/0009",
+    "power": 1519
   },
   "0010": {
     "id": "0010",
@@ -308,7 +316,12 @@
       "moveSpeed": 3,
       "hp": 420,
       "atk": 77,
-      "def": 20
+      "def": 20,
+      "critRate": 14,
+      "critResist": 4,
+      "dmgBonus": 12,
+      "dmgReduce": 0,
+      "critDmgBonus": 35
     },
     "activeSkill": {
       "name": "穿杨千里箭",
@@ -359,12 +372,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 1,
-    "power": 1556,
-    "clipDir": "image/npcClip/0010",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0010_active",
       "0010_passive_1",
@@ -372,7 +380,9 @@
       "0010_passive_3",
       "0010_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "深蓝短发别着金色发饰，翠绿眼眸灵动如雀。身着紫蓝色和服风服饰，手持弓箭，龙脉学院的精准射手，箭矢穿杨千里。",
+    "clipDir": "image/npcClip/0010",
+    "power": 1556
   },
   "0011": {
     "id": "0011",
@@ -383,7 +393,12 @@
       "moveSpeed": 2,
       "hp": 770,
       "atk": 53,
-      "def": 49
+      "def": 49,
+      "critRate": 4,
+      "critResist": 16,
+      "dmgBonus": 4,
+      "dmgReduce": 13,
+      "critDmgBonus": 11
     },
     "activeSkill": {
       "name": "白翼圣光阵",
@@ -434,12 +449,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 1,
-    "power": 1828,
-    "clipDir": "image/npcClip/0011",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0011_active",
       "0011_passive_1",
@@ -447,7 +457,9 @@
       "0011_passive_3",
       "0011_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金发碧眼的少女骑士，头戴银色翼饰，身披银白铠甲，双手紧握长剑。圣光骑士团的荣耀新星，誓言以剑与盾守护光明。",
+    "clipDir": "image/npcClip/0011",
+    "power": 1828
   },
   "0012": {
     "id": "0012",
@@ -458,7 +470,12 @@
       "moveSpeed": 3,
       "hp": 630,
       "atk": 70,
-      "def": 35
+      "def": 35,
+      "critRate": 10,
+      "critResist": 8,
+      "dmgBonus": 7,
+      "dmgReduce": 5,
+      "critDmgBonus": 21
     },
     "activeSkill": {
       "name": "灿阳裂空斩",
@@ -509,12 +526,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 1,
-    "power": 1800,
-    "clipDir": "image/npcClip/0012",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0012_active",
       "0012_passive_1",
@@ -522,7 +534,9 @@
       "0012_passive_3",
       "0012_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金色短发、绿瞳开朗，面带灿烂笑容。身穿黑色机甲风格战装，头顶黑色机甲配件，苍穹帝国的年轻女战士，冲锋在前毫不畏惧。",
+    "clipDir": "image/npcClip/0012",
+    "power": 1800
   },
   "0013": {
     "id": "0013",
@@ -533,7 +547,12 @@
       "moveSpeed": 3,
       "hp": 720,
       "atk": 80,
-      "def": 40
+      "def": 40,
+      "critRate": 11,
+      "critResist": 10,
+      "dmgBonus": 8,
+      "dmgReduce": 6,
+      "critDmgBonus": 24
     },
     "activeSkill": {
       "name": "绯焰烈拳",
@@ -584,12 +603,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 2,
-    "power": 2220,
-    "clipDir": "image/npcClip/0013",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0013_active",
       "0013_passive_1",
@@ -597,7 +611,9 @@
       "0013_passive_3",
       "0013_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "鲜红短发如火焰般张扬，红色双瞳灼灼生威，白色毛领环绕颈部。身着暗红战装，苍穹帝国的热血格斗家，拳如烈焰灼烧一切。",
+    "clipDir": "image/npcClip/0013",
+    "power": 2220
   },
   "0015": {
     "id": "0015",
@@ -608,7 +624,12 @@
       "moveSpeed": 2,
       "hp": 490,
       "atk": 28,
-      "def": 29
+      "def": 29,
+      "critRate": 2,
+      "critResist": 13,
+      "dmgBonus": 0,
+      "dmgReduce": 6,
+      "critDmgBonus": 7
     },
     "activeSkill": {
       "name": "圣光祈愈术",
@@ -659,12 +680,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 1,
-    "power": 1228,
-    "clipDir": "image/npcClip/0015",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0015_active",
       "0015_passive_1",
@@ -672,7 +688,9 @@
       "0015_passive_3",
       "0015_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "白发蓝瞳的纯洁少女，头戴红色兜帽与白色头带，身着红白相间的修道服。圣光骑士团的信仰祭司，以圣光治愈苍生，笑容温暖如晨曦。",
+    "clipDir": "image/npcClip/0015",
+    "power": 1228
   },
   "0016": {
     "id": "0016",
@@ -683,7 +701,12 @@
       "moveSpeed": 2,
       "hp": 490,
       "atk": 28,
-      "def": 29
+      "def": 29,
+      "critRate": 4,
+      "critResist": 11,
+      "dmgBonus": 0,
+      "dmgReduce": 4,
+      "critDmgBonus": 11
     },
     "activeSkill": {
       "name": "弦歌抚魂曲",
@@ -734,12 +757,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 1,
-    "power": 1228,
-    "clipDir": "image/npcClip/0016",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0016_active",
       "0016_passive_1",
@@ -747,7 +765,9 @@
       "0016_passive_3",
       "0016_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银紫色长发柔顺垂落，紫瞳深邃，胸前系着鲜红蝴蝶结。手持提琴与琴弓，森罗万象的音乐祭司，弦歌婉转间抚慰万物伤痛。",
+    "clipDir": "image/npcClip/0016",
+    "power": 1228
   },
   "0028": {
     "id": "0028",
@@ -758,7 +778,12 @@
       "moveSpeed": 3,
       "hp": 630,
       "atk": 70,
-      "def": 35
+      "def": 35,
+      "critRate": 10,
+      "critResist": 8,
+      "dmgBonus": 7,
+      "dmgReduce": 5,
+      "critDmgBonus": 21
     },
     "activeSkill": {
       "name": "炎牙狂斩",
@@ -809,12 +834,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 1,
-    "power": 1800,
-    "clipDir": "image/npcClip/0028",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0028_active",
       "0028_passive_1",
@@ -822,7 +842,9 @@
       "0028_passive_3",
       "0028_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "棕发短寸、头顶翘起一根呆毛，紫红色瞳孔透着傲气与自信。身穿棕色军铠，手持大剑横于胸前，苍穹帝国的豪迈战士，战意如烈火燎原。",
+    "clipDir": "image/npcClip/0028",
+    "power": 1800
   },
   "0030": {
     "id": "0030",
@@ -833,7 +855,12 @@
       "moveSpeed": 2,
       "hp": 770,
       "atk": 53,
-      "def": 49
+      "def": 49,
+      "critRate": 5,
+      "critResist": 15,
+      "dmgBonus": 4,
+      "dmgReduce": 12,
+      "critDmgBonus": 14
     },
     "activeSkill": {
       "name": "苍蓝冰壁",
@@ -884,12 +911,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 1,
-    "power": 1828,
-    "clipDir": "image/npcClip/0030",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0030_active",
       "0030_passive_1",
@@ -897,7 +919,9 @@
       "0030_passive_3",
       "0030_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "深蓝机甲头盔配金色纹饰，红瞳在面罩后闪烁光芒。身披蓝金重甲，造型威严如远古将军，苍穹帝国的钢铁骑士，以厚重铠甲碾碎一切阻碍。",
+    "clipDir": "image/npcClip/0030",
+    "power": 1828
   },
   "0035": {
     "id": "0035",
@@ -908,7 +932,12 @@
       "moveSpeed": 4,
       "hp": 455,
       "atk": 74,
-      "def": 22
+      "def": 22,
+      "critRate": 20,
+      "critResist": 2,
+      "dmgBonus": 13,
+      "dmgReduce": 0,
+      "critDmgBonus": 46
     },
     "activeSkill": {
       "name": "影织暗杀术",
@@ -959,12 +988,7 @@
     "type": 1,
     "role": "中排",
     "qualityRank": 1,
-    "power": 1639,
-    "clipDir": "image/npcClip/0035",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0035_active",
       "0035_passive_1",
@@ -972,7 +996,9 @@
       "0035_passive_3",
       "0035_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅蓝银发别着红色丝带，品红双瞳冷若冰霜，身着深色高领制服。暗影guild的暗杀者，如月光般无声降临，收割猎物不留痕迹。",
+    "clipDir": "image/npcClip/0035",
+    "power": 1639
   },
   "0036": {
     "id": "0036",
@@ -983,7 +1009,12 @@
       "moveSpeed": 3,
       "hp": 630,
       "atk": 70,
-      "def": 35
+      "def": 35,
+      "critRate": 13,
+      "critResist": 6,
+      "dmgBonus": 9,
+      "dmgReduce": 4,
+      "critDmgBonus": 25
     },
     "activeSkill": {
       "name": "霜夜弧光斩",
@@ -1034,12 +1065,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 1,
-    "power": 1800,
-    "clipDir": "image/npcClip/0036",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0036_active",
       "0036_passive_1",
@@ -1047,7 +1073,9 @@
       "0036_passive_3",
       "0036_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅蓝银发别着红色丝带，紫瞳坚定，面颊上有红色战纹。身着红白战装，手持利刃斜劈，暗影guild的刀刃战士，在暗夜中划出致命弧光。",
+    "clipDir": "image/npcClip/0036",
+    "power": 1800
   },
   "0038": {
     "id": "0038",
@@ -1058,7 +1086,12 @@
       "moveSpeed": 2,
       "hp": 385,
       "atk": 88,
-      "def": 15
+      "def": 15,
+      "critRate": 11,
+      "critResist": 4,
+      "dmgBonus": 16,
+      "dmgReduce": 0,
+      "critDmgBonus": 28
     },
     "activeSkill": {
       "name": "冰晶暗狱",
@@ -1109,12 +1142,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 1,
-    "power": 1519,
-    "clipDir": "image/npcClip/0038",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0038_active",
       "0038_passive_1",
@@ -1122,7 +1150,9 @@
       "0038_passive_3",
       "0038_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "亮青短发、蓝瞳自信，头顶生出一对角状突起。身穿深色高领战袍，暗影guild的角瞳法师，以冰霜魔力操控战场，冷笑间冻裂大地。",
+    "clipDir": "image/npcClip/0038",
+    "power": 1519
   },
   "0039": {
     "id": "0039",
@@ -1133,7 +1163,12 @@
       "moveSpeed": 2,
       "hp": 880,
       "atk": 60,
-      "def": 56
+      "def": 56,
+      "critRate": 5,
+      "critResist": 18,
+      "dmgBonus": 4,
+      "dmgReduce": 14,
+      "critDmgBonus": 12
     },
     "activeSkill": {
       "name": "金铠烈阳盾",
@@ -1184,12 +1219,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 2,
-    "power": 2256,
-    "clipDir": "image/npcClip/0039",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0039_active",
       "0039_passive_1",
@@ -1197,7 +1227,9 @@
       "0039_passive_3",
       "0039_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金黄头盔配T形面罩，身披金蓝重甲，手持棒球棍。绿色边框闪烁，圣光骑士团的金铠猛将，烈阳般的气势让敌人闻风丧胆。",
+    "clipDir": "image/npcClip/0039",
+    "power": 2256
   },
   "0040": {
     "id": "0040",
@@ -1208,7 +1240,12 @@
       "moveSpeed": 2,
       "hp": 385,
       "atk": 88,
-      "def": 15
+      "def": 15,
+      "critRate": 8,
+      "critResist": 6,
+      "dmgBonus": 14,
+      "dmgReduce": 0,
+      "critDmgBonus": 25
     },
     "activeSkill": {
       "name": "皇家紫晶风暴",
@@ -1259,12 +1296,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 1,
-    "power": 1519,
-    "clipDir": "image/npcClip/0040",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0040_active",
       "0040_passive_1",
@@ -1272,7 +1304,9 @@
       "0040_passive_3",
       "0040_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅棕金发盘成华丽发髻，紫瞳含笑，头顶紫宝石金冠。身着紫白华丽法袍，肩饰精美，森罗万象的贵族法师，魔法造诣深厚，举手投足尽是优雅。",
+    "clipDir": "image/npcClip/0040",
+    "power": 1519
   },
   "0041": {
     "id": "0041",
@@ -1283,7 +1317,12 @@
       "moveSpeed": 2,
       "hp": 385,
       "atk": 88,
-      "def": 15
+      "def": 15,
+      "critRate": 11,
+      "critResist": 4,
+      "dmgBonus": 16,
+      "dmgReduce": 0,
+      "critDmgBonus": 28
     },
     "activeSkill": {
       "name": "死灵暗噬",
@@ -1334,12 +1373,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 1,
-    "power": 1519,
-    "clipDir": "image/npcClip/0041",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0041_active",
       "0041_passive_1",
@@ -1347,7 +1381,9 @@
       "0041_passive_3",
       "0041_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银色长发如流瀑飞扬，红瞳深邃，嘴角挂着一抹诡异微笑。身披黑色暗甲，肩甲锋利如刺，暗影guild的银骸法师，操控亡灵之力令人胆寒。",
+    "clipDir": "image/npcClip/0041",
+    "power": 1519
   },
   "0042": {
     "id": "0042",
@@ -1358,7 +1394,12 @@
       "moveSpeed": 3,
       "hp": 720,
       "atk": 80,
-      "def": 40
+      "def": 40,
+      "critRate": 12,
+      "critResist": 8,
+      "dmgBonus": 8,
+      "dmgReduce": 4,
+      "critDmgBonus": 24
     },
     "activeSkill": {
       "name": "鬼角雷鸣拳",
@@ -1409,12 +1450,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 2,
-    "power": 2220,
-    "clipDir": "image/npcClip/0042",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0042_active",
       "0042_passive_1",
@@ -1422,7 +1458,9 @@
       "0042_passive_3",
       "0042_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "黑发怒竖，头顶生着白色鬼角，表情狰狞如怒雷轰鸣。身着破损战甲，肌肉贲张，森罗万象的鬼角战士，战吼可震碎山岳。",
+    "clipDir": "image/npcClip/0042",
+    "power": 2220
   },
   "0043": {
     "id": "0043",
@@ -1433,7 +1471,12 @@
       "moveSpeed": 2,
       "hp": 880,
       "atk": 60,
-      "def": 56
+      "def": 56,
+      "critRate": 6,
+      "critResist": 18,
+      "dmgBonus": 4,
+      "dmgReduce": 14,
+      "critDmgBonus": 16
     },
     "activeSkill": {
       "name": "机巧机关阵",
@@ -1484,12 +1527,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 2,
-    "power": 2256,
-    "clipDir": "image/npcClip/0043",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0043_active",
       "0043_passive_1",
@@ -1497,7 +1535,9 @@
       "0043_passive_3",
       "0043_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金色短发、绿瞳灵动，头戴黑红机械护目镜。身穿绿金装甲，手持巨型链锯剑，苍穹帝国的机巧骑士，以高科技武器在战场上所向披靡。",
+    "clipDir": "image/npcClip/0043",
+    "power": 2256
   },
   "0044": {
     "id": "0044",
@@ -1508,7 +1548,12 @@
       "moveSpeed": 2,
       "hp": 880,
       "atk": 60,
-      "def": 56
+      "def": 56,
+      "critRate": 5,
+      "critResist": 18,
+      "dmgBonus": 4,
+      "dmgReduce": 14,
+      "critDmgBonus": 12
     },
     "activeSkill": {
       "name": "执事银刃守护",
@@ -1559,12 +1604,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 2,
-    "power": 2256,
-    "clipDir": "image/npcClip/0044",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0044_active",
       "0044_passive_1",
@@ -1572,7 +1612,9 @@
       "0044_passive_3",
       "0044_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "棕金色短发、蓝眼清澈，身穿白蓝军礼服，白手套行礼致敬。苍穹帝国最忠诚的骑士，右手抚胸立誓效忠，举止间尽显军人风范。",
+    "clipDir": "image/npcClip/0044",
+    "power": 2256
   },
   "0045": {
     "id": "0045",
@@ -1583,7 +1625,12 @@
       "moveSpeed": 3,
       "hp": 720,
       "atk": 80,
-      "def": 40
+      "def": 40,
+      "critRate": 12,
+      "critResist": 8,
+      "dmgBonus": 10,
+      "dmgReduce": 4,
+      "critDmgBonus": 24
     },
     "activeSkill": {
       "name": "破晓古剑斩",
@@ -1634,12 +1681,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 2,
-    "power": 2220,
-    "clipDir": "image/npcClip/0045",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0045_active",
       "0045_passive_1",
@@ -1647,7 +1689,9 @@
       "0045_passive_3",
       "0045_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金色刺猬短发、蓝绿双瞳，笑容灿烂开朗。身穿银甲战装，肩甲坚实，背后斜挎长剑，龙脉学院的破晓战士，以无畏之心迎接黎明之战。",
+    "clipDir": "image/npcClip/0045",
+    "power": 2220
   },
   "0046": {
     "id": "0046",
@@ -1658,7 +1702,12 @@
       "moveSpeed": 2,
       "hp": 880,
       "atk": 60,
-      "def": 56
+      "def": 56,
+      "critRate": 6,
+      "critResist": 18,
+      "dmgBonus": 4,
+      "dmgReduce": 14,
+      "critDmgBonus": 16
     },
     "activeSkill": {
       "name": "苍卫机甲斩",
@@ -1709,12 +1758,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 2,
-    "power": 2256,
-    "clipDir": "image/npcClip/0046",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0046_active",
       "0046_passive_1",
@@ -1722,7 +1766,9 @@
       "0046_passive_3",
       "0046_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银灰色机械头盔棱角分明，面罩泛着青色冷光。身披深蓝机甲重铠，苍穹帝国的机核守卫，以钢铁之躯筑起不可逾越的防线。",
+    "clipDir": "image/npcClip/0046",
+    "power": 2256
   },
   "0047": {
     "id": "0047",
@@ -1733,7 +1779,12 @@
       "moveSpeed": 2,
       "hp": 880,
       "atk": 60,
-      "def": 56
+      "def": 56,
+      "critRate": 6,
+      "critResist": 18,
+      "dmgBonus": 4,
+      "dmgReduce": 14,
+      "critDmgBonus": 16
     },
     "activeSkill": {
       "name": "钢面猩红爪",
@@ -1784,12 +1835,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 2,
-    "power": 2256,
-    "clipDir": "image/npcClip/0047",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0047_active",
       "0047_passive_1",
@@ -1797,7 +1843,9 @@
       "0047_passive_3",
       "0047_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银色头盔配T形面罩，红色面甲如血色印记。身披银灰重甲，肩甲层叠厚实，苍穹帝国的冷酷铁面骑士，沉默中碾压一切来犯之敌。",
+    "clipDir": "image/npcClip/0047",
+    "power": 2256
   },
   "0048": {
     "id": "0048",
@@ -1808,7 +1856,12 @@
       "moveSpeed": 2,
       "hp": 440,
       "atk": 100,
-      "def": 18
+      "def": 18,
+      "critRate": 10,
+      "critResist": 6,
+      "dmgBonus": 16,
+      "dmgReduce": 0,
+      "critDmgBonus": 28
     },
     "activeSkill": {
       "name": "灵酿翠药剂",
@@ -1859,12 +1912,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 2,
-    "power": 1908,
-    "clipDir": "image/npcClip/0048",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0048_active",
       "0048_passive_1",
@@ -1872,7 +1920,9 @@
       "0048_passive_3",
       "0048_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅绿金发、粉红眼眸，身穿深蓝军服，打着红色领结，手持紫色药瓶。森罗万象的灵酿法师，以天地灵草酿造奇迹之药，左颊红痕是草药烙印。",
+    "clipDir": "image/npcClip/0048",
+    "power": 1908
   },
   "0049": {
     "id": "0049",
@@ -1883,7 +1933,12 @@
       "moveSpeed": 2,
       "hp": 880,
       "atk": 60,
-      "def": 56
+      "def": 56,
+      "critRate": 5,
+      "critResist": 18,
+      "dmgBonus": 4,
+      "dmgReduce": 14,
+      "critDmgBonus": 12
     },
     "activeSkill": {
       "name": "翡翠枪盾阵",
@@ -1934,12 +1989,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 2,
-    "power": 2256,
-    "clipDir": "image/npcClip/0049",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0049_active",
       "0049_passive_1",
@@ -1947,7 +1997,9 @@
       "0049_passive_3",
       "0049_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "粉紫渐变长发如梦幻般绮丽，蓝瞳自信含笑。身披银白绿纹重甲，手持巨剑，圣光骑士团的翡翠骑士，铠甲流光间尽显高贵与力量。",
+    "clipDir": "image/npcClip/0049",
+    "power": 2256
   },
   "0050": {
     "id": "0050",
@@ -1958,7 +2010,12 @@
       "moveSpeed": 3,
       "hp": 720,
       "atk": 80,
-      "def": 40
+      "def": 40,
+      "critRate": 12,
+      "critResist": 8,
+      "dmgBonus": 8,
+      "dmgReduce": 4,
+      "critDmgBonus": 24
     },
     "activeSkill": {
       "name": "暴风雪拳",
@@ -2009,12 +2066,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 2,
-    "power": 2220,
-    "clipDir": "image/npcClip/0050",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0050_active",
       "0050_passive_1",
@@ -2022,19 +2074,25 @@
       "0050_passive_3",
       "0050_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "白色毛茸身躯如雪山精灵，红瞳怒睁，棕色浓眉下满是战意。森罗万象的雪暴战士，在暴风雪中挥拳如陨石坠落，一击可碎冰山。",
+    "clipDir": "image/npcClip/0050",
+    "power": 2220
   },
   "0051": {
     "id": "0051",
     "name": "莉莉丝·魔印",
     "profession": "法师",
     "faction": "暗影guild",
-    "story": "金发紫纹的魔族公主，额头印记象征血脉之力，笑容妩媚而危险。",
     "stats": {
       "moveSpeed": 2,
       "hp": 440,
       "atk": 100,
-      "def": 18
+      "def": 18,
+      "critRate": 12,
+      "critResist": 5,
+      "dmgBonus": 18,
+      "dmgReduce": 0,
+      "critDmgBonus": 32
     },
     "activeSkill": {
       "name": "魔印·暗蚀",
@@ -2085,12 +2143,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 2,
-    "power": 1908,
-    "clipDir": "image/npcClip/0051",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0051_active",
       "0051_passive_1",
@@ -2098,19 +2151,25 @@
       "0051_passive_3",
       "0051_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金发长垂如瀑，紫瞳灼灼生辉，额头与面颊刻满紫色魔纹，头戴暗色角状头饰。身着粉紫法袍，暗影guild的魔印法师，血脉中涌动着魔族之力，笑容妩媚而危险。",
+    "clipDir": "image/npcClip/0051",
+    "power": 1908
   },
   "0052": {
     "id": "0052",
     "name": "露娜·准星",
     "profession": "射手",
     "faction": "苍穹帝国",
-    "story": "帝国精锐女狙击手，粉眼夜视仪精准锁定目标，步枪百发百中。",
     "stats": {
       "moveSpeed": 3,
       "hp": 480,
       "atk": 88,
-      "def": 22
+      "def": 22,
+      "critRate": 15,
+      "critResist": 6,
+      "dmgBonus": 12,
+      "dmgReduce": 2,
+      "critDmgBonus": 40
     },
     "activeSkill": {
       "name": "精确处决",
@@ -2161,12 +2220,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 2,
-    "power": 1936,
-    "clipDir": "image/npcClip/0052",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0052_active",
       "0052_passive_1",
@@ -2174,19 +2228,25 @@
       "0052_passive_3",
       "0052_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "戴战术头盔与护目镜的短发射手，粉色双瞳在橄榄绿军装映衬下格外醒目。手持步枪伏于阵地，冷静锁定目标。苍穹帝国精锐狙击手，以精准射击闻名，代号“准星”。",
+    "clipDir": "image/npcClip/0052",
+    "power": 1936
   },
   "0053": {
     "id": "0053",
     "name": "悠歌·翠笔",
     "profession": "祭司",
     "faction": "森罗万象",
-    "story": "青发白帽的少女乐师，手中巨笔如武器，书写天地间最古老的旋律。",
     "stats": {
       "moveSpeed": 2,
       "hp": 560,
       "atk": 32,
-      "def": 34
+      "def": 34,
+      "critRate": 4,
+      "critResist": 12,
+      "dmgBonus": 0,
+      "dmgReduce": 4,
+      "critDmgBonus": 12
     },
     "activeSkill": {
       "name": "翠笔·生命乐章",
@@ -2237,12 +2297,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 2,
-    "power": 1580,
-    "clipDir": "image/npcClip/0053",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0053_active",
       "0053_passive_1",
@@ -2250,19 +2305,25 @@
       "0053_passive_3",
       "0053_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "深紫蓝渐变双马尾少女，青色大眼闪烁智慧光芒，身穿蓝紫绣纹法袍，手持一支青色翠笔法杖。森罗万象的年轻祭司，能以笔墨绘出治愈符文，为人温婉活泼。",
+    "clipDir": "image/npcClip/0053",
+    "power": 1580
   },
   "0054": {
     "id": "0054",
     "name": "塞拉斯·金领",
     "profession": "骑士",
     "faction": "圣光骑士团",
-    "story": "金发碧眼的年轻贵族骑士，白衫金饰，举手投足间尽显风度。",
     "stats": {
       "moveSpeed": 2,
       "hp": 880,
       "atk": 60,
-      "def": 56
+      "def": 56,
+      "critRate": 5,
+      "critResist": 18,
+      "dmgBonus": 4,
+      "dmgReduce": 14,
+      "critDmgBonus": 12
     },
     "activeSkill": {
       "name": "金光守护",
@@ -2313,12 +2374,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 2,
-    "power": 2256,
-    "clipDir": "image/npcClip/0054",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0054_active",
       "0054_passive_1",
@@ -2326,19 +2382,25 @@
       "0054_passive_3",
       "0054_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金发碧眼的年轻骑士，身着白色蕾丝领结配金边暗色礼服，肩披华丽铠甲，神情自信从容。圣光骑士团贵族出身的骑士，以优雅剑术与坚定信念守护正义。",
+    "clipDir": "image/npcClip/0054",
+    "power": 2256
   },
   "0056": {
     "id": "0056",
     "name": "菲奥娜·逐风",
     "profession": "射手",
     "faction": "龙脉学院",
-    "story": "金发蓝眼的学院女弓手，皮革轻甲搭配金饰，箭无虚发。",
     "stats": {
       "moveSpeed": 3,
       "hp": 480,
       "atk": 88,
-      "def": 22
+      "def": 22,
+      "critRate": 16,
+      "critResist": 4,
+      "dmgBonus": 14,
+      "dmgReduce": 0,
+      "critDmgBonus": 40
     },
     "activeSkill": {
       "name": "逐风连珠箭",
@@ -2389,12 +2451,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 2,
-    "power": 1936,
-    "clipDir": "image/npcClip/0056",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0056_active",
       "0056_passive_1",
@@ -2402,19 +2459,25 @@
       "0056_passive_3",
       "0056_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅金双马尾的活泼少女射手，青蓝色大眼透着灵动，头戴兜帽，肩披轻甲，手持长弓。龙脉学院风系弓手，箭矢如风般迅捷，开朗笑容令队友倍感温暖。",
+    "clipDir": "image/npcClip/0056",
+    "power": 1936
   },
   "0058": {
     "id": "0058",
     "name": "苍流·剑意",
     "profession": "战士",
     "faction": "龙脉学院",
-    "story": "蓝发自信的学院剑士，右手持刃，剑光如水流转，绰号'碧波剑'。",
     "stats": {
       "moveSpeed": 3,
       "hp": 810,
       "atk": 90,
-      "def": 45
+      "def": 45,
+      "critRate": 14,
+      "critResist": 9,
+      "dmgBonus": 11,
+      "dmgReduce": 5,
+      "critDmgBonus": 27
     },
     "activeSkill": {
       "name": "碧波·流水斩",
@@ -2465,12 +2528,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 3,
-    "power": 2640,
-    "clipDir": "image/npcClip/0058",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0058_active",
       "0058_passive_1",
@@ -2478,19 +2536,25 @@
       "0058_passive_3",
       "0058_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "蓝发不对称短发的少年战士，金色眼瞳锐利如鹰，身穿银甲，肩扛利剑。龙脉学院剑道天才，剑意凌厉如苍穹流云，一心追求剑道极致。",
+    "clipDir": "image/npcClip/0058",
+    "power": 2640
   },
   "0059": {
     "id": "0059",
     "name": "艾莉丝·银冠",
     "profession": "骑士",
     "faction": "圣光骑士团",
-    "story": "银发白盔的女骑士，金冠闪耀，手执长剑，身披斗篷英姿飒爽。",
     "stats": {
       "moveSpeed": 2,
       "hp": 990,
       "atk": 68,
-      "def": 63
+      "def": 63,
+      "critRate": 5,
+      "critResist": 21,
+      "dmgBonus": 5,
+      "dmgReduce": 16,
+      "critDmgBonus": 14
     },
     "activeSkill": {
       "name": "圣冠·审判之盾",
@@ -2541,12 +2605,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 3,
-    "power": 2692,
-    "clipDir": "image/npcClip/0059",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0059_active",
       "0059_passive_1",
@@ -2554,19 +2613,25 @@
       "0059_passive_3",
       "0059_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金色短发的冷峻女骑士，琥珀色双瞳沉静坚定，身披银灰铠甲，手持圣剑。圣光骑士团精英骑士，代号“银冠”，沉默寡言却誓言守护每一寸光明之地。",
+    "clipDir": "image/npcClip/0059",
+    "power": 2692
   },
   "0061": {
     "id": "0061",
     "name": "舞焰·赤拳",
     "profession": "战士",
     "faction": "苍穹帝国",
-    "story": "青发红饰的女格斗家，出拳快如烈焰，竞技场上的不败之星。",
     "stats": {
       "moveSpeed": 3,
       "hp": 810,
       "atk": 90,
-      "def": 45
+      "def": 45,
+      "critRate": 13,
+      "critResist": 11,
+      "dmgBonus": 9,
+      "dmgReduce": 6,
+      "critDmgBonus": 27
     },
     "activeSkill": {
       "name": "焰舞·烈火连拳",
@@ -2617,12 +2682,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 3,
-    "power": 2640,
-    "clipDir": "image/npcClip/0061",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0061_active",
       "0061_passive_1",
@@ -2630,19 +2690,25 @@
       "0061_passive_3",
       "0061_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "青绿短发少女战士，紫色双瞳中燃烧战意，身穿红金战袍，拳套闪烁烈焰光芒。苍穹帝国近身格斗高手，赤拳如火焰般炽烈，以炽热斗志粉碎一切阻碍。",
+    "clipDir": "image/npcClip/0061",
+    "power": 2640
   },
   "0062": {
     "id": "0062",
     "name": "蜜柑·魔锤",
     "profession": "战士",
     "faction": "森罗万象",
-    "story": "蓝发紫眼的活泼少女，挥舞巨大的带刺铁锤，笑嘻嘻地砸碎一切。",
     "stats": {
       "moveSpeed": 3,
       "hp": 810,
       "atk": 90,
-      "def": 45
+      "def": 45,
+      "critRate": 14,
+      "critResist": 9,
+      "dmgBonus": 9,
+      "dmgReduce": 5,
+      "critDmgBonus": 27
     },
     "activeSkill": {
       "name": "魔锤·大地震击",
@@ -2693,12 +2759,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 3,
-    "power": 2640,
-    "clipDir": "image/npcClip/0062",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0062_active",
       "0062_passive_1",
@@ -2706,19 +2767,25 @@
       "0062_passive_3",
       "0062_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "蓝发红瞳的可爱少女战士，头戴红色尖帽饰以绿叶，身穿粉白战斗服，手持魔锤。森罗万象森林守卫者，魔锤蕴含自然之力，外表娇小却能撼动大地。",
+    "clipDir": "image/npcClip/0062",
+    "power": 2640
   },
   "0064": {
     "id": "0064",
     "name": "苍炎·夜刃",
     "profession": "刺客",
     "faction": "暗影guild",
-    "story": "紫发红眼的暗影刺客，执巨型镰刀潜伏黑夜，无声收割敌人。",
     "stats": {
       "moveSpeed": 4,
       "hp": 585,
       "atk": 95,
-      "def": 29
+      "def": 29,
+      "critRate": 25,
+      "critResist": 3,
+      "dmgBonus": 16,
+      "dmgReduce": 0,
+      "critDmgBonus": 59
     },
     "activeSkill": {
       "name": "暗夜·死神收割",
@@ -2769,12 +2836,7 @@
     "type": 1,
     "role": "中排",
     "qualityRank": 3,
-    "power": 2419,
-    "clipDir": "image/npcClip/0064",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0064_active",
       "0064_passive_1",
@@ -2782,19 +2844,25 @@
       "0064_passive_3",
       "0064_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "暗紫尖发少年刺客，金色双瞳在夜色中灼灼发光，一身暗黑劲装，红色围巾随风猎猎。暗影guild夜刃杀手，刀光如暗流般无声致命，行踪诡秘莫测。",
+    "clipDir": "image/npcClip/0064",
+    "power": 2419
   },
   "0066": {
     "id": "0066",
     "name": "希露碧·异瞳",
     "profession": "法师",
     "faction": "暗影guild",
-    "story": "银发异瞳的神秘少女，右眼蓝左眼红，金饰华丽，举手投足皆是魔力。",
     "stats": {
       "moveSpeed": 2,
       "hp": 495,
       "atk": 113,
-      "def": 20
+      "def": 20,
+      "critRate": 14,
+      "critResist": 5,
+      "dmgBonus": 21,
+      "dmgReduce": 0,
+      "critDmgBonus": 36
     },
     "activeSkill": {
       "name": "异瞳·双界崩裂",
@@ -2845,12 +2913,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 3,
-    "power": 2299,
-    "clipDir": "image/npcClip/0066",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0066_active",
       "0066_passive_1",
@@ -2858,19 +2921,25 @@
       "0066_passive_3",
       "0066_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅蓝银发少女法师，拥有异色瞳——一只赤红一只冰蓝，头戴金饰盔冠，肩披暗色铠甲。暗影guild的神秘法师，双眼能窥破幻术与真实，冷笑间操控命运之线。",
+    "clipDir": "image/npcClip/0066",
+    "power": 2299
   },
   "0067": {
     "id": "0067",
     "name": "福尔摩斯·探帽",
     "profession": "射手",
     "faction": "龙脉学院",
-    "story": "戴猎鹿帽的学院侦探型狙击手，绿眸深邃，用冷静的推理锁定猎物。",
     "stats": {
       "moveSpeed": 3,
       "hp": 540,
       "atk": 99,
-      "def": 25
+      "def": 25,
+      "critRate": 18,
+      "critResist": 5,
+      "dmgBonus": 15,
+      "dmgReduce": 0,
+      "critDmgBonus": 45
     },
     "activeSkill": {
       "name": "演绎·真相之箭",
@@ -2921,12 +2990,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 3,
-    "power": 2322,
-    "clipDir": "image/npcClip/0067",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0067_active",
       "0067_passive_1",
@@ -2934,19 +2998,25 @@
       "0067_passive_3",
       "0067_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "黑发少年射手，头戴深色猎帽，绿色双瞳透着机敏与洞察力，身穿学院制服。龙脉学院的天才侦探型射手，善于从细节中发现目标弱点，百发百中。",
+    "clipDir": "image/npcClip/0067",
+    "power": 2322
   },
   "0068": {
     "id": "0068",
     "name": "美音·狐耳",
     "profession": "射手",
     "faction": "森罗万象",
-    "story": "粉发机械狐耳的可爱猎人，蓝瞳灵动，在森林中如精灵般自在。",
     "stats": {
       "moveSpeed": 3,
       "hp": 540,
       "atk": 99,
-      "def": 25
+      "def": 25,
+      "critRate": 18,
+      "critResist": 5,
+      "dmgBonus": 14,
+      "dmgReduce": 0,
+      "critDmgBonus": 45
     },
     "activeSkill": {
       "name": "狐灵·花雨箭",
@@ -2997,12 +3067,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 3,
-    "power": 2322,
-    "clipDir": "image/npcClip/0068",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0068_active",
       "0068_passive_1",
@@ -3010,19 +3075,25 @@
       "0068_passive_3",
       "0068_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "粉色短发少女射手，头顶一对毛茸茸的兽耳，蓝色大眼灵动可爱，身穿森林系绿装。森罗万象的狐耳族射手，听觉敏锐，箭术精准，如精灵般穿梭林间。",
+    "clipDir": "image/npcClip/0068",
+    "power": 2322
   },
   "0069": {
     "id": "0069",
     "name": "兰华·花冠",
     "profession": "祭司",
     "faction": "森罗万象",
-    "story": "粉紫发戴花冠的温柔少女，紫眸含笑，是众人依赖的治愈之光。",
     "stats": {
       "moveSpeed": 2,
       "hp": 630,
       "atk": 36,
-      "def": 38
+      "def": 38,
+      "critRate": 5,
+      "critResist": 14,
+      "dmgBonus": 0,
+      "dmgReduce": 5,
+      "critDmgBonus": 14
     },
     "activeSkill": {
       "name": "花冠·万物绽放",
@@ -3073,12 +3144,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 3,
-    "power": 1926,
-    "clipDir": "image/npcClip/0069",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0069_active",
       "0069_passive_1",
@@ -3086,19 +3152,25 @@
       "0069_passive_3",
       "0069_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "淡粉双马尾少女祭司，头戴精致花冠与宝石额饰，身穿柔美的紫白法袍，神情温柔含羞。森罗万象花语祭司，以百花之力治愈伤痛，花瓣纷飞处便是生命绽放之地。",
+    "clipDir": "image/npcClip/0069",
+    "power": 1926
   },
   "0073": {
     "id": "0073",
     "name": "艾莉嘉·冷月",
     "profession": "骑士",
     "faction": "圣光骑士团",
-    "story": "金发绿眼的女骑士，面带倦意却不失威严，白领正装下是钢铁般的意志。",
     "stats": {
       "moveSpeed": 2,
       "hp": 990,
       "atk": 68,
-      "def": 63
+      "def": 63,
+      "critRate": 5,
+      "critResist": 21,
+      "dmgBonus": 5,
+      "dmgReduce": 16,
+      "critDmgBonus": 14
     },
     "activeSkill": {
       "name": "冷月·不灭之阵",
@@ -3149,12 +3221,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 3,
-    "power": 2692,
-    "clipDir": "image/npcClip/0073",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0073_active",
       "0073_passive_1",
@@ -3162,19 +3229,25 @@
       "0073_passive_3",
       "0073_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金发碧眼的女骑士，面容冷峻疲惫，身穿暗色高领礼服配白色领巾，指尖轻触嘴唇沉思。圣光骑士团冷月骑士，沉默寡言，月光下独行，誓以冷冽之刃斩尽黑暗。",
+    "clipDir": "image/npcClip/0073",
+    "power": 2692
   },
   "0074": {
     "id": "0074",
     "name": "司音·鼓灵",
     "profession": "祭司",
     "faction": "森罗万象",
-    "story": "棕发绷带的倔强少年乐师，手持手鼓，鼓声可扰乱敌人心神。",
     "stats": {
       "moveSpeed": 2,
       "hp": 630,
       "atk": 36,
-      "def": 38
+      "def": 38,
+      "critRate": 5,
+      "critResist": 14,
+      "dmgBonus": 0,
+      "dmgReduce": 5,
+      "critDmgBonus": 14
     },
     "activeSkill": {
       "name": "战鼓·心神震慑",
@@ -3225,12 +3298,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 3,
-    "power": 1926,
-    "clipDir": "image/npcClip/0074",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0074_active",
       "0074_passive_1",
@@ -3238,19 +3306,25 @@
       "0074_passive_3",
       "0074_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "棕色短发少女祭司，红褐色双瞳坚定认真，身穿深蓝军服，手持圆形圣鼓。森罗万象的鼓灵祭司，以鼓声传递神圣祝福，鼓点节奏即为战场上的生命律动。",
+    "clipDir": "image/npcClip/0074",
+    "power": 1926
   },
   "0075": {
     "id": "0075",
     "name": "雪音·银铃",
     "profession": "祭司",
     "faction": "圣光骑士团",
-    "story": "银发绿眼的洁白少女，气质纯洁如初雪，是骑士团最被信赖的治愈者。",
     "stats": {
       "moveSpeed": 2,
       "hp": 630,
       "atk": 36,
-      "def": 38
+      "def": 38,
+      "critRate": 3,
+      "critResist": 16,
+      "dmgBonus": 0,
+      "dmgReduce": 7,
+      "critDmgBonus": 9
     },
     "activeSkill": {
       "name": "银铃·圣洁颂歌",
@@ -3301,12 +3375,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 3,
-    "power": 1926,
-    "clipDir": "image/npcClip/0075",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0075_active",
       "0075_passive_1",
@@ -3314,19 +3383,25 @@
       "0075_passive_3",
       "0075_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银白短发少女祭司，头戴暗色圆形发饰，黑色高领法袍配胸针，表情平和安宁。圣光骑士团银铃祭司，以清脆银铃之声驱散邪恶，为战友织起圣光之盾。",
+    "clipDir": "image/npcClip/0075",
+    "power": 1926
   },
   "0077": {
     "id": "0077",
     "name": "钢卫·机甲",
     "profession": "骑士",
     "faction": "苍穹帝国",
-    "story": "蓝银色机甲战士，红色独眼光源精准锁定目标，盾牌刻有帝国纹章。",
     "stats": {
       "moveSpeed": 2,
       "hp": 990,
       "atk": 68,
-      "def": 63
+      "def": 63,
+      "critRate": 6,
+      "critResist": 20,
+      "dmgBonus": 5,
+      "dmgReduce": 15,
+      "critDmgBonus": 18
     },
     "activeSkill": {
       "name": "帝国·铁壁推进",
@@ -3377,12 +3452,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 3,
-    "power": 2692,
-    "clipDir": "image/npcClip/0077",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0077_active",
       "0077_passive_1",
@@ -3390,19 +3460,25 @@
       "0077_passive_3",
       "0077_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "蓝红配色的巨型机甲骑士，银灰装甲闪耀金属光泽，面甲上红色天线傲然竖立，胸甲刻有帝国纹章。苍穹帝国最强机甲骑士，钢铁之躯守护帝国疆土，无人能挡。",
+    "clipDir": "image/npcClip/0077",
+    "power": 2692
   },
   "0078": {
     "id": "0078",
     "name": "月影·银瞳",
     "profession": "刺客",
     "faction": "暗影guild",
-    "story": "银发红眼的冷酷刺客，暗装加身，目光如刀，专猎最危险的猎物。",
     "stats": {
       "moveSpeed": 4,
       "hp": 585,
       "atk": 95,
-      "def": 29
+      "def": 29,
+      "critRate": 25,
+      "critResist": 3,
+      "dmgBonus": 16,
+      "dmgReduce": 0,
+      "critDmgBonus": 59
     },
     "activeSkill": {
       "name": "月影·无声暗杀",
@@ -3453,12 +3529,7 @@
     "type": 1,
     "role": "中排",
     "qualityRank": 3,
-    "power": 2419,
-    "clipDir": "image/npcClip/0078",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0078_active",
       "0078_passive_1",
@@ -3466,19 +3537,25 @@
       "0078_passive_3",
       "0078_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银白尖发少年刺客，血红色双瞳冰冷如刀，一身暗色紧身衣，手持暗纹利刃。暗影guild月影刺客，银瞳映月，刀出无影，无声潜行于月光之下收割猎物。",
+    "clipDir": "image/npcClip/0078",
+    "power": 2419
   },
   "0079": {
     "id": "0079",
     "name": "莉莎·晴空",
     "profession": "祭司",
     "faction": "龙脉学院",
-    "story": "金发蓝眼的开朗少女，橙色发带飞扬，学院乐队的核心主唱。",
     "stats": {
       "moveSpeed": 2,
       "hp": 630,
       "atk": 36,
-      "def": 38
+      "def": 38,
+      "critRate": 5,
+      "critResist": 14,
+      "dmgBonus": 2,
+      "dmgReduce": 5,
+      "critDmgBonus": 14
     },
     "activeSkill": {
       "name": "晴空·鼓舞之歌",
@@ -3529,12 +3606,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 3,
-    "power": 1926,
-    "clipDir": "image/npcClip/0079",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0079_active",
       "0079_passive_1",
@@ -3542,19 +3614,25 @@
       "0079_passive_3",
       "0079_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金发蓝眼的活泼少女祭司，头顶翘起的呆毛，蓝色发带蝴蝶结在风中飘扬，身穿学院制服。龙脉学院晴空祭司，开朗乐观的治愈师，笑容如晴空般温暖人心。",
+    "clipDir": "image/npcClip/0079",
+    "power": 1926
   },
   "0084": {
     "id": "0084",
     "name": "绫香·紫锤",
     "profession": "战士",
     "faction": "苍穹帝国",
-    "story": "黑短发紫眼的女格斗家，手持巨型战锤，一击可碎巨岩。",
     "stats": {
       "moveSpeed": 3,
       "hp": 900,
       "atk": 100,
-      "def": 50
+      "def": 50,
+      "critRate": 14,
+      "critResist": 12,
+      "dmgBonus": 10,
+      "dmgReduce": 7,
+      "critDmgBonus": 30
     },
     "activeSkill": {
       "name": "紫锤·碎岩击",
@@ -3605,12 +3683,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 4,
-    "power": 3060,
-    "clipDir": "image/npcClip/0084",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0084_active",
       "0084_passive_1",
@@ -3618,19 +3691,25 @@
       "0084_passive_3",
       "0084_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "黑棕发紫瞳少女战士，头戴白色翼形发饰，身穿暗紫战斗装，手持紫色战锤。苍穹帝国近战女战士，紫锤沉重却挥舞如风，每一击都蕴含帝国的雷霆之怒。",
+    "clipDir": "image/npcClip/0084",
+    "power": 3060
   },
   "0085": {
     "id": "0085",
     "name": "诺瓦·机音",
     "profession": "射手",
     "faction": "苍穹帝国",
-    "story": "银发橙耳机的元气少年，嘴里叼着零食，用高科技装备追踪猎物。",
     "stats": {
       "moveSpeed": 3,
       "hp": 600,
       "atk": 110,
-      "def": 28
+      "def": 28,
+      "critRate": 19,
+      "critResist": 7,
+      "dmgBonus": 15,
+      "dmgReduce": 2,
+      "critDmgBonus": 50
     },
     "activeSkill": {
       "name": "机音·追踪飞弹",
@@ -3681,12 +3760,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 4,
-    "power": 2708,
-    "clipDir": "image/npcClip/0085",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0085_active",
       "0085_passive_1",
@@ -3694,19 +3768,25 @@
       "0085_passive_3",
       "0085_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银白短发少年射手，琥珀色双瞳明亮自信，头戴深色通讯耳机，身穿深蓝科技制服。苍穹帝国机音射手，以高科技声波武器精准打击，耳机中回荡着锁定的电子音。",
+    "clipDir": "image/npcClip/0085",
+    "power": 2708
   },
   "0086": {
     "id": "0086",
     "name": "幽影·紫镰",
     "profession": "刺客",
     "faction": "暗影guild",
-    "story": "紫发红瞳的暗部精英，执曲刃大镰，身隐黑暗，收割一切阻碍者。",
     "stats": {
       "moveSpeed": 4,
       "hp": 650,
       "atk": 105,
-      "def": 32
+      "def": 32,
+      "critRate": 28,
+      "critResist": 3,
+      "dmgBonus": 18,
+      "dmgReduce": 0,
+      "critDmgBonus": 65
     },
     "activeSkill": {
       "name": "紫镰·灵魂收割",
@@ -3757,12 +3837,7 @@
     "type": 1,
     "role": "中排",
     "qualityRank": 4,
-    "power": 2802,
-    "clipDir": "image/npcClip/0086",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0086_active",
       "0086_passive_1",
@@ -3770,19 +3845,25 @@
       "0086_passive_3",
       "0086_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银灰尖发少年刺客，血红双瞳凶狠如兽，暗紫高领劲装勾勒冷峻轮廓，嘴角露出獠牙。暗影guild紫镰刺客，巨镰划过虚空留下一道紫色残影，死神般收割一切。",
+    "clipDir": "image/npcClip/0086",
+    "power": 2802
   },
   "0087": {
     "id": "0087",
     "name": "银盾·圣纹",
     "profession": "骑士",
     "faction": "圣光骑士团",
-    "story": "蓝银机甲的圣光守卫，巨盾刻有G纹章，以身躯为盾守护同伴。",
     "stats": {
       "moveSpeed": 2,
       "hp": 1100,
       "atk": 75,
-      "def": 70
+      "def": 70,
+      "critRate": 6,
+      "critResist": 23,
+      "dmgBonus": 5,
+      "dmgReduce": 18,
+      "critDmgBonus": 15
     },
     "activeSkill": {
       "name": "圣盾·绝对壁垒",
@@ -3833,12 +3914,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 4,
-    "power": 3120,
-    "clipDir": "image/npcClip/0087",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0087_active",
       "0087_passive_1",
@@ -3846,19 +3922,25 @@
       "0087_passive_3",
       "0087_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银灰尖发少年骑士，身穿深色层叠铠甲，肩甲银光闪耀，胸前圣纹徽章熠熠生辉，手持巨盾。圣光骑士团银盾圣骑士，以坚不可摧之盾守护队友，圣纹光华驱散黑暗。",
+    "clipDir": "image/npcClip/0087",
+    "power": 3120
   },
   "0088": {
     "id": "0088",
     "name": "冰焰·魔手",
     "profession": "法师",
     "faction": "暗影guild",
-    "story": "灰发兜帽的神秘法师，右手凝聚蓝色魔焰，无声间释放毁灭之力。",
     "stats": {
       "moveSpeed": 2,
       "hp": 550,
       "atk": 125,
-      "def": 22
+      "def": 22,
+      "critRate": 15,
+      "critResist": 6,
+      "dmgBonus": 23,
+      "dmgReduce": 0,
+      "critDmgBonus": 40
     },
     "activeSkill": {
       "name": "冰焰·毁灭之握",
@@ -3909,12 +3991,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 4,
-    "power": 2682,
-    "clipDir": "image/npcClip/0088",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0088_active",
       "0088_passive_1",
@@ -3922,7 +3999,9 @@
       "0088_passive_3",
       "0088_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "暗紫尖发少年法师，面容隐藏于暗色兜帽下，嘴角带着狡黠獠牙笑，右手凝聚出幽蓝魔法火焰。暗影guild冰焰法师，掌握冰火双元素魔力，暗影中悄然释放致命法术。",
+    "clipDir": "image/npcClip/0088",
+    "power": 2682
   },
   "0091": {
     "id": "0091",
@@ -3933,7 +4012,12 @@
       "moveSpeed": 3,
       "hp": 600,
       "atk": 110,
-      "def": 28
+      "def": 28,
+      "critRate": 20,
+      "critResist": 5,
+      "dmgBonus": 15,
+      "dmgReduce": 0,
+      "critDmgBonus": 50
     },
     "activeSkill": {
       "name": "凤翎穿林箭",
@@ -3984,12 +4068,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 4,
-    "power": 2708,
-    "clipDir": "image/npcClip/0091",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0091_active",
       "0091_passive_1",
@@ -3997,19 +4076,25 @@
       "0091_passive_3",
       "0091_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "翠绿高马尾少女射手，金色大眼明亮有神，头戴华丽红宝石凤翎头冠，身穿深色猎装。森罗万象凤翎弓手，箭矢如凤凰翎羽般绚烂，穿林而过百步穿杨。",
+    "clipDir": "image/npcClip/0091",
+    "power": 2708
   },
   "0093": {
     "id": "0093",
     "name": "卡洛特·骷髅旗",
     "profession": "射手",
     "faction": "暗影guild",
-    "story": "黑帽骷髅徽章的海盗狙击手，粉发异瞳，在公海上百发百中。",
     "stats": {
       "moveSpeed": 3,
       "hp": 600,
       "atk": 110,
-      "def": 28
+      "def": 28,
+      "critRate": 23,
+      "critResist": 3,
+      "dmgBonus": 18,
+      "dmgReduce": 0,
+      "critDmgBonus": 55
     },
     "activeSkill": {
       "name": "骷髅炮弹狙击",
@@ -4060,12 +4145,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 4,
-    "power": 2708,
-    "clipDir": "image/npcClip/0093",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0093_active",
       "0093_passive_1",
@@ -4073,19 +4153,25 @@
       "0093_passive_3",
       "0093_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金发红瞳少女射手，头戴海盗帽饰以骷髅旗，一只眼戴爱心眼罩，身穿黑白海军制服。暗影guild骷髅旗射手，海盗出身的神射手，笑脸之下暗藏杀机，海风是她最好的瞄准镜。",
+    "clipDir": "image/npcClip/0093",
+    "power": 2708
   },
   "0094": {
     "id": "0094",
     "name": "紫苑·天冠",
     "profession": "法师",
     "faction": "森罗万象",
-    "story": "蓝发紫眼的华美法师，金冠嵌宝，持法杖吟唱古老的星辰咒语。",
     "stats": {
       "moveSpeed": 2,
       "hp": 550,
       "atk": 125,
-      "def": 22
+      "def": 22,
+      "critRate": 12,
+      "critResist": 8,
+      "dmgBonus": 20,
+      "dmgReduce": 0,
+      "critDmgBonus": 35
     },
     "activeSkill": {
       "name": "星辰陨落咒",
@@ -4136,12 +4222,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 4,
-    "power": 2682,
-    "clipDir": "image/npcClip/0094",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0094_active",
       "0094_passive_1",
@@ -4149,19 +4230,25 @@
       "0094_passive_3",
       "0094_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "深蓝长发少女法师，头戴金色花饰与珠宝，蓝色大眼温柔而深邃，身穿暗色金边华服。森罗万象天冠法师，天赋异禀的天才魔法师，头冠象征其至高法力，举手投足间天地变色。",
+    "clipDir": "image/npcClip/0094",
+    "power": 2682
   },
   "0097": {
     "id": "0097",
     "name": "星织·翠铠",
     "profession": "骑士",
     "faction": "圣光骑士团",
-    "story": "紫发翠眼的圣光女骑士，翼盔加身，银铠流光，忠诚守护信仰。",
     "stats": {
       "moveSpeed": 2,
       "hp": 1100,
       "atk": 75,
-      "def": 70
+      "def": 70,
+      "critRate": 6,
+      "critResist": 23,
+      "dmgBonus": 5,
+      "dmgReduce": 18,
+      "critDmgBonus": 15
     },
     "activeSkill": {
       "name": "翠铠圣光壁垒",
@@ -4212,12 +4299,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 4,
-    "power": 3120,
-    "clipDir": "image/npcClip/0097",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0097_active",
       "0097_passive_1",
@@ -4225,19 +4307,25 @@
       "0097_passive_3",
       "0097_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "薄荷绿双马尾少女骑士，绿色大眼沉稳坚定，头戴淡紫华丽翼形头盔，身穿暗色红边铠甲。圣光骑士团翠铠圣骑士，翠色铠甲象征生命与希望，以坚韧守护光明。",
+    "clipDir": "image/npcClip/0097",
+    "power": 3120
   },
   "0098": {
     "id": "0098",
     "name": "希露德·赤焰",
     "profession": "祭司",
     "faction": "圣光骑士团",
-    "story": "金发红装的圣光祭司，白袍金边，手持圣典，以光之名治愈众生。",
     "stats": {
       "moveSpeed": 2,
       "hp": 700,
       "atk": 40,
-      "def": 42
+      "def": 42,
+      "critRate": 3,
+      "critResist": 18,
+      "dmgBonus": 0,
+      "dmgReduce": 8,
+      "critDmgBonus": 10
     },
     "activeSkill": {
       "name": "赤焰圣光洗礼",
@@ -4288,12 +4376,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 4,
-    "power": 2272,
-    "clipDir": "image/npcClip/0098",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0098_active",
       "0098_passive_1",
@@ -4301,19 +4384,25 @@
       "0098_passive_3",
       "0098_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金发红装的圣光祭司，白袍金边饰以赤焰纹章，颈间圣典垂挂金色链坠。蓝瞳虔诚，红装在圣光中如火焰般灼热，以赤焰之名治愈众生伤痕。",
+    "clipDir": "image/npcClip/0098",
+    "power": 2272
   },
   "0100": {
     "id": "0100",
     "name": "月兰·灵使",
     "profession": "法师",
     "faction": "森罗万象",
-    "story": "紫发持白狐灵体的神秘法师，身边常伴一只小狐灵，擅长召唤术。",
     "stats": {
       "moveSpeed": 2,
       "hp": 550,
       "atk": 125,
-      "def": 22
+      "def": 22,
+      "critRate": 12,
+      "critResist": 8,
+      "dmgBonus": 20,
+      "dmgReduce": 0,
+      "critDmgBonus": 35
     },
     "activeSkill": {
       "name": "狐灵降世术",
@@ -4364,12 +4453,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 4,
-    "power": 2682,
-    "clipDir": "image/npcClip/0100",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0100_active",
       "0100_passive_1",
@@ -4377,19 +4461,25 @@
       "0100_passive_3",
       "0100_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "淡紫长发的神秘法师，紫眸深邃如夜空。身旁环绕一只白色灵狐，幽光浮动，与之一体同心。森罗万象的灵使，以灵魂共鸣驾驭万灵之力。",
+    "clipDir": "image/npcClip/0100",
+    "power": 2682
   },
   "0101": {
     "id": "0101",
     "name": "莉莉安·单片镜",
     "profession": "法师",
     "faction": "龙脉学院",
-    "story": "金发单片镜的贵族少女法师，异瞳藏智，博学多识，学院天才。",
     "stats": {
       "moveSpeed": 2,
       "hp": 550,
       "atk": 125,
-      "def": 22
+      "def": 22,
+      "critRate": 12,
+      "critResist": 8,
+      "dmgBonus": 22,
+      "dmgReduce": 0,
+      "critDmgBonus": 35
     },
     "activeSkill": {
       "name": "博学者裂变弹",
@@ -4440,12 +4530,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 4,
-    "power": 2682,
-    "clipDir": "image/npcClip/0101",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0101_active",
       "0101_passive_1",
@@ -4453,19 +4538,25 @@
       "0101_passive_3",
       "0101_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金发别着单片镜的贵族少女法师，琥珀色异瞳闪烁智慧光芒。身穿暗色高领礼服配红领，龙脉学院的博学天才，单片镜下藏着看透万物的锐利目光。",
+    "clipDir": "image/npcClip/0101",
+    "power": 2682
   },
   "0103": {
     "id": "0103",
     "name": "艾米·赤钢",
     "profession": "骑士",
     "faction": "苍穹帝国",
-    "story": "棕发红眼的女骑士，肩甲厚重，神色冷峻，是帝国最可靠的前线战力。",
     "stats": {
       "moveSpeed": 2,
       "hp": 1100,
       "atk": 75,
-      "def": 70
+      "def": 70,
+      "critRate": 7,
+      "critResist": 22,
+      "dmgBonus": 5,
+      "dmgReduce": 17,
+      "critDmgBonus": 20
     },
     "activeSkill": {
       "name": "赤钢铁壁冲锋",
@@ -4516,12 +4607,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 4,
-    "power": 3120,
-    "clipDir": "image/npcClip/0103",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0103_active",
       "0103_passive_1",
@@ -4529,19 +4615,25 @@
       "0103_passive_3",
       "0103_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "棕发红眼的冷峻女骑士，厚重肩甲泛着金属冷光，神情坚毅如铁。苍穹帝国的前线钢铁壁垒，沉默中守护每一寸疆土。",
+    "clipDir": "image/npcClip/0103",
+    "power": 3120
   },
   "0105": {
     "id": "0105",
     "name": "诺亚·银纹",
     "profession": "骑士",
     "faction": "圣光骑士团",
-    "story": "棕发蓝眼的坚毅少年骑士，白手套军装，右拳握拳立誓效忠骑士团。",
     "stats": {
       "moveSpeed": 2,
       "hp": 1100,
       "atk": 75,
-      "def": 70
+      "def": 70,
+      "critRate": 6,
+      "critResist": 23,
+      "dmgBonus": 5,
+      "dmgReduce": 18,
+      "critDmgBonus": 15
     },
     "activeSkill": {
       "name": "银纹誓盾斩",
@@ -4592,12 +4684,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 4,
-    "power": 3120,
-    "clipDir": "image/npcClip/0105",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0105_active",
       "0105_passive_1",
@@ -4605,19 +4692,25 @@
       "0105_passive_3",
       "0105_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "棕发蓝眼的坚毅少年骑士，白蓝军装笔挺，白手套右手握拳抵胸立誓。圣光骑士团最忠诚的守卫，银纹铠甲见证他永不背弃的骑士誓言。",
+    "clipDir": "image/npcClip/0105",
+    "power": 3120
   },
   "0108": {
     "id": "0108",
     "name": "黑樱·暗蔷薇",
     "profession": "祭司",
     "faction": "暗影guild",
-    "story": "紫发配黑蔷薇的暗系祭司，优雅而危险，用黑暗之力治愈或毁灭。",
     "stats": {
       "moveSpeed": 2,
       "hp": 700,
       "atk": 40,
-      "def": 42
+      "def": 42,
+      "critRate": 8,
+      "critResist": 13,
+      "dmgBonus": 3,
+      "dmgReduce": 5,
+      "critDmgBonus": 20
     },
     "activeSkill": {
       "name": "暗蔷薇之吻",
@@ -4668,12 +4761,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 4,
-    "power": 2272,
-    "clipDir": "image/npcClip/0108",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0108_active",
       "0108_passive_1",
@@ -4681,19 +4769,25 @@
       "0108_passive_3",
       "0108_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "紫发配暗色蔷薇发饰的哥特风祭司，深蓝洋装层层叠叠。暗影guild的优雅毒蔷薇，以黑暗之力治愈盟友、吞噬敌人，微笑间绽放致命之花。",
+    "clipDir": "image/npcClip/0108",
+    "power": 2272
   },
   "0109": {
     "id": "0109",
     "name": "绫香·紫冠",
     "profession": "法师",
     "faction": "森罗万象",
-    "story": "紫发紫眼的优雅法师，银甲护身，微笑从容间操控风暴之力。",
     "stats": {
       "moveSpeed": 3,
       "hp": 633,
       "atk": 144,
-      "def": 25
+      "def": 25,
+      "critRate": 13,
+      "critResist": 9,
+      "dmgBonus": 23,
+      "dmgReduce": 0,
+      "critDmgBonus": 42
     },
     "activeSkill": {
       "name": "紫冠暴风领域",
@@ -4744,12 +4838,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 5,
-    "power": 3215,
-    "clipDir": "image/npcClip/0109",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0109_active",
       "0109_passive_1",
@@ -4757,19 +4846,25 @@
       "0109_passive_3",
       "0109_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅紫短发配银色圆冠头饰的优雅法师，紫眸自信含笑。身穿暗色高领礼服配银甲护肩，从容操控暴风与雷电，是森罗万象最从容的风暴掌控者。",
+    "clipDir": "image/npcClip/0109",
+    "power": 3215
   },
   "0110": {
     "id": "0110",
     "name": "雪铃·白耳",
     "profession": "射手",
     "faction": "森罗万象",
-    "story": "银发猫耳的可爱少女猎人，橙眸含笑，手持糖果棒状的法杖。",
     "stats": {
       "moveSpeed": 4,
       "hp": 690,
       "atk": 126,
-      "def": 32
+      "def": 32,
+      "critRate": 22,
+      "critResist": 6,
+      "dmgBonus": 17,
+      "dmgReduce": 0,
+      "critDmgBonus": 60
     },
     "activeSkill": {
       "name": "糖果星尘弹",
@@ -4820,12 +4915,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 5,
-    "power": 3230,
-    "clipDir": "image/npcClip/0110",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0110_active",
       "0110_passive_1",
@@ -4833,19 +4923,25 @@
       "0110_passive_3",
       "0110_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银白短发生着一对白色猫耳的可爱少女猎人，橙眸含笑灵动。身穿暗色战斗服，手持糖果棒造型的法杖，森罗万象的灵巧射手，甜笑中射出致命一击。",
+    "clipDir": "image/npcClip/0110",
+    "power": 3230
   },
   "0114": {
     "id": "0114",
     "name": "银牙·赤瞳",
     "profession": "刺客",
     "faction": "暗影guild",
-    "story": "银发红瞳的冷笑少年，暗衣加身，S级暗杀者，出手无声。",
     "stats": {
       "moveSpeed": 5,
       "hp": 747,
       "atk": 121,
-      "def": 37
+      "def": 37,
+      "critRate": 31,
+      "critResist": 3,
+      "dmgBonus": 21,
+      "dmgReduce": 0,
+      "critDmgBonus": 78
     },
     "activeSkill": {
       "name": "银牙噬喉杀",
@@ -4896,12 +4992,7 @@
     "type": 1,
     "role": "中排",
     "qualityRank": 5,
-    "power": 3337,
-    "clipDir": "image/npcClip/0114",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0114_active",
       "0114_passive_1",
@@ -4909,19 +5000,25 @@
       "0114_passive_3",
       "0114_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银白短发红瞳的冷笑少年刺客，暗色高领劲装勾勒冷峻身形。嘴角微扬透着危险笑意，暗影guild的S级暗杀者，银牙噬喉无声无息。",
+    "clipDir": "image/npcClip/0114",
+    "power": 3337
   },
   "0115": {
     "id": "0115",
     "name": "甲壳·铁拳",
     "profession": "战士",
     "faction": "森罗万象",
-    "story": "虫甲包裹的兽人格斗家，红白条纹铠甲，拳头力量惊人如陨石坠落。",
     "stats": {
       "moveSpeed": 4,
       "hp": 1035,
       "atk": 115,
-      "def": 57
+      "def": 57,
+      "critRate": 17,
+      "critResist": 11,
+      "dmgBonus": 12,
+      "dmgReduce": 6,
+      "critDmgBonus": 36
     },
     "activeSkill": {
       "name": "陨石铁拳碎",
@@ -4972,12 +5069,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 5,
-    "power": 3637,
-    "clipDir": "image/npcClip/0115",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0115_active",
       "0115_passive_1",
@@ -4985,19 +5077,25 @@
       "0115_passive_3",
       "0115_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "红白条纹虫甲包裹的兽人格斗家，金色巨眼灼灼，红白面纹凶猛。铠甲如甲壳般厚重，双拳力量如陨石坠落，森罗万象的钢铁拳师。",
+    "clipDir": "image/npcClip/0115",
+    "power": 3637
   },
   "0116": {
     "id": "0116",
     "name": "灵羽·魂冠",
     "profession": "祭司",
     "faction": "森罗万象",
-    "story": "白发自带羽毛头饰的萨满少女，金瞳沉静，以灵魂之火引导亡灵。",
     "stats": {
       "moveSpeed": 3,
       "hp": 805,
       "atk": 46,
-      "def": 48
+      "def": 48,
+      "critRate": 6,
+      "critResist": 17,
+      "dmgBonus": 0,
+      "dmgReduce": 6,
+      "critDmgBonus": 18
     },
     "activeSkill": {
       "name": "灵魂引渡仪式",
@@ -5048,12 +5146,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 5,
-    "power": 2741,
-    "clipDir": "image/npcClip/0116",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0116_active",
       "0116_passive_1",
@@ -5061,19 +5154,25 @@
       "0116_passive_3",
       "0116_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "白发自带羽毛头饰的萨满少女，金瞳沉静如渊。头戴紫冠，白色毛领环绕肩头，森罗万象的灵魂引渡者，以灵魂之火沟通生死两界。",
+    "clipDir": "image/npcClip/0116",
+    "power": 2741
   },
   "0117": {
     "id": "0117",
     "name": "赤帽·小红",
     "profession": "祭司",
     "faction": "森罗万象",
-    "story": "金发红帽的少女祭司，兜帽披风如童话中的小红帽，拥有治愈万物的力量。",
     "stats": {
       "moveSpeed": 3,
       "hp": 805,
       "atk": 46,
-      "def": 48
+      "def": 48,
+      "critRate": 6,
+      "critResist": 17,
+      "dmgBonus": 0,
+      "dmgReduce": 6,
+      "critDmgBonus": 18
     },
     "activeSkill": {
       "name": "赤帽治愈花篮",
@@ -5124,12 +5223,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 5,
-    "power": 2741,
-    "clipDir": "image/npcClip/0117",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0117_active",
       "0117_passive_1",
@@ -5137,19 +5231,25 @@
       "0117_passive_3",
       "0117_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金发红帽的少女祭司，红帽兜帽披风随风飘扬，宛如童话中的小红帽。蓝瞳清澈，笑容纯真温暖，森罗万象的花篮治愈师，花篮中盛满治愈万物的花瓣。",
+    "clipDir": "image/npcClip/0117",
+    "power": 2741
   },
   "0118": {
     "id": "0118",
     "name": "神乐·巫弦",
     "profession": "祭司",
     "faction": "森罗万象",
-    "story": "紫发白花的巫女乐师，持古琴吟唱神乐，音乐可封印妖邪之力。",
     "stats": {
       "moveSpeed": 3,
       "hp": 805,
       "atk": 46,
-      "def": 48
+      "def": 48,
+      "critRate": 6,
+      "critResist": 17,
+      "dmgBonus": 0,
+      "dmgReduce": 6,
+      "critDmgBonus": 18
     },
     "activeSkill": {
       "name": "神乐封印之曲",
@@ -5200,12 +5300,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 5,
-    "power": 2741,
-    "clipDir": "image/npcClip/0118",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0118_active",
       "0118_passive_1",
@@ -5213,19 +5308,25 @@
       "0118_passive_3",
       "0118_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "紫发白花发饰的巫女乐师，身穿白底紫纹和服，端庄秀丽。怀抱古琴，蓝瞳含笑，森罗万象的神乐巫女，琴音可封印妖邪、净化战场。",
+    "clipDir": "image/npcClip/0118",
+    "power": 2741
   },
   "0119": {
     "id": "0119",
     "name": "紫夜·暗杀者",
     "profession": "刺客",
     "faction": "暗影guild",
-    "story": "紫发兜帽的沉默暗杀者，面无表情，手中暗器随时待发。",
     "stats": {
       "moveSpeed": 5,
       "hp": 747,
       "atk": 121,
-      "def": 37
+      "def": 37,
+      "critRate": 31,
+      "critResist": 3,
+      "dmgBonus": 21,
+      "dmgReduce": 0,
+      "critDmgBonus": 78
     },
     "activeSkill": {
       "name": "紫夜暗器连发",
@@ -5276,12 +5377,7 @@
     "type": 1,
     "role": "中排",
     "qualityRank": 5,
-    "power": 3337,
-    "clipDir": "image/npcClip/0119",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0119_active",
       "0119_passive_1",
@@ -5289,19 +5385,25 @@
       "0119_passive_3",
       "0119_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "紫发兜帽的沉默暗杀者，紫眸平静无波，白色衣领整洁。面无表情，双手藏于暗处随时投掷暗器，暗影guild的无声死神，出手前你甚至感觉不到他的存在。",
+    "clipDir": "image/npcClip/0119",
+    "power": 3337
   },
   "0120": {
     "id": "0120",
     "name": "苍澜·碧盾",
     "profession": "骑士",
     "faction": "圣光骑士团",
-    "story": "紫发碧眼的圣光女骑士，巨盾金纹，坚守阵线不退一步。",
     "stats": {
       "moveSpeed": 3,
       "hp": 1265,
       "atk": 86,
-      "def": 81
+      "def": 81,
+      "critRate": 7,
+      "critResist": 25,
+      "dmgBonus": 6,
+      "dmgReduce": 21,
+      "critDmgBonus": 18
     },
     "activeSkill": {
       "name": "碧盾不退壁垒",
@@ -5352,12 +5454,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 5,
-    "power": 3719,
-    "clipDir": "image/npcClip/0120",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0120_active",
       "0120_passive_1",
@@ -5365,19 +5462,25 @@
       "0120_passive_3",
       "0120_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "紫蓝短发碧眼的圣光女骑士，蓝白金纹铠甲厚重庄严。手持巨盾，盾面金纹闪烁圣光，是圣光骑士团不退一步的钢铁壁垒，碧盾之前寸土不丢。",
+    "clipDir": "image/npcClip/0120",
+    "power": 3719
   },
   "0121": {
     "id": "0121",
     "name": "奥莉维亚·金铠",
     "profession": "骑士",
     "faction": "苍穹帝国",
-    "story": "金发绿眼的帝国女骑士，金甲辉煌，腰佩长剑，守护帝都安宁。",
     "stats": {
       "moveSpeed": 3,
       "hp": 1265,
       "atk": 86,
-      "def": 81
+      "def": 81,
+      "critRate": 8,
+      "critResist": 24,
+      "dmgBonus": 6,
+      "dmgReduce": 20,
+      "critDmgBonus": 24
     },
     "activeSkill": {
       "name": "金铠帝剑裁决",
@@ -5428,12 +5531,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 5,
-    "power": 3719,
-    "clipDir": "image/npcClip/0121",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0121_active",
       "0121_passive_1",
@@ -5441,19 +5539,25 @@
       "0121_passive_3",
       "0121_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金发绿眼的帝国女骑士，金甲辉煌如朝阳。肩铠华丽，金边礼服彰显贵族气质，腰佩长剑，苍穹帝国的帝都守护者，金光所及之处皆为帝国疆土。",
+    "clipDir": "image/npcClip/0121",
+    "power": 3719
   },
   "0122": {
     "id": "0122",
     "name": "暗牙·鬼角",
     "profession": "战士",
     "faction": "暗影guild",
-    "story": "黑发鬼角、金瞳如火的少年格斗家，战斗狂热，拳拳到肉。",
     "stats": {
       "moveSpeed": 4,
       "hp": 1035,
       "atk": 115,
-      "def": 57
+      "def": 57,
+      "critRate": 20,
+      "critResist": 9,
+      "dmgBonus": 15,
+      "dmgReduce": 6,
+      "critDmgBonus": 42
     },
     "activeSkill": {
       "name": "鬼角碎骨拳",
@@ -5504,12 +5608,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 5,
-    "power": 3637,
-    "clipDir": "image/npcClip/0122",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0122_active",
       "0122_passive_1",
@@ -5517,19 +5616,25 @@
       "0122_passive_3",
       "0122_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "黑发头顶白色鬼角的少年格斗家，金瞳如燃烧的火焰，露出的獠牙透着野性。暗影guild的战斗狂人，鬼角碎骨拳拳拳到肉，越战越狂永不退缩。",
+    "clipDir": "image/npcClip/0122",
+    "power": 3637
   },
   "0124": {
     "id": "0124",
     "name": "艾蕾诺·玫瑰冠",
     "profession": "祭司",
     "faction": "圣光骑士团",
-    "story": "银发蓝瞳的贵族少女，头顶紫玫瑰与皇冠，是圣光团的精神象征。",
     "stats": {
       "moveSpeed": 3,
       "hp": 805,
       "atk": 46,
-      "def": 48
+      "def": 48,
+      "critRate": 3,
+      "critResist": 20,
+      "dmgBonus": 0,
+      "dmgReduce": 9,
+      "critDmgBonus": 12
     },
     "activeSkill": {
       "name": "玫瑰圣冠加冕",
@@ -5580,12 +5685,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 5,
-    "power": 2741,
-    "clipDir": "image/npcClip/0124",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0124_active",
       "0124_passive_1",
@@ -5593,19 +5693,25 @@
       "0124_passive_3",
       "0124_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银发蓝瞳的贵族少女，头顶紫玫瑰与金色皇冠交织。身着紫白华丽礼服，举止高贵优雅，圣光骑士团的精神象征，玫瑰圣冠加冕之处便是希望降临之地。",
+    "clipDir": "image/npcClip/0124",
+    "power": 2741
   },
   "0125": {
     "id": "0125",
     "name": "蕾拉·赤翎",
     "profession": "骑士",
     "faction": "苍穹帝国",
-    "story": "银发蓝眼的帝国女骑士，红披风飘扬，银甲之下是无畏的心。",
     "stats": {
       "moveSpeed": 3,
       "hp": 1265,
       "atk": 86,
-      "def": 81
+      "def": 81,
+      "critRate": 8,
+      "critResist": 24,
+      "dmgBonus": 6,
+      "dmgReduce": 20,
+      "critDmgBonus": 24
     },
     "activeSkill": {
       "name": "赤翎无畏冲锋",
@@ -5656,12 +5762,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 5,
-    "power": 3719,
-    "clipDir": "image/npcClip/0125",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0125_active",
       "0125_passive_1",
@@ -5669,19 +5770,25 @@
       "0125_passive_3",
       "0125_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银发蓝眼的帝国女骑士，红披风在身后猎猎飞扬。银灰铠甲整洁利落，苍穹帝国的无畏先锋，红翎翻飞间冲锋陷阵，银甲之下跳动着一颗永不退缩的心。",
+    "clipDir": "image/npcClip/0125",
+    "power": 3719
   },
   "0126": {
     "id": "0126",
     "name": "雪音·暗夜",
     "profession": "刺客",
     "faction": "暗影guild",
-    "story": "白金发红瞳的高贵刺客，黑衣翩翩，优雅地终结每一个目标。",
     "stats": {
       "moveSpeed": 5,
       "hp": 747,
       "atk": 121,
-      "def": 37
+      "def": 37,
+      "critRate": 31,
+      "critResist": 3,
+      "dmgBonus": 21,
+      "dmgReduce": 0,
+      "critDmgBonus": 78
     },
     "activeSkill": {
       "name": "暗夜优雅绝杀",
@@ -5732,12 +5839,7 @@
     "type": 1,
     "role": "中排",
     "qualityRank": 5,
-    "power": 3337,
-    "clipDir": "image/npcClip/0126",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0126_active",
       "0126_passive_1",
@@ -5745,19 +5847,25 @@
       "0126_passive_3",
       "0126_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "白金长发红瞳的高贵刺客，黑衣翩翩如夜色流淌。暗色高领劲装勾勒优雅身姿，暗影guild的暗夜贵族，以舞步般的优雅终结每一个目标的生命。",
+    "clipDir": "image/npcClip/0126",
+    "power": 3337
   },
   "0127": {
     "id": "0127",
     "name": "露米娜·鹿心",
     "profession": "祭司",
     "faction": "森罗万象",
-    "story": "鹿耳少女祭司，蓝瞳含笑，头戴爱心发饰，红金制服，治愈之力如春风。",
     "stats": {
       "moveSpeed": 3,
       "hp": 805,
       "atk": 46,
-      "def": 48
+      "def": 48,
+      "critRate": 6,
+      "critResist": 17,
+      "dmgBonus": 0,
+      "dmgReduce": 6,
+      "critDmgBonus": 18
     },
     "activeSkill": {
       "name": "鹿心春风治愈",
@@ -5808,12 +5916,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 5,
-    "power": 2741,
-    "clipDir": "image/npcClip/0127",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0127_active",
       "0127_passive_1",
@@ -5821,19 +5924,25 @@
       "0127_passive_3",
       "0127_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "鹿耳鹿角的可爱少女祭司，蓝瞳含笑如春风拂面。头戴爱心发饰，身穿红金制服，森罗万象的温柔治愈师，鹿心之力化为春风温暖每一位战友。",
+    "clipDir": "image/npcClip/0127",
+    "power": 2741
   },
   "0128": {
     "id": "0128",
     "name": "绯叶·炎铠",
     "profession": "骑士",
     "faction": "苍穹帝国",
-    "story": "红发金瞳的女骑士，暗红铠甲灼热如火，冲锋时如烈焰席卷。",
     "stats": {
       "moveSpeed": 3,
       "hp": 1265,
       "atk": 86,
-      "def": 81
+      "def": 81,
+      "critRate": 8,
+      "critResist": 24,
+      "dmgBonus": 6,
+      "dmgReduce": 20,
+      "critDmgBonus": 24
     },
     "activeSkill": {
       "name": "炎铠烈焰冲锋",
@@ -5884,12 +5993,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 5,
-    "power": 3719,
-    "clipDir": "image/npcClip/0128",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0128_active",
       "0128_passive_1",
@@ -5897,7 +6001,9 @@
       "0128_passive_3",
       "0128_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "红短发金瞳的帝国女骑士，暗红铠甲灼热如火。肩甲厚重泛着余烬光芒，苍穹帝国的炎铠先锋，冲锋时留下一道烈焰之路，所经之处寸草不燃。",
+    "clipDir": "image/npcClip/0128",
+    "power": 3719
   },
   "0129": {
     "id": "0129",
@@ -5908,7 +6014,12 @@
       "moveSpeed": 4,
       "hp": 780,
       "atk": 143,
-      "def": 36
+      "def": 36,
+      "critRate": 23,
+      "critResist": 8,
+      "dmgBonus": 20,
+      "dmgReduce": 3,
+      "critDmgBonus": 70
     },
     "activeSkill": {
       "name": "帝鹰精准狙击",
@@ -5959,12 +6070,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 6,
-    "power": 3700,
-    "clipDir": "image/npcClip/0129",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0129_active",
       "0129_passive_1",
@@ -5972,7 +6078,9 @@
       "0129_passive_3",
       "0129_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金棕短发配棕色军帽的帝国女射手，琥珀色大眼坚定冷静。军帽上H徽章醒目，身穿深色军装手持步枪，苍穹帝国的王牌狙击手，冷静校准后一枪毙命。",
+    "clipDir": "image/npcClip/0129",
+    "power": 3700
   },
   "0134": {
     "id": "0134",
@@ -5983,7 +6091,12 @@
       "moveSpeed": 3,
       "hp": 910,
       "atk": 52,
-      "def": 55
+      "def": 55,
+      "critRate": 6,
+      "critResist": 18,
+      "dmgBonus": 0,
+      "dmgReduce": 7,
+      "critDmgBonus": 21
     },
     "activeSkill": {
       "name": "白灵治愈之光",
@@ -6034,12 +6147,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 6,
-    "power": 3156,
-    "clipDir": "image/npcClip/0134",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0134_active",
       "0134_passive_1",
@@ -6047,7 +6155,9 @@
       "0134_passive_3",
       "0134_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银白短发配白兔耳饰的含羞少女祭司，红瞳中透着温柔与羞涩。身穿白金华丽制服，森罗万象的白灵治愈师，绯红兔耳能感知战友伤痛，默默守护身旁之人。",
+    "clipDir": "image/npcClip/0134",
+    "power": 3156
   },
   "0135": {
     "id": "0135",
@@ -6058,7 +6168,12 @@
       "moveSpeed": 5,
       "hp": 845,
       "atk": 137,
-      "def": 42
+      "def": 42,
+      "critRate": 30,
+      "critResist": 6,
+      "dmgBonus": 22,
+      "dmgReduce": 0,
+      "critDmgBonus": 84
     },
     "activeSkill": {
       "name": "写轮·雷切突刺",
@@ -6109,12 +6224,7 @@
     "type": 1,
     "role": "中排",
     "qualityRank": 6,
-    "power": 3813,
-    "clipDir": "image/npcClip/0135",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0135_active",
       "0135_passive_1",
@@ -6122,7 +6232,9 @@
       "0135_passive_3",
       "0135_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银白发配暗色护额的蒙面忍者刺客，护额上紫色宝石闪烁。半面被面罩遮掩，龙脉学院的写轮忍术大师，以雷切突刺贯穿敌人，影分身在战场间穿梭如幻。",
+    "clipDir": "image/npcClip/0135",
+    "power": 3813
   },
   "0136": {
     "id": "0136",
@@ -6133,7 +6245,12 @@
       "moveSpeed": 3,
       "hp": 1430,
       "atk": 98,
-      "def": 91
+      "def": 91,
+      "critRate": 8,
+      "critResist": 26,
+      "dmgBonus": 7,
+      "dmgReduce": 22,
+      "critDmgBonus": 28
     },
     "activeSkill": {
       "name": "苍帝号令·铁壁",
@@ -6184,12 +6301,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 6,
-    "power": 4260,
-    "clipDir": "image/npcClip/0136",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0136_active",
       "0136_passive_1",
@@ -6197,7 +6309,9 @@
       "0136_passive_3",
       "0136_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "暗色头盔配紫色宝石额饰的帝国将军骑士，蓝瞳在面甲后威严如山。金色纹饰勾勒出帝王气度，苍穹帝国的铁冠统帅，号令之下万军齐行，钢铁防线不可撼动。",
+    "clipDir": "image/npcClip/0136",
+    "power": 4260
   },
   "0137": {
     "id": "0137",
@@ -6208,7 +6322,12 @@
       "moveSpeed": 4,
       "hp": 780,
       "atk": 143,
-      "def": 36
+      "def": 36,
+      "critRate": 23,
+      "critResist": 8,
+      "dmgBonus": 20,
+      "dmgReduce": 3,
+      "critDmgBonus": 70
     },
     "activeSkill": {
       "name": "钢枪穿甲射击",
@@ -6259,12 +6378,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 6,
-    "power": 3700,
-    "clipDir": "image/npcClip/0137",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0137_active",
       "0137_passive_1",
@@ -6272,7 +6386,9 @@
       "0137_passive_3",
       "0137_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "棕发蓝眼的帝国少年射手，身穿深色军装，神情坚毅认真。手持制式步枪，苍穹帝国阵地最可靠的钢枪手，稳住阵脚精准射击，少年肩膀扛起保卫家园的重任。",
+    "clipDir": "image/npcClip/0137",
+    "power": 3700
   },
   "0138": {
     "id": "0138",
@@ -6283,7 +6399,12 @@
       "moveSpeed": 4,
       "hp": 780,
       "atk": 143,
-      "def": 36
+      "def": 36,
+      "critRate": 23,
+      "critResist": 8,
+      "dmgBonus": 20,
+      "dmgReduce": 3,
+      "critDmgBonus": 70
     },
     "activeSkill": {
       "name": "绯焰华丽连射",
@@ -6334,12 +6455,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 6,
-    "power": 3700,
-    "clipDir": "image/npcClip/0138",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0138_active",
       "0138_passive_1",
@@ -6347,7 +6463,9 @@
       "0138_passive_3",
       "0138_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "棕发紫眸的活泼少女射手，身穿深色军装配红金装饰，笑意盈盈。手持火枪华丽旋转，苍穹帝国的绯焰枪舞者，在战场上翩翩起舞间倾泻火红弹幕。",
+    "clipDir": "image/npcClip/0138",
+    "power": 3700
   },
   "0140": {
     "id": "0140",
@@ -6358,7 +6476,12 @@
       "moveSpeed": 3,
       "hp": 910,
       "atk": 52,
-      "def": 55
+      "def": 55,
+      "critRate": 6,
+      "critResist": 18,
+      "dmgBonus": 0,
+      "dmgReduce": 7,
+      "critDmgBonus": 21
     },
     "activeSkill": {
       "name": "碧冠清泉治愈",
@@ -6409,12 +6532,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 6,
-    "power": 3156,
-    "clipDir": "image/npcClip/0140",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0140_active",
       "0140_passive_1",
@@ -6422,7 +6540,9 @@
       "0140_passive_3",
       "0140_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "棕红短发少女，头顶白色羽翼发饰，红瞳如樱花般明媚。身披银灰镶金战甲，面带灿烂笑容。森罗万象的碧冠祭司，以清泉之力治愈万物，所过之处鲜花盛开。",
+    "clipDir": "image/npcClip/0140",
+    "power": 3156
   },
   "0141": {
     "id": "0141",
@@ -6433,7 +6553,12 @@
       "moveSpeed": 3,
       "hp": 1430,
       "atk": 98,
-      "def": 91
+      "def": 91,
+      "critRate": 13,
+      "critResist": 22,
+      "dmgBonus": 10,
+      "dmgReduce": 20,
+      "critDmgBonus": 35
     },
     "activeSkill": {
       "name": "暗领审判·赤焰斩",
@@ -6484,12 +6609,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 6,
-    "power": 4260,
-    "clipDir": "image/npcClip/0141",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0141_active",
       "0141_passive_1",
@@ -6497,7 +6617,9 @@
       "0141_passive_3",
       "0141_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "粉红短发绿瞳少年，头顶呆毛，神情自信而张扬。身着暗色军甲，金领高耸，右手前指如同号令万军。暗影guild的暗领骑士，赤焰灼灼，以铁血手腕统御暗夜军团。",
+    "clipDir": "image/npcClip/0141",
+    "power": 4260
   },
   "0143": {
     "id": "0143",
@@ -6508,7 +6630,12 @@
       "moveSpeed": 3,
       "hp": 1430,
       "atk": 98,
-      "def": 91
+      "def": 91,
+      "critRate": 8,
+      "critResist": 26,
+      "dmgBonus": 7,
+      "dmgReduce": 22,
+      "critDmgBonus": 28
     },
     "activeSkill": {
       "name": "机核 overload·铁壁",
@@ -6559,12 +6686,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 6,
-    "power": 4260,
-    "clipDir": "image/npcClip/0143",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0143_active",
       "0143_passive_1",
@@ -6572,7 +6694,9 @@
       "0143_passive_3",
       "0143_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "亮绿色机甲头颅的机械骑士，黑色圆眼闪烁冷光，头顶双天线灵敏探测。紫口微笑中透着机械的精密。苍穹帝国的机核骑士，以钢铁之躯执行帝国指令，永不偏移。",
+    "clipDir": "image/npcClip/0143",
+    "power": 4260
   },
   "0145": {
     "id": "0145",
@@ -6583,7 +6707,12 @@
       "moveSpeed": 4,
       "hp": 780,
       "atk": 143,
-      "def": 36
+      "def": 36,
+      "critRate": 23,
+      "critResist": 8,
+      "dmgBonus": 20,
+      "dmgReduce": 3,
+      "critDmgBonus": 70
     },
     "activeSkill": {
       "name": "红星标记射击",
@@ -6634,12 +6763,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 6,
-    "power": 3700,
-    "clipDir": "image/npcClip/0145",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0145_active",
       "0145_passive_1",
@@ -6647,7 +6771,9 @@
       "0145_passive_3",
       "0145_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅棕金发少年，戴深色军帽系白围巾，眼神坚毅而沉稳。身穿苍穹帝国深色军装，微笑中透着老兵的从容。红星标记在目镜中闪烁，精准锁定每一个猎物。",
+    "clipDir": "image/npcClip/0145",
+    "power": 3700
   },
   "0147": {
     "id": "0147",
@@ -6658,7 +6784,12 @@
       "moveSpeed": 3,
       "hp": 715,
       "atk": 163,
-      "def": 29
+      "def": 29,
+      "critRate": 14,
+      "critResist": 10,
+      "dmgBonus": 26,
+      "dmgReduce": 0,
+      "critDmgBonus": 49
     },
     "activeSkill": {
       "name": "锦绣凤仪·花法阵",
@@ -6709,12 +6840,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 6,
-    "power": 3693,
-    "clipDir": "image/npcClip/0147",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0147_active",
       "0147_passive_1",
@@ -6722,7 +6848,9 @@
       "0147_passive_3",
       "0147_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "粉红长发少女，头戴红绿金三色华丽凤冠，黄橙双瞳含笑。身着红金锦绣华服，肩饰精美繁复。森罗万象的宫廷法师，吟唱东方古咒时百花齐放，华丽而致命。",
+    "clipDir": "image/npcClip/0147",
+    "power": 3693
   },
   "0148": {
     "id": "0148",
@@ -6733,7 +6861,12 @@
       "moveSpeed": 3,
       "hp": 910,
       "atk": 52,
-      "def": 55
+      "def": 55,
+      "critRate": 10,
+      "critResist": 16,
+      "dmgBonus": 4,
+      "dmgReduce": 7,
+      "critDmgBonus": 28
     },
     "activeSkill": {
       "name": "暗冠仪式·影愈",
@@ -6784,12 +6917,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 6,
-    "power": 3156,
-    "clipDir": "image/npcClip/0148",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0148_active",
       "0148_passive_1",
@@ -6797,7 +6925,9 @@
       "0148_passive_3",
       "0148_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "黑紫短发少女，头戴银白色尖角暗冠，大眼深邃如夜空。白肤微泛红晕，气质清纯中透着幽暗。暗影guild的月影祭司，以暗影仪式汲取力量，沉默中治愈或毁灭。",
+    "clipDir": "image/npcClip/0148",
+    "power": 3156
   },
   "0149": {
     "id": "0149",
@@ -6808,7 +6938,12 @@
       "moveSpeed": 3,
       "hp": 910,
       "atk": 52,
-      "def": 55
+      "def": 55,
+      "critRate": 4,
+      "critResist": 22,
+      "dmgBonus": 0,
+      "dmgReduce": 10,
+      "critDmgBonus": 14
     },
     "activeSkill": {
       "name": "天使降世·星翼圣光",
@@ -6859,12 +6994,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 6,
-    "power": 3156,
-    "clipDir": "image/npcClip/0149",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0149_active",
       "0149_passive_1",
@@ -6872,7 +7002,9 @@
       "0149_passive_3",
       "0149_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银白双马尾少女，黑丝带束发，湛蓝双瞳纯净如天空。身穿暗色轻甲肩披银饰，笑容温暖而圣洁。圣光骑士团的天使祭司，展开星翼降下圣光，银铃声中众生得救。",
+    "clipDir": "image/npcClip/0149",
+    "power": 3156
   },
   "0150": {
     "id": "0150",
@@ -6883,7 +7015,12 @@
       "moveSpeed": 4,
       "hp": 1170,
       "atk": 130,
-      "def": 65
+      "def": 65,
+      "critRate": 18,
+      "critResist": 12,
+      "dmgBonus": 16,
+      "dmgReduce": 7,
+      "critDmgBonus": 42
     },
     "activeSkill": {
       "name": "七海斩浪击",
@@ -6934,12 +7071,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 6,
-    "power": 4160,
-    "clipDir": "image/npcClip/0150",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0150_active",
       "0150_passive_1",
@@ -6947,7 +7079,9 @@
       "0150_passive_3",
       "0150_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "白发缠白头巾的异域冒险家，碧蓝大眼闪烁好奇光芒，尖耳灵动。身穿白金镶饰战袍，金肩环彰显七海旅行的荣耀。龙脉学院的传奇战士，斩浪七海归来，剑意中有大海的辽阔。",
+    "clipDir": "image/npcClip/0150",
+    "power": 4160
   },
   "0151": {
     "id": "0151",
@@ -6958,7 +7092,12 @@
       "moveSpeed": 3,
       "hp": 715,
       "atk": 163,
-      "def": 29
+      "def": 29,
+      "critRate": 14,
+      "critResist": 10,
+      "dmgBonus": 26,
+      "dmgReduce": 0,
+      "critDmgBonus": 49
     },
     "activeSkill": {
       "name": "花舞漫天·花瓣风暴",
@@ -7009,12 +7148,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 6,
-    "power": 3693,
-    "clipDir": "image/npcClip/0151",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0151_active",
       "0151_passive_1",
@@ -7022,7 +7156,9 @@
       "0151_passive_3",
       "0151_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "粉红长发少女，头戴白花宝石发饰，翠绿双瞳明媚自信。身着深色法袍，白领精致，一手前伸似在召唤花灵。森罗万象的花舞法师，花瓣风暴席卷战场，美丽而危险。",
+    "clipDir": "image/npcClip/0151",
+    "power": 3693
   },
   "0152": {
     "id": "0152",
@@ -7033,7 +7169,12 @@
       "moveSpeed": 3,
       "hp": 715,
       "atk": 163,
-      "def": 29
+      "def": 29,
+      "critRate": 14,
+      "critResist": 10,
+      "dmgBonus": 29,
+      "dmgReduce": 0,
+      "critDmgBonus": 49
     },
     "activeSkill": {
       "name": "水镜万象·冰晶牢",
@@ -7084,12 +7225,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 6,
-    "power": 3693,
-    "clipDir": "image/npcClip/0152",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0152_active",
       "0152_passive_1",
@@ -7097,7 +7233,9 @@
       "0152_passive_3",
       "0152_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅蓝银发少女，刘海齐整，青蓝双瞳沉静如水。身着深色高领制服，表情淡然从容。龙脉学院的水镜法师，以冰晶牢笼困锁敌人，水镜折射间尽显学者风范与冷静智慧。",
+    "clipDir": "image/npcClip/0152",
+    "power": 3693
   },
   "0153": {
     "id": "0153",
@@ -7108,7 +7246,12 @@
       "moveSpeed": 3,
       "hp": 540,
       "atk": 99,
-      "def": 25
+      "def": 25,
+      "critRate": 18,
+      "critResist": 5,
+      "dmgBonus": 15,
+      "dmgReduce": 0,
+      "critDmgBonus": 45
     },
     "activeSkill": {
       "name": "星歌箭雨·碧束连射",
@@ -7159,12 +7302,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 3,
-    "power": 2322,
-    "clipDir": "image/npcClip/0153",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0153_active",
       "0153_passive_1",
@@ -7172,7 +7310,9 @@
       "0153_passive_3",
       "0153_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "青蓝双马尾少女，头戴华丽金绿凤冠，金色双瞳锐利如星。身穿暗色衣甲配红宝石胸饰，笑容灿烂自信。龙脉学院的星歌射手，箭矢如流星划过夜空，精准而华丽。",
+    "clipDir": "image/npcClip/0153",
+    "power": 2322
   },
   "0183": {
     "id": "0183",
@@ -7183,7 +7323,12 @@
       "moveSpeed": 3,
       "hp": 600,
       "atk": 110,
-      "def": 28
+      "def": 28,
+      "critRate": 20,
+      "critResist": 5,
+      "dmgBonus": 15,
+      "dmgReduce": 0,
+      "critDmgBonus": 50
     },
     "activeSkill": {
       "name": "凤冠展翅·烈焰箭",
@@ -7234,12 +7379,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 4,
-    "power": 2708,
-    "clipDir": "image/npcClip/0183",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0183_active",
       "0183_passive_1",
@@ -7247,7 +7387,9 @@
       "0183_passive_3",
       "0183_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "粉红双马尾少女，头戴绿色蒸汽朋克风护目镜，红瞳灵动可爱。身穿橙色上衣，肩后有绿色小飞龙伴飞。森罗万象的碧波射手，护目镜锁定目标后箭无虚发，与飞龙搭档出击。",
+    "clipDir": "image/npcClip/0183",
+    "power": 2708
   },
   "0192": {
     "id": "0192",
@@ -7258,7 +7400,12 @@
       "moveSpeed": 4,
       "hp": 900,
       "atk": 165,
-      "def": 42
+      "def": 42,
+      "critRate": 27,
+      "critResist": 7,
+      "dmgBonus": 26,
+      "dmgReduce": 0,
+      "critDmgBonus": 80
     },
     "activeSkill": {
       "name": "护目扫描·精确射击",
@@ -7309,12 +7456,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 7,
-    "power": 4252,
-    "clipDir": "image/npcClip/0192",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0192_active",
       "0192_passive_1",
@@ -7322,7 +7464,9 @@
       "0192_passive_3",
       "0192_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金发侧马尾少女，绿瞳坚定中带着怒意，表情倔强不服输。身穿紫金色高领军装，气质高贵。龙脉学院的护目射手，护目镜扫描弱点后一箭穿心，看似娇柔实则百步穿杨。",
+    "clipDir": "image/npcClip/0192",
+    "power": 4252
   },
   "0649": {
     "id": "0649",
@@ -7333,7 +7477,12 @@
       "moveSpeed": 3,
       "hp": 1050,
       "atk": 60,
-      "def": 63
+      "def": 63,
+      "critRate": 7,
+      "critResist": 20,
+      "dmgBonus": 3,
+      "dmgReduce": 8,
+      "critDmgBonus": 24
     },
     "activeSkill": {
       "name": "金阳绽放·新生治愈",
@@ -7384,12 +7533,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 7,
-    "power": 3628,
-    "clipDir": "image/npcClip/0649",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0649_active",
       "0649_passive_1",
@@ -7397,7 +7541,9 @@
       "0649_passive_3",
       "0649_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金色侧马尾少女，头戴宽檐青绿礼帽配橙色宝石，气质优雅神秘。暗色高领华服，紫调深沉。龙脉学院的月冠祭司，金阳之力绽放时如初升朝阳，驱散黑暗治愈伤痛。",
+    "clipDir": "image/npcClip/0649",
+    "power": 3628
   },
   "0669": {
     "id": "0669",
@@ -7408,7 +7554,12 @@
       "moveSpeed": 3,
       "hp": 825,
       "atk": 188,
-      "def": 33
+      "def": 33,
+      "critRate": 20,
+      "critResist": 8,
+      "dmgBonus": 35,
+      "dmgReduce": 0,
+      "critDmgBonus": 64
     },
     "activeSkill": {
       "name": "月冠暗蚀·虚空爆破",
@@ -7459,12 +7610,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 7,
-    "power": 4247,
-    "clipDir": "image/npcClip/0669",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0669_active",
       "0669_passive_1",
@@ -7472,7 +7618,9 @@
       "0669_passive_3",
       "0669_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅绿金竖发少年，碧蓝双瞳锐利，头顶银白月冠。身穿暗紫战甲配红色肩饰，手持锁链利刃神情冷峻。暗影guild的锁刃刺客，翠风一闪间链刃如龙蛇绞杀，无声收割猎物。",
+    "clipDir": "image/npcClip/0669",
+    "power": 4247
   },
   "0679": {
     "id": "0679",
@@ -7483,7 +7631,12 @@
       "moveSpeed": 5,
       "hp": 975,
       "atk": 158,
-      "def": 48
+      "def": 48,
+      "critRate": 38,
+      "critResist": 4,
+      "dmgBonus": 27,
+      "dmgReduce": 0,
+      "critDmgBonus": 104
     },
     "activeSkill": {
       "name": "锁刃龙蛇·绞杀",
@@ -7534,12 +7687,7 @@
     "type": 1,
     "role": "中排",
     "qualityRank": 7,
-    "power": 4367,
-    "clipDir": "image/npcClip/0679",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0679_active",
       "0679_passive_1",
@@ -7547,7 +7695,9 @@
       "0679_passive_3",
       "0679_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银白繁复编发少女，水蓝双瞳温柔而深邃，气质高贵清冷。暗色哥特华服层层叠叠，银饰闪烁。森罗万象的冰织祭司，银辫中蕴含先知之力，编织冰之结界守护一切。",
+    "clipDir": "image/npcClip/0679",
+    "power": 4367
   },
   "0712": {
     "id": "0712",
@@ -7558,7 +7708,12 @@
       "moveSpeed": 3,
       "hp": 1050,
       "atk": 60,
-      "def": 63
+      "def": 63,
+      "critRate": 7,
+      "critResist": 20,
+      "dmgBonus": 0,
+      "dmgReduce": 8,
+      "critDmgBonus": 24
     },
     "activeSkill": {
       "name": "银辫先知·冰织结界",
@@ -7609,12 +7764,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 7,
-    "power": 3628,
-    "clipDir": "image/npcClip/0712",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0712_active",
       "0712_passive_1",
@@ -7622,7 +7772,9 @@
       "0712_passive_3",
       "0712_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "银白繁复编发少女，水蓝双瞳温柔而深邃，气质高贵清冷。暗色哥特华服层层叠叠，银饰闪烁。森罗万象的冰织祭司，银辫中蕴含先知之力，编织冰之结界守护一切。",
+    "clipDir": "image/npcClip/0712",
+    "power": 3628
   },
   "0717": {
     "id": "0717",
@@ -7633,7 +7785,12 @@
       "moveSpeed": 4,
       "hp": 900,
       "atk": 165,
-      "def": 42
+      "def": 42,
+      "critRate": 27,
+      "critResist": 7,
+      "dmgBonus": 26,
+      "dmgReduce": 0,
+      "critDmgBonus": 80
     },
     "activeSkill": {
       "name": "翠岚贯穿·精灵神射",
@@ -7684,12 +7841,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 7,
-    "power": 4252,
-    "clipDir": "image/npcClip/0717",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0717_active",
       "0717_passive_1",
@@ -7697,19 +7849,25 @@
       "0717_passive_3",
       "0717_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "薄荷绿尖刺短发少年，碧蓝双瞳如清澈湖水，尖耳灵动。头戴黑色十字额饰，暗色银甲护肩，笑容开朗阳光。龙脉学院的精灵射手，翠岚之箭穿透万物，风助箭势百发百中。",
+    "clipDir": "image/npcClip/0717",
+    "power": 4252
   },
   "0729": {
     "id": "0729",
     "name": "蜜橙·金甲",
     "profession": "骑士",
     "faction": "圣光骑士团",
-    "story": "橙发金甲的年轻女骑士，蓝瞳坚定，守护圣光团的荣誉与信仰。",
     "stats": {
       "moveSpeed": 3,
       "hp": 1575,
       "atk": 117,
-      "def": 99
+      "def": 99,
+      "critRate": 8,
+      "critResist": 31,
+      "dmgBonus": 8,
+      "dmgReduce": 27,
+      "critDmgBonus": 24
     },
     "activeSkill": {
       "name": "橙光圣盾·金甲守护",
@@ -7760,12 +7918,7 @@
     "type": 1,
     "role": "前排",
     "qualityRank": 7,
-    "power": 4825,
-    "clipDir": "image/npcClip/0729",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0729_active",
       "0729_passive_1",
@@ -7773,19 +7926,25 @@
       "0729_passive_3",
       "0729_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "橙色波波头少女，碧蓝大眼灵动可爱，头戴暗色军帽系红领结。身穿白衬衣配学生制服风格战装，手持木剑练习剑术，元气满满。龙脉学院的金甲骑士，以不屈意志守护同伴。",
+    "clipDir": "image/npcClip/0729",
+    "power": 4825
   },
   "0738": {
     "id": "0738",
     "name": "辉夜·双丸子",
     "profession": "祭司",
     "faction": "圣光骑士团",
-    "story": "金发双丸子头的可爱少女祭司，红丝带蓝眼，笑容温暖治愈人心。",
     "stats": {
       "moveSpeed": 3,
       "hp": 1050,
       "atk": 60,
-      "def": 63
+      "def": 63,
+      "critRate": 4,
+      "critResist": 24,
+      "dmgBonus": 0,
+      "dmgReduce": 12,
+      "critDmgBonus": 16
     },
     "activeSkill": {
       "name": "辉夜祈光·丸子治愈",
@@ -7836,12 +7995,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 7,
-    "power": 3628,
-    "clipDir": "image/npcClip/0738",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0738_active",
       "0738_passive_1",
@@ -7849,7 +8003,9 @@
       "0738_passive_3",
       "0738_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "金发盘成华丽发髻，头顶大红蝴蝶结，蓝色双瞳温柔含笑。身穿暗色高领华服，气质纯洁可爱。圣光骑士团的辉夜祭司，丸子头一晃一晃，温暖笑容如月光洒落，治愈一切伤痛。",
+    "clipDir": "image/npcClip/0738",
+    "power": 3628
   },
   "0759": {
     "id": "0759",
@@ -7860,7 +8016,12 @@
       "moveSpeed": 3,
       "hp": 825,
       "atk": 188,
-      "def": 33
+      "def": 33,
+      "critRate": 15,
+      "critResist": 14,
+      "dmgBonus": 30,
+      "dmgReduce": 3,
+      "critDmgBonus": 56
     },
     "activeSkill": {
       "name": "辉耀皇权·金冠天罚",
@@ -7911,12 +8072,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 7,
-    "power": 4247,
-    "clipDir": "image/npcClip/0759",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0759_active",
       "0759_passive_1",
@@ -7924,7 +8080,9 @@
       "0759_passive_3",
       "0759_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅金长发少女，头戴华丽金冠镶嵌红宝石，琥珀色双瞳凝视前方。身穿暗紫色华服配金边高领，肩饰蓬松华丽。苍穹帝国的辉耀法师，皇族血脉赋予她天罚之力，金冠闪耀间万敌臣服。",
+    "clipDir": "image/npcClip/0759",
+    "power": 4247
   },
   "0760": {
     "id": "0760",
@@ -7935,7 +8093,12 @@
       "moveSpeed": 3,
       "hp": 1050,
       "atk": 60,
-      "def": 63
+      "def": 63,
+      "critRate": 11,
+      "critResist": 18,
+      "dmgBonus": 5,
+      "dmgReduce": 8,
+      "critDmgBonus": 32
     },
     "activeSkill": {
       "name": "暗衣仪式·影祭",
@@ -7986,12 +8149,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 7,
-    "power": 3628,
-    "clipDir": "image/npcClip/0760",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "0760_active",
       "0760_passive_1",
@@ -7999,19 +8157,25 @@
       "0760_passive_3",
       "0760_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "紫发波波头少女，头顶华丽金色皇冠，琥珀色双瞳灼灼生辉。身穿紫金高领暗色礼服，肩饰华丽膨松。暗影guild的绫华祭司，以暗之仪式献祭自我换取全队力量，高贵而悲壮。",
+    "clipDir": "image/npcClip/0760",
+    "power": 3628
   },
   "1009": {
     "id": "1009",
     "name": "墨璃·镜框",
     "profession": "法师",
     "faction": "龙脉学院",
-    "story": "粉发黑框眼镜的学者型法师，紫瞳温柔，白金衣衫，学院的图书馆常客。",
     "stats": {
       "moveSpeed": 3,
       "hp": 825,
       "atk": 188,
-      "def": 33
+      "def": 33,
+      "critRate": 16,
+      "critResist": 11,
+      "dmgBonus": 33,
+      "dmgReduce": 0,
+      "critDmgBonus": 56
     },
     "activeSkill": {
       "name": "墨璃幻镜·万象折射",
@@ -8062,12 +8226,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 7,
-    "power": 4247,
-    "clipDir": "image/npcClip/1009",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "1009_active",
       "1009_passive_1",
@@ -8075,19 +8234,25 @@
       "1009_passive_3",
       "1009_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅粉短发少年，戴黑框眼镜气质温文尔雅，淡紫背景映衬出学者风范。身穿白金镶边华丽法袍，肩饰精美。龙脉学院的墨璃法师，镜框之下洞察万象，以幻镜折射之光解析一切弱点。",
+    "clipDir": "image/npcClip/1009",
+    "power": 4247
   },
   "1010": {
     "id": "1010",
     "name": "星音·耳机",
     "profession": "祭司",
     "faction": "龙脉学院",
-    "story": "粉发耳机的元气少女乐师，绿瞳闪耀，音乐是她与世界沟通的方式。",
     "stats": {
       "moveSpeed": 3,
       "hp": 1050,
       "atk": 60,
-      "def": 63
+      "def": 63,
+      "critRate": 7,
+      "critResist": 20,
+      "dmgBonus": 3,
+      "dmgReduce": 8,
+      "critDmgBonus": 24
     },
     "activeSkill": {
       "name": "星音共鸣·治愈交响",
@@ -8138,12 +8303,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 7,
-    "power": 3628,
-    "clipDir": "image/npcClip/1010",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "1010_active",
       "1010_passive_1",
@@ -8151,19 +8311,25 @@
       "1010_passive_3",
       "1010_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅粉金短发少女，头戴粉黑耳机，绿瞳闪耀着音乐的光芒。脸颊微红，笑容元气十足。身穿白衣配蓝紫点缀的轻装。龙脉学院的星音祭司，耳机中流淌的旋律化为治愈之力，节拍中全队振奋。",
+    "clipDir": "image/npcClip/1010",
+    "power": 3628
   },
   "1011": {
     "id": "1011",
     "name": "樱绮·绿带",
     "profession": "祭司",
     "faction": "森罗万象",
-    "story": "粉发绿带的可爱少女祭司，手持魔法杖，微笑着为同伴编织护盾。",
     "stats": {
       "moveSpeed": 3,
       "hp": 1050,
       "atk": 60,
-      "def": 63
+      "def": 63,
+      "critRate": 7,
+      "critResist": 20,
+      "dmgBonus": 0,
+      "dmgReduce": 8,
+      "critDmgBonus": 24
     },
     "activeSkill": {
       "name": "樱绮花盾·森之庇护",
@@ -8214,12 +8380,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 7,
-    "power": 3628,
-    "clipDir": "image/npcClip/1011",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "1011_active",
       "1011_passive_1",
@@ -8227,19 +8388,25 @@
       "1011_passive_3",
       "1011_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "粉红短发少女，头戴绿色发带配粉白花饰，大眼明亮微笑甜美。身穿白色轻纱配绿色点缀的清新裙装，双手交于胸前。森罗万象的樱绮祭司，以樱花编织护盾，绿带系满生机，温柔守护每个同伴。",
+    "clipDir": "image/npcClip/1011",
+    "power": 3628
   },
   "1012": {
     "id": "1012",
     "name": "冰蓝·月耳",
     "profession": "祭司",
     "faction": "森罗万象",
-    "story": "银蓝发猫耳的月光祭司，紫瞳安详，白金华服，在月下吟唱安魂曲。",
     "stats": {
       "moveSpeed": 3,
       "hp": 1050,
       "atk": 60,
-      "def": 63
+      "def": 63,
+      "critRate": 7,
+      "critResist": 20,
+      "dmgBonus": 0,
+      "dmgReduce": 8,
+      "critDmgBonus": 24
     },
     "activeSkill": {
       "name": "月下安魂·冰蓝冥唱",
@@ -8290,12 +8457,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 7,
-    "power": 3628,
-    "clipDir": "image/npcClip/1012",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "1012_active",
       "1012_passive_1",
@@ -8303,19 +8465,25 @@
       "1012_passive_3",
       "1012_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅蓝银发少女，头顶生有猫耳般的双角突起，紫瞳沉静如月光。身穿白金华丽铠甲，手持新月形法杖，气质高贵神秘。森罗万象的冰蓝祭司，月下吟唱安魂曲，银耳灵敏感知万物安危。",
+    "clipDir": "image/npcClip/1012",
+    "power": 3628
   },
   "1014": {
     "id": "1014",
     "name": "茜色·双马尾",
     "profession": "射手",
     "faction": "龙脉学院",
-    "story": "棕发双马尾的活力少女猎人，蓝白运动装，手指前方充满探索欲。",
     "stats": {
       "moveSpeed": 4,
       "hp": 900,
       "atk": 165,
-      "def": 42
+      "def": 42,
+      "critRate": 27,
+      "critResist": 7,
+      "dmgBonus": 26,
+      "dmgReduce": 0,
+      "critDmgBonus": 80
     },
     "activeSkill": {
       "name": "茜色追踪·探险连射",
@@ -8366,12 +8534,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 7,
-    "power": 4252,
-    "clipDir": "image/npcClip/1014",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "1014_active",
       "1014_passive_1",
@@ -8379,19 +8542,25 @@
       "1014_passive_3",
       "1014_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅棕金发少女，侧扎单马尾系红丝带，琥珀色双瞳闪烁好奇光芒。身穿蓝白轻装，表情活泼开朗，右手前指仿佛发现了新目标。龙脉学院的茜色射手，红丝带飘扬间箭如连珠，探索的脚步永不停歇。",
+    "clipDir": "image/npcClip/1014",
+    "power": 4252
   },
   "2023": {
     "id": "2023",
     "name": "音波·双辫",
     "profession": "祭司",
     "faction": "龙脉学院",
-    "story": "青发双马尾的电音乐师少女，戴耳机与X形发饰，音乐能化为声波攻击。",
     "stats": {
       "moveSpeed": 3,
       "hp": 1050,
       "atk": 60,
-      "def": 63
+      "def": 63,
+      "critRate": 7,
+      "critResist": 20,
+      "dmgBonus": 3,
+      "dmgReduce": 8,
+      "critDmgBonus": 24
     },
     "activeSkill": {
       "name": "电音震荡·X音波",
@@ -8442,12 +8611,7 @@
     "type": 1,
     "role": "后排",
     "qualityRank": 7,
-    "power": 3628,
-    "clipDir": "image/npcClip/2023",
     "BaseStarID": 1,
-    "BaseAttributeID": 1,
-    "UpgradeAttributeID": 1001,
-    "AdvancedAttributeID": 2001,
     "Skill": [
       "2023_active",
       "2023_passive_1",
@@ -8455,7 +8619,9 @@
       "2023_passive_3",
       "2023_passive_4"
     ],
-    "ResetConsumption": 100
+    "story": "浅蓝双马尾少女，头戴黑色猫耳造型耳机配蓝色机械装饰，蓝色大眼闪烁电音节拍。身穿深蓝科技感战装，笑容开朗充满活力。龙脉学院的音波祭司，X形发饰共鸣时释放毁灭音波，旋律即是武器也是治愈。",
+    "clipDir": "image/npcClip/2023",
+    "power": 3628
   },
   "#meta": {
     "source": "docs/setting/npcdata.json",
@@ -8475,6 +8641,97 @@
       "森罗万象",
       "苍穹帝国"
     ],
+    "qualities": [
+      {
+        "tier": "D",
+        "label": "普通"
+      },
+      {
+        "tier": "C",
+        "label": "良好"
+      },
+      {
+        "tier": "B",
+        "label": "优秀"
+      },
+      {
+        "tier": "A",
+        "label": "精英"
+      },
+      {
+        "tier": "S",
+        "label": "史诗"
+      },
+      {
+        "tier": "SS",
+        "label": "传说"
+      },
+      {
+        "tier": "L",
+        "label": "神话"
+      }
+    ],
+    "statsDefinitions": [
+      {
+        "key": "moveSpeed",
+        "label": "移动速度",
+        "desc": "每tick可移动的格数",
+        "unit": "格/tick"
+      },
+      {
+        "key": "hp",
+        "label": "生命值",
+        "desc": "最大生命值",
+        "unit": "HP"
+      },
+      {
+        "key": "atk",
+        "label": "攻击力",
+        "desc": "普通攻击和技能的基础伤害",
+        "unit": "ATK"
+      },
+      {
+        "key": "def",
+        "label": "防御力",
+        "desc": "减少受到的物理伤害",
+        "unit": "DEF"
+      },
+      {
+        "key": "critRate",
+        "label": "暴击率",
+        "desc": "攻击时触发暴击的概率",
+        "unit": "%"
+      },
+      {
+        "key": "critResist",
+        "label": "抗暴率",
+        "desc": "降低被敌人暴击的概率",
+        "unit": "%"
+      },
+      {
+        "key": "dmgBonus",
+        "label": "伤害加成",
+        "desc": "最终伤害的百分比加成（不含暴击）",
+        "unit": "%"
+      },
+      {
+        "key": "dmgReduce",
+        "label": "减伤",
+        "desc": "减少受到的最终伤害百分比",
+        "unit": "%"
+      },
+      {
+        "key": "critDmgBonus",
+        "label": "暴伤加成",
+        "desc": "暴击时额外伤害百分比（基础暴击150%）",
+        "unit": "%"
+      }
+    ],
+    "damageFormula": {
+      "normal": "最终伤害=(ATK-DEF*0.5)*(1+dmgBonus/100)*(1-dmgReduce_target/100)",
+      "crit": "暴击伤害=最终伤害*(1.5+critDmgBonus/100)",
+      "critChance": "实际暴击率=max(0,攻击方critRate-防御方critResist)"
+    },
     "qualityOrder": [
       "D",
       "C",

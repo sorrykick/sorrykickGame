@@ -19,6 +19,11 @@ local ATTRIBUTE_DEFS = {
     { label = "攻击", keys = { "atk", "Att", "attack" } },
     { label = "防御", keys = { "def", "Def", "defense" } },
     { label = "移动", keys = { "moveSpeed", "Speed", "speed" } },
+    { label = "暴击", keys = { "critRate" } },
+    { label = "抗暴", keys = { "critResist" } },
+    { label = "增伤", keys = { "dmgBonus" } },
+    { label = "减伤", keys = { "dmgReduce" } },
+    { label = "暴伤", keys = { "critDmgBonus" } },
 }
 
 local function FormatNumber(value)
@@ -554,7 +559,7 @@ function HeroGrowthScene:CreateAttributePanel(hero)
     end
     return UI.Panel {
         width = "100%",
-        height = 104,
+        height = 158,
         padding = 8,
         gap = 6,
         backgroundColor = { 113, 74, 58, 230 },

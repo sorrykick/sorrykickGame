@@ -5598,9 +5598,5 @@
     "name": "X形发饰",
     "trigger": "受到致命伤害时",
     "effect": "X形发饰共鸣爆裂，保留1HP并震退周围2格内所有敌人，每场战斗限1次"
-  },
-  "#meta": {
-    "source": "docs/setting/npcdata.json",
-    "totalCount": 560
   }
 }

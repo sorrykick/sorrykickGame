@@ -2,6 +2,7 @@
 
 | 日期 | 版本/阶段 | 说明 |
 |---|---|---|
+| 2026-07-06 | npc-ai-skill-battle-runtime | 按 `npcdata.json` 扩展 NPC 属性并接入战斗 AI/技能：运行配置同步 112 个 NPC 的 9 项战斗属性和 560 个技能；养成页/图鉴页属性面板显示暴击、抗暴、增伤、减伤、暴伤；`GridBattleScene` 数据驱动读取 `stats/activeSkill/passiveSkills/ai`，实现目标优先级、移动策略、主动技能、被动触发、低血量反应、Buff/Debuff、护盾、持续伤害和扩展伤害公式；LSP 0 Error，官方构建成功。 |
 | 2026-07-06 | home-skill-entry | 将技能培养入口迁移到主界面：勇者养成页移除技能培养面板和入口文案，仅保留升级、升星、属性展示；主界面底部第 3 个导航改为“技能”，点击进入独立 `HeroSkillScene`，技能页返回主界面；LSP 0 Error，官方构建成功。 |
 | 2026-07-06 | home-bottom-nav-skill-icon | 按 Inspector 同步主界面底部导航第 3 个图标：将“冒险”导航图标资源替换为新生成的 `image/edited_nav_skill_20260706082834.png`，显示“技能”文字图标；仅修改目标 `backgroundImage`，LSP 0 Error，官方构建成功。 |
 | 2026-07-06 | hero-skill-scene-split | 将技能学习/升级从勇者养成页拆出：`HeroGrowthScene` 保留升级、升星、属性展示和“技能培养”入口；新增 `HeroSkillScene` 独立页面，支持按 `npc.Skill` 学习技能、查看技能详情和升级已学技能；`main.lua` 新增技能页跳转并返回同一勇者；`SaveSchema` 新增并规范化 `hero.skillLevels`；LSP 0 Error，官方构建成功。 |

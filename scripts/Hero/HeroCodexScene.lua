@@ -19,6 +19,11 @@ local ATTRIBUTE_LABELS = {
     { id = "atk", label = "攻击" },
     { id = "def", label = "防御" },
     { id = "moveSpeed", label = "移动" },
+    { id = "critRate", label = "暴击" },
+    { id = "critResist", label = "抗暴" },
+    { id = "dmgBonus", label = "增伤" },
+    { id = "dmgReduce", label = "减伤" },
+    { id = "critDmgBonus", label = "暴伤" },
 }
 
 local function FormatNumber(value)
@@ -608,7 +613,7 @@ function HeroCodexScene:CreateAttributePanel(entry)
     end
     return UI.Panel {
         width = "100%",
-        height = 136,
+        height = 168,
         padding = 9,
         gap = 6,
         backgroundColor = { 113, 74, 58, 230 },
