@@ -14,6 +14,13 @@ local MAX_STAR = 6
 
 local STAR_ICON_PATH = "image/品质/星级.png"
 
+local ATTRIBUTE_DEFS = {
+    { label = "生命", keys = { "hp", "MaxHP", "maxHp" } },
+    { label = "攻击", keys = { "atk", "Att", "attack" } },
+    { label = "防御", keys = { "def", "Def", "defense" } },
+    { label = "移动", keys = { "moveSpeed", "Speed", "speed" } },
+}
+
 local function FormatNumber(value)
     value = math.floor(tonumber(value) or 0)
     if value >= 100000000 then
@@ -115,6 +122,30 @@ local function GetSkillName(skillId)
         return tostring(skill.name)
     end
     return "技能" .. tostring(skillId)
+end
+
+local function GetHeroStats(hero)
+    if hero and type(hero.stats) == "table" then
+        return hero.stats
+    end
+    local npcConfig = GetNpcConfig(hero)
+    if npcConfig and type(npcConfig.stats) == "table" then
+        return npcConfig.stats
+    end
+    return {}
+end
+
+local function GetRawStatValue(stats, keys)
+    for _, key in ipairs(keys or {}) do
+        local value = stats and stats[key] or nil
+        if type(value) == "table" then
+            value = value.Value or value.value
+        end
+        if value ~= nil then
+            return value
+        end
+    end
+    return 0
 end
 
 local function GetUpgradeCost(hero)
@@ -532,6 +563,7 @@ function HeroGrowthScene:CreateGrowthPanel(hero)
         borderRadius = 18,
         children = hero and {
             self:CreateHeroOverview(hero),
+            self:CreateAttributePanel(hero),
             self:CreateUpgradePanel(hero),
             self:CreateStarPanel(hero),
             self:CreateSkillPanel(hero),
@@ -546,7 +578,7 @@ function HeroGrowthScene:CreateHeroOverview(hero)
     local quality = GetQuality(hero)
     return UI.Panel {
         width = "100%",
-        height = 224,
+        height = 206,
         backgroundColor = { 255, 244, 220, 255 },
         borderColor = GetQualityColor(hero),
         borderWidth = 3,
@@ -559,9 +591,9 @@ function HeroGrowthScene:CreateHeroOverview(hero)
             UI.Label { text = hero.name, position = "absolute", left = 182, top = 18, width = 179, fontSize = 25, fontWeight = "bold", fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
             UI.Label { text = tostring(hero.job or hero.profession or "战士") .. " · " .. tostring(hero.faction or "王国"), position = "absolute", left = 182, top = 60, width = 180, fontSize = 14, fontWeight = "bold", fontColor = GetQualityColor(hero), textStroke = { width = 1, color = { 68, 45, 25, 160 } }, maxLines = 1 },
             UI.Panel { position = "absolute", left = 182, top = 88, children = { CreateStarBadge(hero.star, { top = 4 }) } },
-            self:CreateStatRow("等级", "Lv." .. tostring(GetHeroLevel(hero)) .. "/" .. tostring(GetLevelLimit(hero)), 182, 128, 181),
-            self:CreateStatRow("战力", FormatNumber(hero.power), 182, 162, 182),
-            self:CreateStatRow("技能", tostring(#GetHeroSkills(hero)) .. "/" .. tostring(GetOpenSkillNum(hero)), 182, 192, 183),
+            self:CreateStatRow("等级", "Lv." .. tostring(GetHeroLevel(hero)) .. "/" .. tostring(GetLevelLimit(hero)), 182, 122, 181),
+            self:CreateStatRow("战力", FormatNumber(hero.power), 182, 152, 182),
+            self:CreateStatRow("技能", tostring(#GetHeroSkills(hero)) .. "/" .. tostring(GetOpenSkillNum(hero)), 182, 180, 183),
         },
     }
 end
@@ -586,6 +618,45 @@ function HeroGrowthScene:CreateStatRow(label, value, left, top, width)
     }
 end
 
+function HeroGrowthScene:CreateAttributePanel(hero)
+    local stats = GetHeroStats(hero)
+    local rows = {}
+    for _, attr in ipairs(ATTRIBUTE_DEFS) do
+        rows[#rows + 1] = self:CreateAttributeRow(attr.label, GetRawStatValue(stats, attr.keys))
+    end
+    return UI.Panel {
+        width = "100%",
+        height = 104,
+        padding = 8,
+        gap = 6,
+        backgroundColor = { 113, 74, 58, 230 },
+        borderColor = { 68, 45, 25, 255 },
+        borderWidth = 2,
+        borderRadius = 16,
+        children = {
+            UI.Label { text = "具体属性", fontSize = 19, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 180 } } },
+            UI.Panel { width = "100%", flexGrow = 1, flexBasis = 0, flexDirection = "row", flexWrap = "wrap", gap = 5, children = rows },
+        },
+    }
+end
+
+function HeroGrowthScene:CreateAttributeRow(label, value)
+    return UI.Panel {
+        width = 86,
+        height = 28,
+        flexDirection = "row",
+        alignItems = "center",
+        paddingLeft = 6,
+        paddingRight = 6,
+        backgroundColor = { 245, 228, 200, 240 },
+        borderRadius = 9,
+        children = {
+            UI.Label { text = label, flexGrow = 1, flexShrink = 1, fontSize = 13, fontColor = { 88, 46, 45, 255 }, maxLines = 1 },
+            UI.Label { text = FormatNumber(value), width = 38, fontSize = 13, fontWeight = "bold", fontColor = { 202, 92, 44, 255 }, textAlign = "right", maxLines = 1 },
+        },
+    }
+end
+
 function HeroGrowthScene:CreateUpgradePanel(hero)
     local cost = GetUpgradeCost(hero)
     local level = GetHeroLevel(hero)
@@ -593,12 +664,14 @@ function HeroGrowthScene:CreateUpgradePanel(hero)
     return self:CreateActionPanel("勇者升级", "提升等级并增加基础战力。当前上限 Lv." .. tostring(limit), "升级", "消耗金币 " .. FormatNumber(cost), level < limit, function()
         self:UpgradeHero()
     end, {
-        height = 125,
+        height = 100,
         padding = 2,
-        descHeight = 50,
+        descHeight = 34,
         descWhiteSpace = "normal",
         descVerticalAlign = "top",
-        costTop = 91,
+        descMaxLines = 2,
+        costTop = 73,
+        buttonTop = 28,
     })
 end
 
@@ -608,13 +681,14 @@ function HeroGrowthScene:CreateStarPanel(hero)
     return self:CreateActionPanel("勇者升星", "提升星级，增加大量战力并开放更多技能槽。", "升星", "消耗白钻 " .. FormatNumber(cost), star < MAX_STAR, function()
         self:StarUpHero()
     end, {
-        height = 129,
+        height = 100,
         padding = 2,
-        descHeight = 60,
-        descMaxLines = 3,
+        descHeight = 34,
+        descMaxLines = 2,
         descWhiteSpace = "normal",
         descWordBreak = "normal",
-        costTop = 99,
+        costTop = 73,
+        buttonTop = 28,
     })
 end
 
@@ -623,7 +697,7 @@ function HeroGrowthScene:CreateSkillPanel(hero)
     local canLearn = #GetHeroSkills(hero) < GetOpenSkillNum(hero) and GetSkillCandidates(hero)[#GetHeroSkills(hero) + 1] ~= nil
     return UI.Panel {
         width = "100%",
-        height = 285,
+        height = 210,
         padding = 10,
         gap = 8,
         backgroundColor = { 113, 74, 58, 230 },
@@ -653,8 +727,8 @@ function HeroGrowthScene:CreateSkillSlots(hero)
         local title = learnedSkill and GetSkillName(learnedSkill) or (opened and candidate and GetSkillName(candidate) or "技能槽" .. tostring(index))
         local status = learnedSkill and "已学习" or (opened and "可学习" or "升星解锁")
         children[#children + 1] = UI.Panel {
-            width = 112,
-            height = 62,
+            width = 105,
+            height = 50,
             padding = 6,
             backgroundColor = learnedSkill and { 245, 228, 200, 255 } or (opened and { 207, 166, 119, 255 } or { 117, 79, 62, 180 }),
             borderColor = learnedSkill and { 255, 234, 0, 255 } or { 68, 45, 25, 220 },
@@ -684,7 +758,7 @@ function HeroGrowthScene:CreateActionPanel(title, desc, buttonText, costText, en
             UI.Label { text = title, position = "absolute", left = 12, top = 8, width = 160, fontSize = 20, fontWeight = "bold", fontColor = { 255, 235, 178, 255 }, textStroke = { width = 2, color = { 0, 0, 0, 180 } } },
             UI.Label { text = desc, position = "absolute", left = 12, top = 40, width = 230, height = layout.descHeight, fontSize = 14, fontColor = { 255, 244, 220, 230 }, verticalAlign = layout.descVerticalAlign, whiteSpace = layout.descWhiteSpace, wordBreak = layout.descWordBreak, maxLines = layout.descMaxLines or 2 },
             UI.Label { text = costText, position = "absolute", left = 12, top = layout.costTop or 76, width = 220, fontSize = 15, fontWeight = "bold", fontColor = { 255, 234, 0, 255 }, textStroke = { width = 1, color = { 0, 0, 0, 200 } }, maxLines = 1 },
-            UI.Button { text = buttonText, position = "absolute", right = 12, top = 31, width = 90, height = 42, fontSize = 18, fontWeight = "bold", backgroundColor = enabled and { 202, 92, 44, 255 } or { 117, 79, 62, 180 }, pressedBackgroundColor = { 155, 62, 36, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 16, onClick = onClick },
+            UI.Button { text = buttonText, position = "absolute", right = 12, top = layout.buttonTop or 31, width = 90, height = 42, fontSize = 18, fontWeight = "bold", backgroundColor = enabled and { 202, 92, 44, 255 } or { 117, 79, 62, 180 }, pressedBackgroundColor = { 155, 62, 36, 255 }, textColor = { 255, 244, 220, 255 }, borderRadius = 16, onClick = onClick },
         },
     }
 end
